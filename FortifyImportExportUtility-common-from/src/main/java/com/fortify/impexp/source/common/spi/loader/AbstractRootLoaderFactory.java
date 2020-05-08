@@ -24,6 +24,10 @@
  ******************************************************************************/
 package com.fortify.impexp.source.common.spi.loader;
 
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
+
 import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerFactory;
 import com.fortify.impexp.common.processor.selector.IProcessorSelector;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
@@ -36,11 +40,31 @@ public abstract class AbstractRootLoaderFactory<R extends ISchedulableRunner> ex
 		return hasEnabledProcessors(getTargetProcessorSelector());
 	}
 	
+	/**
+	 * This implementation of {@link ISchedulableRunnerFactory#getRunner()} simply returns
+	 * the root loader that is returned by the {@link #getRootLoader()} method.
+	 */
 	@Override
 	public final ISchedulableRunner getRunner() {
 		return getRootLoader();
 	}
 	
+	/**
+	 * <p>Implementations of this method should return instances of the root loader associated to the 
+	 * factory implementation. Usually you would have Spring provide and manage these instances,
+	 * with the appropriate scope.</p>
+	 * 
+	 * <p>It would be easiest to simply annotate implementations of this method with the {@link Lookup}
+	 * annotation, specifying the concrete type as the implementation. Unfortunately this annotation
+	 * apparently doesn't take the concrete return type of the method implementation into account,
+	 * but rather looks up the generic {@link ISchedulableRunner} type defined here. As there will be
+	 * more than one {@link ISchedulableRunner} bean, the {@link Lookup} annotation fails unless you
+	 * specify the actual bean name.</p>
+	 * 
+	 * <p>For now, most implementations rather use a different approach; they have an {@link ObjectFactory}
+	 * field for the relevant root loader class, and this field is annotated with the {@link Autowired}
+	 * annotation. These implementations then simply return the result of {@link ObjectFactory#getObject()}.</p>
+	 */
 	protected abstract R getRootLoader();
 
 	protected abstract IProcessorSelector getTargetProcessorSelector();
