@@ -35,17 +35,72 @@ together; it doesn't do anything useful yet.
 
 * **Downloads**:  
   _Beta versions may be unstable or non-functional. The `*-licenseReport.zip` and `*-dependencySources.zip` files are for informational purposes only and do not need to be downloaded._
-	* **Release versions**: https://bintray.com/package/files/fortify-ps/release/FortifyVulnerabilityExporter?order=desc&sort=fileLastModified&basePath=&tab=files  
-	* **Beta versions**: https://bintray.com/package/files/fortify-ps/beta/FortifyVulnerabilityExporter?order=desc&sort=fileLastModified&basePath=&tab=files
+	* **Release versions**: https://bintray.com/package/files/fortify-ps/release/FortifyImportExportUtility?order=desc&sort=fileLastModified&basePath=&tab=files  
+	* **Beta versions**: https://bintray.com/package/files/fortify-ps/beta/FortifyImportExportUtility?order=desc&sort=fileLastModified&basePath=&tab=files
 	* **Sample configuration files**: [config](config)
-* **GitHub**: https://github.com/fortify-ps/FortifyVulnerabilityExporter
-* **Automated builds**: https://travis-ci.com/fortify-ps/FortifyVulnerabilityExporter
+* **GitHub**: https://github.com/fortify-ps/FortifyImportExportUtility
+* **Automated builds**: https://travis-ci.com/fortify-ps/FortifyImportExportUtility
 
 
 ## TODO
 
-Include further documentation
+Architecture & Design:
 
+* Notify source system about exported entities (applications, release, vulnerabilities, ...)
+    * Update source system based on configuration settings 
+    * Actual functionality depends on source system and entity type
+        * Vulnerability: bug link, comment, custom tag, ...
+        * FoD application: application attrs
+        * SSC version: version attrs
+* Filter entities based on previously exported status
+	* Target processors specify what information they need
+	* All issues (independent of whether previously submitted), previously submitted issues (for updates), issues that have not yet been submitted
+* How to easily support multiple configurations for a single source/target system
+    * @ConfigurationProperties only allows for fixed property prefixes
+    * Select between these configurations (connecting specific source and target configurations) 
+
+Implementation:
+
+* Add generic source filtering configuration and implementation
+    * Filter & select SSC & FoD applications, releases, vulnerabilities, ...
+    * Add filtering parameters to REST requests, perform regex filtering, ...
+* Add functionality for grouping source data
+    * Controlled by target configuration
+* Finalize existing plugins
+    * 'from FoD'
+    * 'from SSC'
+    * 'to file'
+        * Generic data export to CSV, JSON, XML, ...
+        * Support both console and file
+        * Group data in multiple files in single run (by application/release/category/...)
+* Add plugins:
+    * 'from FPR'
+        * Load vulnerability data from FPR files
+    * 'to SonarQube external issue data'
+        * To replace and enhance https://github.com/fortify-ps/FortifyFprToSonarQubeIssueData
+        * Load vulnerabilities from SSC, FoD, FPR
+        * Eventually replace https://github.com/fortify-ps/fortify-integration-sonarqube
+        * Provide separate SonarQube plugins to enhance their generic issue data import
+    * 'to bug trackers'
+        * Eventually replace https://github.com/fortify-ps/FortifyBugTrackerUtility
+    * 'to SSC' and 'to FoD': 
+        * Import data from external sources into FoD or SSC
+        * Import FPR/users/roles/applications/releases/... from file or from other FoD/SSC instances
+    * 'from file': 
+        * Read applications/releases/users/roles/... from a CSV/JSON/... file
+
+
+Documentation:
+
+* For users: Describe plugin system
+    * Optimize installation by removing unneeded plugins
+* For developers: Describe architecture
+	* Scheduled run vs run-once
+	* Modifyable property scope
+	* Extensible enums
+	* Plugin system, provided dependencies, ...
+	
+	
 
 ## Developers
 
