@@ -33,6 +33,38 @@ public abstract class AbstractIntermediateLoaderFactory<I> extends AbstractProce
 		setSupportedSourceEntities(getParentSourceEntities());
 	}
 	
+	/**
+	 * If no supported source entities are defined, then calls to {@link #isEnabled(IProcessorSelector)}
+	 * may result in endless loops:
+	 * <ul>
+	 *  <li>This factory indirectly calls {@link #isEnabled(IProcessorSelector)} on all 
+	 *      available processors to see whether they provide a valid target processor for our processor<li>
+	 *  <li>However if we call {@link #isEnabled(IProcessorSelector)} on any 
+	 *      {@link AbstractIntermediateLoaderFactory} (either ourselves or any other {@link AbstractIntermediateLoaderFactory}
+	 *      implementation), then this factory will eventually call {@link #isEnabled(IProcessorSelector)}
+	 *      on ourselves again, as we are listed as an available processor factory</li>
+	 * </ul>
+	 * 
+	 * We assume that source entities are hierarchical in nature (i.e. application->release->vulnerability), so
+	 * no endless loops are possible if each factory properly sets one or more parent entity types. If a loader 
+	 * implementation doesn't specify a source entity then it will be disabled automatically by having this method 
+	 * return false.
+	 */
+	@Override
+	protected boolean isEnabledIfSupportedSourceEntitiesIsEmpty() {
+		return false;
+	}
+	
+	/**
+	 * Each intermediate loader should only be invoked by other loaders from the same source 
+	 * system; if a loader implementation doesn't specify a source system then it will be disabled
+	 * automatically by having this method return false.
+	 */
+	@Override
+	protected boolean isEnabledIfSupportedSourceSystemsIsEmpty() {
+		return false;
+	}
+	
 	@Override
 	public boolean isEnabled(IProcessorSelector processorSelector) {
 		return super.isEnabled(processorSelector) && hasEnabledProcessors(getTargetProcessorSelector());

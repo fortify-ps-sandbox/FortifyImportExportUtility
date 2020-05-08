@@ -42,7 +42,7 @@ public abstract class AbstractProcessorInvokerProcessor<I> extends AbstractProce
 		try ( ModifyablePropertySource mps = ModifyablePropertySource.withProperties(getProperties(input)) ) {
 			enabledProcessorsLoader
 				.getEnabledProcessors(processorSelector)
-				// This cast should be safe if associated processor factory accepted IProcessorSelector#getProcessorInputType
+				// This cast/invocation should be safe if associated processor factory accepted IProcessorSelector#getProcessorInputType
 				.forEach(processor->((IProcessor<I>)processor).process(input));
 		}
 	}
