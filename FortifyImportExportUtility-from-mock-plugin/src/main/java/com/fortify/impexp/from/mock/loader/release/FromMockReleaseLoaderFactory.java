@@ -29,12 +29,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.impexp.common.processor.selector.IProcessorSelector;
 import com.fortify.impexp.common.processor.selector.StandardSourceEntity;
+import com.fortify.impexp.from.mock.loader.AbstractFromMockRootLoaderFactory;
 import com.fortify.impexp.from.mock.processor.selector.FromMockProcessorSelector;
 import com.fortify.impexp.source.common.spi.annotation.SourceComponent;
-import com.fortify.impexp.source.common.spi.loader.AbstractRootLoaderFactory;
 
 @SourceComponent
-public class FromMockReleaseLoaderFactory extends AbstractRootLoaderFactory<FromMockReleaseLoader> {
+public class FromMockReleaseLoaderFactory extends AbstractFromMockRootLoaderFactory<FromMockReleaseLoader> {
 	@Autowired private ObjectFactory<FromMockReleaseLoader> rootLoaderFactory;
 	
 	public static final IProcessorSelector TARGET_PROCESSOR_SELECTOR = 

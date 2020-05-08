@@ -22,34 +22,13 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.loader.release;
+package com.fortify.impexp.from.mock.loader;
 
-import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fortify.impexp.source.common.spi.loader.AbstractRootLoaderFactory;
+import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 
-import com.fortify.impexp.common.processor.selector.IProcessorSelector;
-import com.fortify.impexp.common.processor.selector.StandardSourceEntity;
-import com.fortify.impexp.from.ssc.loader.AbstractFromSSCRootLoaderFactory;
-import com.fortify.impexp.from.ssc.processor.selector.FromSSCProcessorSelector;
-import com.fortify.impexp.source.common.spi.annotation.SourceComponent;
-
-@SourceComponent
-public class FromSSCReleaseLoaderFactory extends AbstractFromSSCRootLoaderFactory<FromSSCReleaseLoader> {
-	@Autowired private ObjectFactory<FromSSCReleaseLoader> rootLoaderFactory;
-	
-	public static final IProcessorSelector TARGET_PROCESSOR_SELECTOR = 
-			new FromSSCProcessorSelector().sourceEntity(StandardSourceEntity.RELEASE);
-
-	@Override
-	public String getCronSchedule() {
-		return null;
+public abstract class AbstractFromMockRootLoaderFactory<R extends ISchedulableRunner> extends AbstractRootLoaderFactory<R> {
+	public AbstractFromMockRootLoaderFactory() {
+		// TODO setPropertyPrefix("from.mock");
 	}
-	
-	@Override
-	protected IProcessorSelector getTargetProcessorSelector() {
-		return TARGET_PROCESSOR_SELECTOR;
-	}
-
-	@Override
-	public FromSSCReleaseLoader getRootLoader() { return rootLoaderFactory.getObject(); }
 }
