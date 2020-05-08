@@ -1,0 +1,11 @@
+plugins {
+    id 'java-library'
+	id "io.freefair.lombok" version "4.1.2"
+}
+
+description = 'FortifyImportExportUtility source implementation for FoD'
+
+dependencies {
+	compileOnly project(':FortifyImportExportUtility-common-from')
+	compileOnly('com.fortify.client.api:client-api-fod') { changing = true }
+}

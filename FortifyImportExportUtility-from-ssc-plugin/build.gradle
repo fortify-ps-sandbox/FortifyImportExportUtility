@@ -1,0 +1,14 @@
+plugins {
+    id 'java-library'
+	id "io.freefair.lombok" version "4.1.2"
+}
+
+description = 'FortifyImportExportUtility source implementation for SSC'
+
+dependencies {
+	compileOnly project(':FortifyImportExportUtility-common')
+	compileOnly project(':FortifyImportExportUtility-common-from')
+	compileOnly project(':FortifyImportExportUtility-common-to')
+	compileOnly('com.fortify.util.spring.boot:fortify-spring-boot-helper') { changing = true }
+	compileOnly('com.fortify.client.api:client-api-ssc') { changing = true }
+}

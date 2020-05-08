@@ -1,0 +1,12 @@
+plugins {
+    id 'java-library'
+	id "io.freefair.lombok" version "4.1.2"
+}
+
+description = 'FortifyImportExportUtility common functionality for source implementations'
+
+dependencies {
+	compileOnly project(':FortifyImportExportUtility-common')
+	compileOnly project(':FortifyImportExportUtility-common-to')
+	compileOnly('com.fortify.util.spring.boot:fortify-spring-boot-helper') { changing = true }
+}
