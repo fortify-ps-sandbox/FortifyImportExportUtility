@@ -22,15 +22,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.mock.processor.selector;
+package com.fortify.impexp.common.from.spi.loader;
 
-import com.fortify.impexp.common.processor.selector.AbstractProcessorSelector;
-import com.fortify.impexp.common.processor.selector.StandardSourceSystem;
-import com.fortify.util.rest.json.JSONMap;
+import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerProcessor;
 
-public class FromMockProcessorSelector extends AbstractProcessorSelector<FromMockProcessorSelector> {
-	public FromMockProcessorSelector() {
-		sourceSystem(StandardSourceSystem.MOCK);
-		processorInputType(JSONMap.class);
-	}
-}
+public abstract class AbstractIntermediateLoader<E> extends AbstractProcessorInvokerProcessor<E> {}

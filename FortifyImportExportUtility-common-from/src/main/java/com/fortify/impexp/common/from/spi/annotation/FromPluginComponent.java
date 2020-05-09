@@ -22,9 +22,22 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.source.common.spi.loader;
+package com.fortify.impexp.common.from.spi.annotation;
 
-import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvoker;
-import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public abstract class AbstractRootLoader<I> extends AbstractProcessorInvoker<I> implements ISchedulableRunner {}
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
+
+import com.fortify.util.spring.boot.env.PropertyScopedComponent;
+
+@Qualifier
+@PropertyScopedComponent
+@Lazy
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface FromPluginComponent {
+}

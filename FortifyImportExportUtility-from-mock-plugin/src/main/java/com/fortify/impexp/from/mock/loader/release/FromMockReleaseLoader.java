@@ -24,16 +24,16 @@
  ******************************************************************************/
 package com.fortify.impexp.from.mock.loader.release;
 
-import com.fortify.impexp.source.common.spi.annotation.SourceComponent;
-import com.fortify.impexp.source.common.spi.loader.AbstractRootLoader;
+import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
+import com.fortify.impexp.common.from.spi.loader.AbstractRootLoader;
 import com.fortify.util.rest.json.JSONMap;
 
-@SourceComponent
+@FromPluginComponent
 public class FromMockReleaseLoader extends AbstractRootLoader<JSONMap> {
 	@Override
 	public void run() {
 		for ( int i = 0 ; i < 10 ; i++ ) {
-			invokeEnabledProcessors(FromMockReleaseLoaderFactory.TARGET_PROCESSOR_SELECTOR, getRelease(i));
+			invokeEnabledProcessors(FromMockReleaseLoaderFactory.ENTITY_DESCRIPTOR, getRelease(i));
 		}
 	}
 

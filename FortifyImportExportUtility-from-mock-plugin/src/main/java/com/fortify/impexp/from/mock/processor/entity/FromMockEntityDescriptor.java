@@ -22,46 +22,15 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.util.enumentry;
+package com.fortify.impexp.from.mock.processor.entity;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import com.fortify.impexp.common.processor.entity.AbstractEntityDescriptor;
+import com.fortify.impexp.common.processor.entity.StandardEntitySource;
+import com.fortify.util.rest.json.JSONMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
-
-import com.fortify.impexp.common.processor.selector.ISourceEntity;
-
-public class AbstractEnumConverter<E extends IEnumEntry> implements Converter<String, E> {
-	private final Map<String, E> valuesByName = new HashMap<>();
-	
-	@Autowired
-	public final void register(Collection<IEnumEntryProvider<E>> providers) {
-		providers.stream()
-			.map(IEnumEntryProvider::getEnumEntries)
-			.forEach(this::register); // TODO how to call register with individual entity directly?
-	}
-	
-	public final void register(E[] entity) {
-		Arrays.stream(entity).forEach(this::register);
-	}
-	
-	public final void register(E entity) {
-		valuesByName.put(entity.name(), entity);
-	}
-
-	@Override
-	public E convert(String name) {
-		return checkNotNull(valuesByName.get(name.trim().toUpperCase()), name);
-	}
-	
-	private E checkNotNull(E value, String name) {
-		if ( value==null ) {
-			// TODO Log error message, as Spring's error doesn't provide any details
-			throw new IllegalArgumentException("No enum constant " + ISourceEntity.class.getCanonicalName() + "." + name);
-		}
-		return value;
+public class FromMockEntityDescriptor extends AbstractEntityDescriptor<FromMockEntityDescriptor> {
+	public FromMockEntityDescriptor() {
+		source(StandardEntitySource.MOCK);
+		javaType(JSONMap.class);
 	}
 }

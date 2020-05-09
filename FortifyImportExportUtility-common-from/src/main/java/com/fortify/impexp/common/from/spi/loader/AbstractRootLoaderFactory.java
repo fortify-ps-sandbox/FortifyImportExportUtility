@@ -22,14 +22,14 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.source.common.spi.loader;
+package com.fortify.impexp.common.from.spi.loader;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 
+import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
 import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerFactory;
-import com.fortify.impexp.common.processor.selector.IProcessorSelector;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunnerFactory;
 
@@ -37,7 +37,7 @@ public abstract class AbstractRootLoaderFactory<R extends ISchedulableRunner> ex
 	@Override
 	public boolean isEnabled() {
 		// TODO Check for enabled configuration properties
-		return hasEnabledProcessors(getTargetProcessorSelector());
+		return hasActiveProcessors(getEntityDescriptor());
 	}
 	
 	/**
@@ -67,6 +67,6 @@ public abstract class AbstractRootLoaderFactory<R extends ISchedulableRunner> ex
 	 */
 	protected abstract R getRootLoader();
 
-	protected abstract IProcessorSelector getTargetProcessorSelector();
+	protected abstract IEntityDescriptor getEntityDescriptor();
 	
 }

@@ -22,13 +22,36 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.selector;
+package com.fortify.impexp.common.processor.retriever;
 
-import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fortify.util.enumentry.AbstractEnumConverter;
+import com.fortify.impexp.common.processor.IProcessor;
+import com.fortify.impexp.common.processor.IProcessorFactory;
+import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
 
 @Component
-@ConfigurationPropertiesBinding
-public class StringToSourceSystemConverter extends AbstractEnumConverter<ISourceSystem> {}
+public class ActiveProcessorsRetriever {
+	@Autowired private Collection<IProcessorFactory<?>> allProcessorFactories;
+	
+	public final Collection<IProcessor<?>> getActiveProcessors(final IEntityDescriptor entityDescriptor) {
+		return getActiveProcessorsStream(entityDescriptor)
+				.map(factory->(IProcessor<?>)factory.getProcessor())
+				.collect(Collectors.toList());
+	}
+
+	private Stream<IProcessorFactory<?>> getActiveProcessorsStream(final IEntityDescriptor entityDescriptor) {
+		return allProcessorFactories
+				.stream()
+				.filter(factory->factory.isActive(entityDescriptor));
+	}
+	
+	public final boolean hasActiveProcessors(final IEntityDescriptor entityDescriptor) {
+		return getActiveProcessorsStream(entityDescriptor).findAny().isPresent();
+	}
+}

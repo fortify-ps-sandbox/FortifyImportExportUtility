@@ -24,7 +24,7 @@
  ******************************************************************************/
 package com.fortify.impexp.common.processor;
 
-public interface IProcessor<I> {
-	public void process(I input);
+public interface IProcessor<E> {
+	public void process(E entity);
 	// TODO Add initialize/finalize methods
 }

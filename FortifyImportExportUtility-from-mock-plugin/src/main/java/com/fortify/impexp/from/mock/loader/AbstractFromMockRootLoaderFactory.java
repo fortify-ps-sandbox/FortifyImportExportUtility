@@ -24,7 +24,7 @@
  ******************************************************************************/
 package com.fortify.impexp.from.mock.loader;
 
-import com.fortify.impexp.source.common.spi.loader.AbstractRootLoaderFactory;
+import com.fortify.impexp.common.from.spi.loader.AbstractRootLoaderFactory;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 
 public abstract class AbstractFromMockRootLoaderFactory<R extends ISchedulableRunner> extends AbstractRootLoaderFactory<R> {

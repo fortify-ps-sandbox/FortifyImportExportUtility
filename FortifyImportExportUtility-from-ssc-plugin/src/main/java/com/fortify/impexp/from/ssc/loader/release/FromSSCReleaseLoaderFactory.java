@@ -27,18 +27,18 @@ package com.fortify.impexp.from.ssc.loader.release;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.fortify.impexp.common.processor.selector.IProcessorSelector;
-import com.fortify.impexp.common.processor.selector.StandardSourceEntity;
+import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
+import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
+import com.fortify.impexp.common.processor.entity.StandardEntityType;
 import com.fortify.impexp.from.ssc.loader.AbstractFromSSCRootLoaderFactory;
-import com.fortify.impexp.from.ssc.processor.selector.FromSSCProcessorSelector;
-import com.fortify.impexp.source.common.spi.annotation.SourceComponent;
+import com.fortify.impexp.from.ssc.processor.entity.FromSSCEntityDescriptor;
 
-@SourceComponent
+@FromPluginComponent
 public class FromSSCReleaseLoaderFactory extends AbstractFromSSCRootLoaderFactory<FromSSCReleaseLoader> {
 	@Autowired private ObjectFactory<FromSSCReleaseLoader> rootLoaderFactory;
 	
-	public static final IProcessorSelector TARGET_PROCESSOR_SELECTOR = 
-			new FromSSCProcessorSelector().sourceEntity(StandardSourceEntity.RELEASE);
+	public static final IEntityDescriptor ENTITY_DESCRIPTOR = 
+			new FromSSCEntityDescriptor().entity(StandardEntityType.RELEASE);
 
 	@Override
 	public String getCronSchedule() {
@@ -46,8 +46,8 @@ public class FromSSCReleaseLoaderFactory extends AbstractFromSSCRootLoaderFactor
 	}
 	
 	@Override
-	protected IProcessorSelector getTargetProcessorSelector() {
-		return TARGET_PROCESSOR_SELECTOR;
+	protected IEntityDescriptor getEntityDescriptor() {
+		return ENTITY_DESCRIPTOR;
 	}
 
 	@Override

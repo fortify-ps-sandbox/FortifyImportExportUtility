@@ -27,16 +27,16 @@ package com.fortify.impexp.from.mock.loader.application;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fortify.impexp.source.common.spi.annotation.SourceComponent;
-import com.fortify.impexp.source.common.spi.loader.AbstractRootLoader;
+import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
+import com.fortify.impexp.common.from.spi.loader.AbstractRootLoader;
 import com.fortify.util.rest.json.JSONMap;
 
-@SourceComponent
+@FromPluginComponent
 public class FromMockApplicationLoader extends AbstractRootLoader<JSONMap> {
 	@Override
 	public void run() {
 		for ( int i = 0 ; i < 10 ; i++ ) {
-			invokeEnabledProcessors(FromMockApplicationLoaderFactory.TARGET_PROCESSOR_SELECTOR, getApplication(i));
+			invokeEnabledProcessors(FromMockApplicationLoaderFactory.ENTITY_DESCRIPTOR, getApplication(i));
 		}
 	}
 

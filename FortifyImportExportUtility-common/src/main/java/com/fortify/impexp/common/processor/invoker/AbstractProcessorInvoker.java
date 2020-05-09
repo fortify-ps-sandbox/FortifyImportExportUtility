@@ -29,24 +29,24 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.impexp.common.processor.IProcessor;
-import com.fortify.impexp.common.processor.retriever.EnabledProcessorsRetriever;
-import com.fortify.impexp.common.processor.selector.IProcessorSelector;
+import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
+import com.fortify.impexp.common.processor.retriever.ActiveProcessorsRetriever;
 import com.fortify.util.spring.boot.env.ModifyablePropertySource;
 
-public class AbstractProcessorInvoker<I> {
-	@Autowired private EnabledProcessorsRetriever enabledProcessorsLoader;
+public class AbstractProcessorInvoker<E> {
+	@Autowired private ActiveProcessorsRetriever activeProcessorsLoader;
 	
 	@SuppressWarnings("unchecked")
-	protected final void invokeEnabledProcessors(IProcessorSelector processorSelector, I input) {
-		try ( ModifyablePropertySource mps = ModifyablePropertySource.withProperties(getProperties(input)) ) {
-			enabledProcessorsLoader
-				.getEnabledProcessors(processorSelector)
-				// This cast should be safe if associated processor factory accepted IProcessorSelector#getProcessorInputType
-				.forEach(processor->((IProcessor<I>)processor).process(input));
+	protected final void invokeEnabledProcessors(IEntityDescriptor entityDescriptor, E entity) {
+		try ( ModifyablePropertySource mps = ModifyablePropertySource.withProperties(getProperties(entity)) ) {
+			activeProcessorsLoader
+				.getActiveProcessors(entityDescriptor)
+				// This cast should be safe based on IEntityDescriptor#getJavaType()
+				.forEach(processor->((IProcessor<E>)processor).process(entity));
 		}
 	}
 
-	protected Map<String, Object> getProperties(I input) {
+	protected Map<String, Object> getProperties(E input) {
 		return null;
 	}
 }

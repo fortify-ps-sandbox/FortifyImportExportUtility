@@ -27,10 +27,10 @@ package com.fortify.impexp.to.file.processor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.impexp.common.processor.AbstractObjectProcessor;
-import com.fortify.impexp.target.common.spi.annotation.TargetComponent;
+import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
 import com.fortify.impexp.to.file.processor.config.ToFileConfig;
 
-@TargetComponent
+@ToPluginComponent
 public class ToFileProcessor extends AbstractObjectProcessor {
 	@Autowired ToFileConfig exportToFileConfig;
 	

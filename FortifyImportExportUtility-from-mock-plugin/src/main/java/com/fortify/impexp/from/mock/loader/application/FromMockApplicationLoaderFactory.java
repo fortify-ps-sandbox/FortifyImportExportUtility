@@ -27,18 +27,18 @@ package com.fortify.impexp.from.mock.loader.application;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.fortify.impexp.common.processor.selector.IProcessorSelector;
-import com.fortify.impexp.common.processor.selector.StandardSourceEntity;
+import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
+import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
+import com.fortify.impexp.common.processor.entity.StandardEntityType;
 import com.fortify.impexp.from.mock.loader.AbstractFromMockRootLoaderFactory;
-import com.fortify.impexp.from.mock.processor.selector.FromMockProcessorSelector;
-import com.fortify.impexp.source.common.spi.annotation.SourceComponent;
+import com.fortify.impexp.from.mock.processor.entity.FromMockEntityDescriptor;
 
-@SourceComponent
+@FromPluginComponent
 public class FromMockApplicationLoaderFactory extends AbstractFromMockRootLoaderFactory<FromMockApplicationLoader> {
 	@Autowired private ObjectFactory<FromMockApplicationLoader> rootLoaderFactory;
 	
-	public static final IProcessorSelector TARGET_PROCESSOR_SELECTOR = 
-			new FromMockProcessorSelector().sourceEntity(StandardSourceEntity.APPLICATION);
+	public static final IEntityDescriptor ENTITY_DESCRIPTOR = 
+			new FromMockEntityDescriptor().entity(StandardEntityType.APPLICATION);
 
 	@Override
 	public String getCronSchedule() {
@@ -46,8 +46,8 @@ public class FromMockApplicationLoaderFactory extends AbstractFromMockRootLoader
 	}
 	
 	@Override
-	protected IProcessorSelector getTargetProcessorSelector() {
-		return TARGET_PROCESSOR_SELECTOR;
+	protected IEntityDescriptor getEntityDescriptor() {
+		return ENTITY_DESCRIPTOR;
 	}
 
 	@Override

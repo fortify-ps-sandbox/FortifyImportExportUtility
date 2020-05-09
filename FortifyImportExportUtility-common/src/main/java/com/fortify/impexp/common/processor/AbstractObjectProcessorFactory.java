@@ -26,7 +26,7 @@ package com.fortify.impexp.common.processor;
 
 public abstract class AbstractObjectProcessorFactory extends AbstractProcessorFactory<Object> {
 	public AbstractObjectProcessorFactory() {
-		setSupportedProcessorInputType(Object.class);
+		setSupportedEntityJavaType(Object.class);
 	}
 
 }

@@ -22,54 +22,54 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.source.common.spi.loader;
+package com.fortify.impexp.common.from.spi.loader;
 
+import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
+import com.fortify.impexp.common.processor.entity.IEntityType;
 import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerProcessorFactory;
-import com.fortify.impexp.common.processor.selector.IProcessorSelector;
-import com.fortify.impexp.common.processor.selector.ISourceEntity;
 
-public abstract class AbstractIntermediateLoaderFactory<I> extends AbstractProcessorInvokerProcessorFactory<I> {
+public abstract class AbstractIntermediateLoaderFactory<E> extends AbstractProcessorInvokerProcessorFactory<E> {
 	public AbstractIntermediateLoaderFactory() {
-		setSupportedSourceEntities(getParentSourceEntities());
+		setSupportedEntityTypes(getSupportedEntityTypes());
 	}
 	
 	/**
-	 * If no supported source entities are defined, then calls to {@link #isEnabled(IProcessorSelector)}
+	 * If no supported entity types are defined, then calls to {@link #isActive(IEntityDescriptor)}
 	 * may result in endless loops:
 	 * <ul>
-	 *  <li>This factory indirectly calls {@link #isEnabled(IProcessorSelector)} on all 
+	 *  <li>This factory indirectly calls {@link #isActive(IEntityDescriptor)} on all 
 	 *      available processors to see whether they provide a valid target processor for our processor<li>
-	 *  <li>However if we call {@link #isEnabled(IProcessorSelector)} on any 
+	 *  <li>However if we call {@link #isActive(IEntityDescriptor)} on any 
 	 *      {@link AbstractIntermediateLoaderFactory} (either ourselves or any other {@link AbstractIntermediateLoaderFactory}
-	 *      implementation), then this factory will eventually call {@link #isEnabled(IProcessorSelector)}
+	 *      implementation), then that factory will eventually call {@link #isActive(IEntityDescriptor)}
 	 *      on ourselves again, as we are listed as an available processor factory</li>
 	 * </ul>
 	 * 
-	 * We assume that source entities are hierarchical in nature (i.e. application->release->vulnerability), so
-	 * no endless loops are possible if each factory properly sets one or more parent entity types. If a loader 
-	 * implementation doesn't specify a source entity then it will be disabled automatically by having this method 
+	 * We assume that entity types are hierarchical in nature (for example application->release->vulnerability), so
+	 * no endless loops are possible if each factory properly sets one or more supported entity types. If a loader 
+	 * implementation doesn't specify an entity type then the loader will be disabled automatically by having this method 
 	 * return false.
 	 */
 	@Override
-	protected boolean isEnabledIfSupportedSourceEntitiesIsEmpty() {
+	protected boolean isSupportedIfSupportedEntityTypesIsEmpty() {
 		return false;
 	}
 	
 	/**
-	 * Each intermediate loader should only be invoked by other loaders from the same source 
-	 * system; if a loader implementation doesn't specify a source system then it will be disabled
-	 * automatically by having this method return false.
+	 * Each intermediate loader should only be invoked by loaders that have the same entity source; 
+	 * if a loader implementation doesn't specify an entity source then it will be disabled automatically 
+	 * by having this method return false.
 	 */
 	@Override
-	protected boolean isEnabledIfSupportedSourceSystemsIsEmpty() {
+	protected boolean isSupportedIfSupportedEntitySourcesIsEmpty() {
 		return false;
 	}
 	
 	@Override
-	public boolean isEnabled(IProcessorSelector processorSelector) {
-		return super.isEnabled(processorSelector) && hasEnabledProcessors(getTargetProcessorSelector());
+	public boolean isActive(IEntityDescriptor entityDescriptor) {
+		return super.isActive(entityDescriptor) && hasEnabledProcessors(getEntityDescriptor());
 	}
 	
-	protected abstract IProcessorSelector getTargetProcessorSelector();
-	protected abstract ISourceEntity[] getParentSourceEntities();
+	protected abstract IEntityDescriptor getEntityDescriptor();
+	protected abstract IEntityType[] getSupportedEntityTypes();
 }

@@ -22,10 +22,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.selector;
+package com.fortify.impexp.common.from.spi.loader;
 
-public interface IProcessorSelector {
-	public ISourceSystem getSourceSystem();
-	public ISourceEntity getSourceEntity();
-	public Class<?> getProcessorInputType();
-}
+import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvoker;
+import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
+
+public abstract class AbstractRootLoader<E> extends AbstractProcessorInvoker<E> implements ISchedulableRunner {}

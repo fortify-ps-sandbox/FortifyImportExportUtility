@@ -24,12 +24,13 @@
  ******************************************************************************/
 package com.fortify.impexp.from.ssc.loader;
 
-import com.fortify.impexp.common.processor.selector.StandardSourceSystem;
-import com.fortify.impexp.source.common.spi.loader.AbstractIntermediateLoaderFactory;
+import com.fortify.impexp.common.from.spi.loader.AbstractIntermediateLoaderFactory;
+import com.fortify.impexp.common.processor.entity.StandardEntitySource;
+import com.fortify.util.rest.json.JSONMap;
 
-public abstract class AbstractFromSSCIntermediateLoaderFactory<I> extends AbstractIntermediateLoaderFactory<I> {
+public abstract class AbstractFromSSCIntermediateLoaderFactory extends AbstractIntermediateLoaderFactory<JSONMap> {
 	public AbstractFromSSCIntermediateLoaderFactory() {
-		setSupportedSourceSystems(StandardSourceSystem.SSC);
+		setSupportedEntitySources(StandardEntitySource.SSC);
 		setPropertyPrefix("from.ssc");
 	}
 

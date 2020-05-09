@@ -28,32 +28,32 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import com.fortify.impexp.common.processor.selector.ISourceEntity;
-import com.fortify.impexp.common.processor.selector.ISourceSystem;
-import com.fortify.impexp.target.common.spi.annotation.TargetComponent;
+import com.fortify.impexp.common.processor.entity.IEntitySource;
+import com.fortify.impexp.common.processor.entity.IEntityType;
+import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
 import com.fortify.impexp.to.mock.processor.ToMockProcessorFactory;
 
 import lombok.Data;
 
 @Data
-@TargetComponent
+@ToPluginComponent
 @ConfigurationProperties(ToMockProcessorFactory.PROPERTY_PREFIX)
 public class ToMockConfig {
 	private String simple;
-	private ToMockConfigSource source;
+	private ToMockConfigEntity entity;
 	
-	public final ISourceSystem[] getSourceSystems() {
-		return source==null ? null : source.getSystems();
+	public final IEntitySource[] getEntitySources() {
+		return entity==null ? null : entity.getSources();
 	}
 	
-	public final ISourceEntity[] getSourceEntities() {
-		return source==null ? null : source.getEntities();
+	public final IEntityType[] getEntityTypes() {
+		return entity==null ? null : entity.getTypes();
 	}
 	
 	@Data
-	public static final class ToMockConfigSource {
-		private ISourceSystem[] systems;
-		private ISourceEntity[] entities;
+	public static final class ToMockConfigEntity {
+		private IEntitySource[] sources;
+		private IEntityType[] types;
 	}
 	
 	@PostConstruct

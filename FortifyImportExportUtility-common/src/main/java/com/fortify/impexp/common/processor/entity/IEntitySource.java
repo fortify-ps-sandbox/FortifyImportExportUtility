@@ -22,37 +22,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.selector;
+package com.fortify.impexp.common.processor.entity;
 
-public abstract class AbstractProcessorSelector<T extends AbstractProcessorSelector<T>> implements IProcessorSelector {
-	private ISourceSystem sourceSystem;
-	private ISourceEntity sourceEntity;
-	private Class<?> processorInputType;
-	
-	public ISourceSystem getSourceSystem() {
-		return sourceSystem;
-	}
-	public T sourceSystem(ISourceSystem sourceSystem) {
-		this.sourceSystem = sourceSystem;
-		return _this();
-	}
-	public ISourceEntity getSourceEntity() {
-		return sourceEntity;
-	}
-	public T sourceEntity(ISourceEntity sourceEntity) {
-		this.sourceEntity = sourceEntity;
-		return _this();
-	}
-	public Class<?> getProcessorInputType() {
-		return processorInputType;
-	}
-	public T processorInputType(Class<?> processorInputType) {
-		this.processorInputType = processorInputType;
-		return _this();
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected T _this() {
-		return (T)this;
-	}
-}
+import com.fortify.util.enumentry.IEnumEntry;
+
+public interface IEntitySource extends IEnumEntry {}

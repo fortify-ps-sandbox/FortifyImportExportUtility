@@ -22,22 +22,31 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.source.common.spi.annotation;
+package com.fortify.impexp.common.processor.entity;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import lombok.Getter;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
-
-import com.fortify.util.spring.boot.env.PropertyScopedComponent;
-
-@Qualifier
-@PropertyScopedComponent
-@Lazy
-@Target({ ElementType.TYPE, ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SourceComponent {
+@Getter
+public abstract class AbstractEntityDescriptor<T extends AbstractEntityDescriptor<T>> implements IEntityDescriptor {
+	private IEntitySource source;
+	private IEntityType type;
+	private Class<?> javaType;
+	
+	public T source(IEntitySource source) {
+		this.source = source;
+		return _this();
+	}
+	public T entity(IEntityType type) {
+		this.type = type;
+		return _this();
+	}
+	public T javaType(Class<?> javaType) {
+		this.javaType = javaType;
+		return _this();
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected T _this() {
+		return (T)this;
+	}
 }

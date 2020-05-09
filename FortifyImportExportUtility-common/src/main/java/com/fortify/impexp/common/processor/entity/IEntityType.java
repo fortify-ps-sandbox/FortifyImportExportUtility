@@ -22,8 +22,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.selector;
+package com.fortify.impexp.common.processor.entity;
 
 import com.fortify.util.enumentry.IEnumEntry;
 
-public interface ISourceEntity extends IEnumEntry {}
+public interface IEntityType extends IEnumEntry {}

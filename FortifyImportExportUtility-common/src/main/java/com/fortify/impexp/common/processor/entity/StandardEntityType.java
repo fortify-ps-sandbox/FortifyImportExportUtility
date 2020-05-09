@@ -22,15 +22,22 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.processor.selector;
+package com.fortify.impexp.common.processor.entity;
 
-import com.fortify.impexp.common.processor.selector.AbstractProcessorSelector;
-import com.fortify.impexp.common.processor.selector.StandardSourceSystem;
-import com.fortify.util.rest.json.JSONMap;
+import org.springframework.stereotype.Component;
 
-public class FromSSCProcessorSelector extends AbstractProcessorSelector<FromSSCProcessorSelector> {
-	public FromSSCProcessorSelector() {
-		sourceSystem(StandardSourceSystem.SSC);
-		processorInputType(JSONMap.class);
+import com.fortify.util.enumentry.IEnumEntryProvider;
+
+public enum StandardEntityType implements IEntityType {
+	APPLICATION,
+	RELEASE,
+	VULNERABILITY;
+	
+	@Component
+	public static class EnumEntryProvider implements IEnumEntryProvider<IEntityType> {
+		@Override
+		public IEntityType[] getEnumEntries() {
+			return values();
+		}
 	}
 }

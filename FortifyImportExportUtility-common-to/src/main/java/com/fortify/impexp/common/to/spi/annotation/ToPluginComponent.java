@@ -22,21 +22,22 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.mock.processor.selector;
+package com.fortify.impexp.common.to.spi.annotation;
 
-import org.springframework.stereotype.Component;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import com.fortify.impexp.common.processor.selector.ISourceEntity;
-import com.fortify.util.enumentry.IEnumEntryProvider;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 
-public enum FromMockSourceEntity implements ISourceEntity {
-	MOCK_CUSTOM;
-	
-	@Component
-	public static class SourceEntityProvider implements IEnumEntryProvider<ISourceEntity> {
-		@Override
-		public ISourceEntity[] getEnumEntries() {
-			return values();
-		}
-	}
+import com.fortify.util.spring.boot.env.PropertyScopedComponent;
+
+@Qualifier
+@PropertyScopedComponent
+@Lazy
+@Target({ ElementType.TYPE, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ToPluginComponent {
 }

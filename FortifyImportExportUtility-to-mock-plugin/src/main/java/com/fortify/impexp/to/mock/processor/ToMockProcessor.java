@@ -27,10 +27,10 @@ package com.fortify.impexp.to.mock.processor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.impexp.common.processor.AbstractObjectProcessor;
-import com.fortify.impexp.target.common.spi.annotation.TargetComponent;
+import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
 import com.fortify.impexp.to.mock.processor.config.ToMockConfig;
 
-@TargetComponent
+@ToPluginComponent
 public class ToMockProcessor extends AbstractObjectProcessor {
 	@Autowired ToMockConfig exportToFileConfig;
 	

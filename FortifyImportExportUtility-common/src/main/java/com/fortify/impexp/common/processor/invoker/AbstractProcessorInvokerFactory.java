@@ -26,13 +26,13 @@ package com.fortify.impexp.common.processor.invoker;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.fortify.impexp.common.processor.retriever.EnabledProcessorsRetriever;
-import com.fortify.impexp.common.processor.selector.IProcessorSelector;
+import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
+import com.fortify.impexp.common.processor.retriever.ActiveProcessorsRetriever;
 
 public class AbstractProcessorInvokerFactory {
-	@Autowired private EnabledProcessorsRetriever enabledProcessorsLoader;
+	@Autowired private ActiveProcessorsRetriever activeProcessorsRetriever;
 	
-	protected boolean hasEnabledProcessors(IProcessorSelector processorSelector) {
-		return enabledProcessorsLoader.hasEnabledProcessors(processorSelector);
+	protected boolean hasActiveProcessors(IEntityDescriptor entityDescriptor) {
+		return activeProcessorsRetriever.hasActiveProcessors(entityDescriptor);
 	}
 }

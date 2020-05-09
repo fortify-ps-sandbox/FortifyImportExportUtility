@@ -22,13 +22,15 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.selector;
+package com.fortify.impexp.from.ssc.processor.entity;
 
-import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
-import org.springframework.stereotype.Component;
+import com.fortify.impexp.common.processor.entity.AbstractEntityDescriptor;
+import com.fortify.impexp.common.processor.entity.StandardEntitySource;
+import com.fortify.util.rest.json.JSONMap;
 
-import com.fortify.util.enumentry.AbstractEnumConverter;
-
-@Component
-@ConfigurationPropertiesBinding
-public class StringToSourceEntityConverter extends AbstractEnumConverter<ISourceEntity> {}
+public class FromSSCEntityDescriptor extends AbstractEntityDescriptor<FromSSCEntityDescriptor> {
+	public FromSSCEntityDescriptor() {
+		source(StandardEntitySource.SSC);
+		javaType(JSONMap.class);
+	}
+}

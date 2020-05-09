@@ -27,29 +27,28 @@ package com.fortify.impexp.from.mock.loader.release;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.fortify.impexp.common.processor.selector.IProcessorSelector;
-import com.fortify.impexp.common.processor.selector.ISourceEntity;
-import com.fortify.impexp.common.processor.selector.StandardSourceEntity;
+import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
+import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
+import com.fortify.impexp.common.processor.entity.IEntityType;
+import com.fortify.impexp.common.processor.entity.StandardEntityType;
 import com.fortify.impexp.from.mock.loader.AbstractFromMockIntermediateLoaderFactory;
-import com.fortify.impexp.from.mock.processor.selector.FromMockProcessorSelector;
-import com.fortify.impexp.source.common.spi.annotation.SourceComponent;
-import com.fortify.util.rest.json.JSONMap;
+import com.fortify.impexp.from.mock.processor.entity.FromMockEntityDescriptor;
 
-@SourceComponent
-public class FromMockReleaseFromApplicationLoaderFactory extends AbstractFromMockIntermediateLoaderFactory<JSONMap> {
-	static final IProcessorSelector TARGET_PROCESSOR_SELECTOR = 
-			new FromMockProcessorSelector().sourceEntity(StandardSourceEntity.RELEASE);
-	private static final ISourceEntity[] PARENT_SOURCE_ENTITIES = {StandardSourceEntity.APPLICATION};
+@FromPluginComponent
+public class FromMockReleaseFromApplicationLoaderFactory extends AbstractFromMockIntermediateLoaderFactory {
+	static final IEntityDescriptor ENTITY_DESCRIPTOR = 
+			new FromMockEntityDescriptor().entity(StandardEntityType.RELEASE);
+	private static final IEntityType[] SUPPORTED_ENTITY_TYPES = {StandardEntityType.APPLICATION};
 	@Autowired private ObjectFactory<FromMockReleaseFromApplicationLoader> processorFactory;
 	
 	@Override
-	protected ISourceEntity[] getParentSourceEntities() {
-		return PARENT_SOURCE_ENTITIES;
+	protected IEntityType[] getSupportedEntityTypes() {
+		return SUPPORTED_ENTITY_TYPES;
 	}
 
 	@Override
-	protected IProcessorSelector getTargetProcessorSelector() {
-		return TARGET_PROCESSOR_SELECTOR;
+	protected IEntityDescriptor getEntityDescriptor() {
+		return ENTITY_DESCRIPTOR;
 	}
 	
 	@Override

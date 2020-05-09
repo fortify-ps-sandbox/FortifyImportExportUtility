@@ -22,22 +22,22 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.target.common.spi.annotation;
+package com.fortify.impexp.common.processor.entity;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.springframework.stereotype.Component;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
+import com.fortify.util.enumentry.IEnumEntryProvider;
 
-import com.fortify.util.spring.boot.env.PropertyScopedComponent;
-
-@Qualifier
-@PropertyScopedComponent
-@Lazy
-@Target({ ElementType.TYPE, ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface TargetComponent {
+public enum StandardEntitySource implements IEntitySource {
+	MOCK,
+	SSC,
+	FOD;
+	
+	@Component
+	public static class EnumEntryProvider implements IEnumEntryProvider<IEntitySource> {
+		@Override
+		public IEntitySource[] getEnumEntries() {
+			return values();
+		}
+	}
 }

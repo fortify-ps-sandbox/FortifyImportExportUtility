@@ -24,9 +24,9 @@
  ******************************************************************************/
 package com.fortify.impexp.common.processor;
 
-import com.fortify.impexp.common.processor.selector.IProcessorSelector;
+import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
 
-public interface IProcessorFactory<I> {
-	public boolean isEnabled(IProcessorSelector processorSelector);
-	public IProcessor<I> getProcessor();
+public interface IProcessorFactory<E> {
+	public boolean isActive(IEntityDescriptor entityDescriptor);
+	public IProcessor<E> getProcessor();
 }

@@ -24,12 +24,13 @@
  ******************************************************************************/
 package com.fortify.impexp.from.mock.loader;
 
-import com.fortify.impexp.common.processor.selector.StandardSourceSystem;
-import com.fortify.impexp.source.common.spi.loader.AbstractIntermediateLoaderFactory;
+import com.fortify.impexp.common.from.spi.loader.AbstractIntermediateLoaderFactory;
+import com.fortify.impexp.common.processor.entity.StandardEntitySource;
+import com.fortify.util.rest.json.JSONMap;
 
-public abstract class AbstractFromMockIntermediateLoaderFactory<I> extends AbstractIntermediateLoaderFactory<I> {
+public abstract class AbstractFromMockIntermediateLoaderFactory extends AbstractIntermediateLoaderFactory<JSONMap> {
 	public AbstractFromMockIntermediateLoaderFactory() {
-		setSupportedSourceSystems(StandardSourceSystem.MOCK);
+		setSupportedEntitySources(StandardEntitySource.MOCK);
 		setPropertyPrefix("from.mock");
 	}
 

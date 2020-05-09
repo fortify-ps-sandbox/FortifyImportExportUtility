@@ -22,36 +22,10 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.retriever;
+package com.fortify.impexp.common.processor.entity;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.fortify.impexp.common.processor.IProcessor;
-import com.fortify.impexp.common.processor.IProcessorFactory;
-import com.fortify.impexp.common.processor.selector.IProcessorSelector;
-
-@Component
-public class EnabledProcessorsRetriever {
-	@Autowired private Collection<IProcessorFactory<?>> availableProcessorFactories;
-	
-	public final Collection<IProcessor<?>> getEnabledProcessors(final IProcessorSelector selector) {
-		return getEnabledProcessorsStream(selector)
-				.map(factory->(IProcessor<?>)factory.getProcessor())
-				.collect(Collectors.toList());
-	}
-
-	private Stream<IProcessorFactory<?>> getEnabledProcessorsStream(final IProcessorSelector selector) {
-		return availableProcessorFactories
-				.stream()
-				.filter(factory->factory.isEnabled(selector));
-	}
-	
-	public final boolean hasEnabledProcessors(final IProcessorSelector selector) {
-		return getEnabledProcessorsStream(selector).findAny().isPresent();
-	}
+public interface IEntityDescriptor {
+	public Class<?> getJavaType();
+	public IEntityType getType();
+	public IEntitySource getSource();
 }

@@ -22,21 +22,20 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.selector;
+package com.fortify.impexp.from.mock.processor.entity;
 
 import org.springframework.stereotype.Component;
 
+import com.fortify.impexp.common.processor.entity.IEntityType;
 import com.fortify.util.enumentry.IEnumEntryProvider;
 
-public enum StandardSourceEntity implements ISourceEntity {
-	APPLICATION,
-	RELEASE,
-	VULNERABILITY;
+public enum FromMockEntity implements IEntityType {
+	MOCK_CUSTOM;
 	
 	@Component
-	public static class SourceEntityProvider implements IEnumEntryProvider<ISourceEntity> {
+	public static class EnumEntryProvider implements IEnumEntryProvider<IEntityType> {
 		@Override
-		public ISourceEntity[] getEnumEntries() {
+		public IEntityType[] getEnumEntries() {
 			return values();
 		}
 	}

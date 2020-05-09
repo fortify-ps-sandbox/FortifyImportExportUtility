@@ -28,11 +28,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.client.ssc.api.SSCApplicationVersionAPI;
 import com.fortify.client.ssc.connection.SSCAuthenticatingRestConnection;
-import com.fortify.impexp.source.common.spi.annotation.SourceComponent;
-import com.fortify.impexp.source.common.spi.loader.AbstractRootLoader;
+import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
+import com.fortify.impexp.common.from.spi.loader.AbstractRootLoader;
 import com.fortify.util.rest.json.JSONMap;
 
-@SourceComponent
+@FromPluginComponent
 public class FromSSCReleaseLoader extends AbstractRootLoader<JSONMap> {
 	@Autowired private SSCAuthenticatingRestConnection conn;
 	
@@ -46,7 +46,7 @@ public class FromSSCReleaseLoader extends AbstractRootLoader<JSONMap> {
 	}
 	
 	private final void processRelease(JSONMap release) {
-		invokeEnabledProcessors(FromSSCReleaseLoaderFactory.TARGET_PROCESSOR_SELECTOR, release);
+		invokeEnabledProcessors(FromSSCReleaseLoaderFactory.ENTITY_DESCRIPTOR, release);
 	}
 
 }

@@ -44,7 +44,7 @@ public class SSCConnectionFactory {
 	 * @return
 	 */
 	@Bean
-	@ConfigurationProperties("ssc.conn") 
+	@ConfigurationProperties("from.ssc.conn") 
 	public SSCAuthenticatingRestConnectionBuilder sscConnectionBuilder() {
 		return SSCAuthenticatingRestConnection.builder().multiThreaded(true);
 	}

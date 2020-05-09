@@ -24,7 +24,7 @@
  ******************************************************************************/
 package com.fortify.impexp.from.ssc.loader;
 
-import com.fortify.impexp.source.common.spi.loader.AbstractRootLoaderFactory;
+import com.fortify.impexp.common.from.spi.loader.AbstractRootLoaderFactory;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 
 public abstract class AbstractFromSSCRootLoaderFactory<R extends ISchedulableRunner> extends AbstractRootLoaderFactory<R> {

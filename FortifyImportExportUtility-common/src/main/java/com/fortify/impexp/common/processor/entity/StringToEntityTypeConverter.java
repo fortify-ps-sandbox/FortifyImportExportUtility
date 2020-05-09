@@ -22,8 +22,13 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.source.common.spi.loader;
+package com.fortify.impexp.common.processor.entity;
 
-import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerProcessor;
+import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
+import org.springframework.stereotype.Component;
 
-public abstract class AbstractIntermediateLoader<I> extends AbstractProcessorInvokerProcessor<I> {}
+import com.fortify.util.enumentry.AbstractStringToEnumEntryConverter;
+
+@Component
+@ConfigurationPropertiesBinding
+public class StringToEntityTypeConverter extends AbstractStringToEnumEntryConverter<IEntityType> {}

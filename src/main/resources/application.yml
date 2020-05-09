@@ -10,19 +10,16 @@ spring:
     web-application-type: NONE
 
 from.ssc:
-#  enabled: true # TODO Implement this for root processors
+  conn:
+    baseUrl: http://localhost:1920/ssc
+    userName: ssc
+    password: Fortify123!
   
 from.mock:
 #  enabled: true
 
 to.mock:
   simple: test
-  source:
-    systems: mock, ssc
-    entities: vulnerability, mock_custom
-  
-
-ssc.conn:
-  baseUrl: http://localhost:1920/ssc
-  userName: ssc
-  password: Fortify123!
+  entity:
+    sources: mock, ssc
+    types: vulnerability, mock_custom

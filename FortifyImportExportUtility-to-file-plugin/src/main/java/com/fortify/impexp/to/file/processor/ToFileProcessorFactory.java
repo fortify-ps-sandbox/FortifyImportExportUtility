@@ -28,18 +28,18 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.impexp.common.processor.AbstractObjectProcessorFactory;
-import com.fortify.impexp.target.common.spi.annotation.TargetComponent;
+import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
 import com.fortify.impexp.to.file.processor.config.ToFileConfig;
 
-@TargetComponent
+@ToPluginComponent
 public class ToFileProcessorFactory extends AbstractObjectProcessorFactory {
 	public static final String PROPERTY_PREFIX = "to.file";
 	@Autowired private ObjectFactory<ToFileProcessor> processorFactory;
 	
 	public ToFileProcessorFactory(@Autowired ToFileConfig config) {
 		setPropertyPrefix(PROPERTY_PREFIX);
-		setSupportedSourceSystems(config.getSourceSystems());
-		setSupportedSourceEntities(config.getSourceEntities());
+		setSupportedEntitySources(config.getEntitySources());
+		setSupportedEntityTypes(config.getEntityTypes());
 	}
 
 	@Override
