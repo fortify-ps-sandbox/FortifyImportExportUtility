@@ -24,7 +24,15 @@
  ******************************************************************************/
 package com.fortify.impexp.common.from.spi.loader;
 
+import javax.annotation.PostConstruct;
+
 import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvoker;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 
-public abstract class AbstractRootLoader<E> extends AbstractProcessorInvoker<E> implements ISchedulableRunner {}
+public abstract class AbstractRootLoader<E> extends AbstractProcessorInvoker<E> implements ISchedulableRunner {
+	
+	@PostConstruct
+	public final void logInitialized() {
+		System.out.println("Initialized "+this);
+	}
+}

@@ -24,6 +24,8 @@
  ******************************************************************************/
 package com.fortify.impexp.common.from.spi.loader;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
@@ -68,5 +70,10 @@ public abstract class AbstractRootLoaderFactory<R extends ISchedulableRunner> ex
 	protected abstract R getRootLoader();
 
 	protected abstract IEntityDescriptor getEntityDescriptor();
+	
+	@PostConstruct
+	public final void logInitialized() {
+		System.out.println("Initialized "+this);
+	}
 	
 }

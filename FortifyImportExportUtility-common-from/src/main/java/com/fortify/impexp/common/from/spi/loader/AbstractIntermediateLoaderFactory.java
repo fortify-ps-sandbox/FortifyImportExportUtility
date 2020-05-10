@@ -24,6 +24,8 @@
  ******************************************************************************/
 package com.fortify.impexp.common.from.spi.loader;
 
+import javax.annotation.PostConstruct;
+
 import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
 import com.fortify.impexp.common.processor.entity.IEntityType;
 import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerProcessorFactory;
@@ -72,4 +74,9 @@ public abstract class AbstractIntermediateLoaderFactory<E> extends AbstractProce
 	
 	protected abstract IEntityDescriptor getEntityDescriptor();
 	protected abstract IEntityType[] getSupportedEntityTypes();
+	
+	@PostConstruct
+	public final void logInitialized() {
+		System.out.println("Initialized "+this);
+	}
 }

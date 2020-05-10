@@ -24,6 +24,14 @@
  ******************************************************************************/
 package com.fortify.impexp.common.from.spi.loader;
 
+import javax.annotation.PostConstruct;
+
 import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerProcessor;
 
-public abstract class AbstractIntermediateLoader<E> extends AbstractProcessorInvokerProcessor<E> {}
+public abstract class AbstractIntermediateLoader<E> extends AbstractProcessorInvokerProcessor<E> {
+	
+	@PostConstruct
+	public final void logInitialized() {
+		System.out.println("Initialized "+this);
+	}
+}
