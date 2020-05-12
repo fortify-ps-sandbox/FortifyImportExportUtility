@@ -31,13 +31,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import com.fortify.impexp.common.processor.entity.IEntitySource;
 import com.fortify.impexp.common.processor.entity.IEntityType;
 import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
-import com.fortify.impexp.to.mock.processor.ToMockProcessorFactory;
 
 import lombok.Data;
 
 @Data
 @ToPluginComponent
-@ConfigurationProperties(ToMockProcessorFactory.PROPERTY_PREFIX)
+@ConfigurationProperties("to.mock")
 public class ToMockConfig {
 	private String simple;
 	private ToMockConfigEntity entity;

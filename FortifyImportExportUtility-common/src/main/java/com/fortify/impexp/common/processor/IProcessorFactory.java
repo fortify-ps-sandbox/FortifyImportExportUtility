@@ -24,9 +24,11 @@
  ******************************************************************************/
 package com.fortify.impexp.common.processor;
 
+import org.springframework.core.Ordered;
+
 import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
 
-public interface IProcessorFactory<E> {
+public interface IProcessorFactory<E> extends Ordered {
 	public boolean isActive(IEntityDescriptor entityDescriptor);
 	public IProcessor<E> getProcessor();
 }

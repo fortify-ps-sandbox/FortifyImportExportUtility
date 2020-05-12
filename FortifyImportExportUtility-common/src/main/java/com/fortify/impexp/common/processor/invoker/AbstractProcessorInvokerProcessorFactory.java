@@ -24,16 +24,7 @@
  ******************************************************************************/
 package com.fortify.impexp.common.processor.invoker;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.fortify.impexp.common.processor.AbstractProcessorFactory;
-import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
-import com.fortify.impexp.common.processor.retriever.ActiveProcessorsRetriever;
 
 public abstract class AbstractProcessorInvokerProcessorFactory<E> extends AbstractProcessorFactory<E> {
-	@Autowired private ActiveProcessorsRetriever activeProcessorsRetriever;
-	
-	protected boolean hasEnabledProcessors(IEntityDescriptor entityDescriptor) {
-		return activeProcessorsRetriever.hasActiveProcessors(entityDescriptor);
-	}
 }

@@ -36,12 +36,6 @@ import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunnerFactory;
 
 public abstract class AbstractRootLoaderFactory<R extends ISchedulableRunner> extends AbstractProcessorInvokerFactory implements ISchedulableRunnerFactory {
-	@Override
-	public boolean isEnabled() {
-		// TODO Check for enabled configuration properties
-		return hasActiveProcessors(getEntityDescriptor());
-	}
-	
 	/**
 	 * This implementation of {@link ISchedulableRunnerFactory#getRunner()} simply returns
 	 * the root loader that is returned by the {@link #getRootLoader()} method.

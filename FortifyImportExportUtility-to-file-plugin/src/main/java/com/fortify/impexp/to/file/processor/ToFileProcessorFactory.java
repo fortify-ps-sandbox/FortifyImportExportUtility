@@ -26,6 +26,7 @@ package com.fortify.impexp.to.file.processor;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
 
 import com.fortify.impexp.common.processor.AbstractObjectProcessorFactory;
 import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
@@ -33,15 +34,26 @@ import com.fortify.impexp.to.file.processor.config.ToFileConfig;
 
 @ToPluginComponent
 public class ToFileProcessorFactory extends AbstractObjectProcessorFactory {
-	public static final String PROPERTY_PREFIX = "to.file";
 	@Autowired private ObjectFactory<ToFileProcessor> processorFactory;
 	
 	public ToFileProcessorFactory(@Autowired ToFileConfig config) {
-		setPropertyPrefix(PROPERTY_PREFIX);
 		setSupportedEntitySources(config.getEntitySources());
 		setSupportedEntityTypes(config.getEntityTypes());
 	}
 
 	@Override
-	public ToFileProcessor getProcessor() { return processorFactory.getObject(); }
+	public ToFileProcessor getProcessor() { 
+		return processorFactory.getObject(); 
+	}
+	
+	@Override
+	protected boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public int getOrder() {
+		return Ordered.HIGHEST_PRECEDENCE;
+	}
 }

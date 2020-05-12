@@ -22,31 +22,15 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.invoker;
+package com.fortify.impexp.from.ssc.annotation;
 
-import java.util.Map;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Qualifier;
 
-import com.fortify.impexp.common.processor.IProcessor;
-import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
-import com.fortify.impexp.common.processor.retriever.ActiveProcessorsRetriever;
-import com.fortify.util.spring.boot.env.ModifyablePropertySource;
-
-public class AbstractProcessorInvoker<E> {
-	@Autowired private ActiveProcessorsRetriever activeProcessorsLoader;
-	
-	@SuppressWarnings("unchecked")
-	protected final void invokeEnabledProcessors(IEntityDescriptor entityDescriptor, E entity) {
-		try ( ModifyablePropertySource mps = ModifyablePropertySource.withProperties(getOverrideProperties(entity)) ) {
-			activeProcessorsLoader
-				.getActiveProcessors(entityDescriptor)
-				// This cast should be safe based on IEntityDescriptor#getJavaType()
-				.forEach(processor->((IProcessor<E>)processor).process(entity));
-		}
-	}
-
-	protected Map<String, Object> getOverrideProperties(E input) {
-		return null;
-	}
-}
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier
+public @interface FromSSC {}

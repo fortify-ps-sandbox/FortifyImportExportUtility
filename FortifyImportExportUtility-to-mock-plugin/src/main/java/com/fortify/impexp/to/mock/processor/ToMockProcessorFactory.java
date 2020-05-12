@@ -26,6 +26,7 @@ package com.fortify.impexp.to.mock.processor;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
 
 import com.fortify.impexp.common.processor.AbstractObjectProcessorFactory;
 import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
@@ -33,15 +34,26 @@ import com.fortify.impexp.to.mock.processor.config.ToMockConfig;
 
 @ToPluginComponent
 public class ToMockProcessorFactory extends AbstractObjectProcessorFactory {
-	public static final String PROPERTY_PREFIX = "to.mock";
 	@Autowired private ObjectFactory<ToMockProcessor> processorFactory;
 	
 	public ToMockProcessorFactory(@Autowired ToMockConfig config) {
-		setPropertyPrefix(PROPERTY_PREFIX);
 		setSupportedEntitySources(config.getEntitySources());
 		setSupportedEntityTypes(config.getEntityTypes());
 	}
 
 	@Override
-	public ToMockProcessor getProcessor() { return processorFactory.getObject(); }
+	public ToMockProcessor getProcessor() { 
+		return processorFactory.getObject(); 
+	}
+	
+	@Override
+	protected boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
+	@Override
+	public int getOrder() {
+		return Ordered.HIGHEST_PRECEDENCE;
+	}
 }

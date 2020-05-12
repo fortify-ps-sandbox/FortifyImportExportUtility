@@ -31,13 +31,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import com.fortify.impexp.common.processor.entity.IEntitySource;
 import com.fortify.impexp.common.processor.entity.IEntityType;
 import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
-import com.fortify.impexp.to.file.processor.ToFileProcessorFactory;
 
 import lombok.Data;
 
 @Data
 @ToPluginComponent
-@ConfigurationProperties(ToFileProcessorFactory.PROPERTY_PREFIX)
+@ConfigurationProperties("to.file")
 public class ToFileConfig {
 	private String simple;
 	private ToFileConfigEntity entity;

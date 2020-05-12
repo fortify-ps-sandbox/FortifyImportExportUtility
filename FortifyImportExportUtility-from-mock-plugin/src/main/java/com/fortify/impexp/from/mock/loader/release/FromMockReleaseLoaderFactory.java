@@ -51,5 +51,13 @@ public class FromMockReleaseLoaderFactory extends AbstractFromMockRootLoaderFact
 	}
 
 	@Override
-	public FromMockReleaseLoader getRootLoader() { return rootLoaderFactory.getObject(); }
+	public FromMockReleaseLoader getRootLoader() { 
+		return rootLoaderFactory.getObject(); 
+	}
+	
+	@Override
+	public boolean isLoaderEnabled() {
+		// TODO Check whether config is available
+		return false;
+	}
 }

@@ -24,14 +24,26 @@
  ******************************************************************************/
 package com.fortify.impexp.from.ssc.loader;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.fortify.client.ssc.connection.SSCAuthenticatingRestConnection;
 import com.fortify.impexp.common.from.spi.loader.AbstractIntermediateLoaderFactory;
 import com.fortify.impexp.common.processor.entity.StandardEntitySource;
+import com.fortify.impexp.from.ssc.annotation.FromSSC;
 import com.fortify.util.rest.json.JSONMap;
 
 public abstract class AbstractFromSSCIntermediateLoaderFactory extends AbstractIntermediateLoaderFactory<JSONMap> {
+	@Autowired(required=false) @FromSSC private SSCAuthenticatingRestConnection conn;
+	
 	public AbstractFromSSCIntermediateLoaderFactory() {
 		setSupportedEntitySources(StandardEntitySource.SSC);
-		setPropertyPrefix("from.ssc");
 	}
+	
+	@Override
+	protected final boolean isEnabled() {
+		return conn!=null && isLoaderEnabled();
+	}
+
+	protected abstract boolean isLoaderEnabled();
 
 }

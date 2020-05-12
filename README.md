@@ -100,6 +100,24 @@ Documentation:
 	* Extensible enums
 	* Plugin system, provided dependencies, ...
 	
+
+## Migrating from FortifyBugTrackerUtility
+
+Once finished, FortifyImportExportUtility can fully replace FortifyBugTrackerUtility, taking into account
+the following differences:
+
+FortifyBugTrackerUtility:
+* Is invoked manually for each run, leaving scheduling to the operating system or CI/CD system
+* Configuration is done using quite technical Spring XML configuration files
+* Vulnerabilities are loaded in two phases; previously submitted vulnerabilities are loaded separately from new vulnerabilities to be submitted
+* Only a single source and single target system is supported within a single configuration file, and within a single run
+
+FortifyImportExportUtility:
+* Can either be invoked manually for a single run, or can be run as a long-running process that handles scheduling of individual runs
+* Configuration is done using more user-friendly YAML configuration files
+* All vulnerabilities are loaded only once from the source system, independent of whether they were previously exported
+    * How to differentiate between previously submitted versus new vulnerabilities is now decided in the target configuration
+* As an advanced use case, FortifyImportExportUtility can process multiple sources and targets within a single run
 	
 
 ## Developers

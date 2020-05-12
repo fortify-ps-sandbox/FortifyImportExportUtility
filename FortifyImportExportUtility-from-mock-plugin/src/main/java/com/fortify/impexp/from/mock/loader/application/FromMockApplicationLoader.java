@@ -48,7 +48,7 @@ public class FromMockApplicationLoader extends AbstractRootLoader<JSONMap> {
 	}
 	
 	@Override
-	protected Map<String, Object> getProperties(JSONMap application) {
+	protected Map<String, Object> getOverrideProperties(JSONMap application) {
 		Map<String, Object> result = new HashMap<>();
 		result.put("to.mock.enabled", application.get("id",Integer.class)%2==0);
 		result.put("to.mock.simple", application.get("id",String.class));

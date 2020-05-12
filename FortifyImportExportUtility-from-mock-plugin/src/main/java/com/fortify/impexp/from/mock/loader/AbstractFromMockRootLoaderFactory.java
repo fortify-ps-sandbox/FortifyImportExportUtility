@@ -28,7 +28,13 @@ import com.fortify.impexp.common.from.spi.loader.AbstractRootLoaderFactory;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 
 public abstract class AbstractFromMockRootLoaderFactory<R extends ISchedulableRunner> extends AbstractRootLoaderFactory<R> {
-	public AbstractFromMockRootLoaderFactory() {
-		// TODO setPropertyPrefix("from.mock");
+	public AbstractFromMockRootLoaderFactory() {}
+	
+	@Override
+	public final boolean isEnabled() {
+		// For consistency with other plugins, we delegate to the abstract isLoaderEnabled() method
+		return isLoaderEnabled();
 	}
+
+	protected abstract boolean isLoaderEnabled();
 }

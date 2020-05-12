@@ -24,11 +24,22 @@
  ******************************************************************************/
 package com.fortify.impexp.from.ssc.loader;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.fortify.client.ssc.connection.SSCAuthenticatingRestConnection;
 import com.fortify.impexp.common.from.spi.loader.AbstractRootLoaderFactory;
+import com.fortify.impexp.from.ssc.annotation.FromSSC;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 
 public abstract class AbstractFromSSCRootLoaderFactory<R extends ISchedulableRunner> extends AbstractRootLoaderFactory<R> {
-	public AbstractFromSSCRootLoaderFactory() {
-		// TODO setPropertyPrefix("from.ssc");
+	@Autowired(required=false) @FromSSC private SSCAuthenticatingRestConnection conn;
+	
+	public AbstractFromSSCRootLoaderFactory() {}
+	
+	@Override
+	public final boolean isEnabled() {
+		return conn!=null && isLoaderEnabled();
 	}
+
+	protected abstract boolean isLoaderEnabled();
 }

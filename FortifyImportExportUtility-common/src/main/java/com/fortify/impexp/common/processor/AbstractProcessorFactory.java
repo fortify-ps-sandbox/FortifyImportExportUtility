@@ -28,22 +28,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.EnumerablePropertySource;
-import org.springframework.core.env.MutablePropertySources;
-import org.springframework.core.env.StandardEnvironment;
-
 import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
 import com.fortify.impexp.common.processor.entity.IEntitySource;
 import com.fortify.impexp.common.processor.entity.IEntityType;
 
 public abstract class AbstractProcessorFactory<E> implements IProcessorFactory<E> {
-	@Autowired private StandardEnvironment environment;
 	private final Set<IEntitySource> supportedEntitySources = new HashSet<>();
 	private final Set<IEntityType> supportedEntityTypes = new HashSet<>();
 	private Class<E> supportedEntityJavaType;
-	private String propertyPrefix;
 	
 	public final void setSupportedEntitySources(IEntitySource... supportedEntitySources) {
 		this.supportedEntitySources.clear();
@@ -63,10 +55,6 @@ public abstract class AbstractProcessorFactory<E> implements IProcessorFactory<E
 		this.supportedEntityJavaType = supportedEntityJavaType;
 	}
 	
-	public final void setPropertyPrefix(String propertyPrefix) {
-		this.propertyPrefix = propertyPrefix;
-	}
-	
 	@Override
 	public boolean isActive(IEntityDescriptor entityDescriptor) {
 		return isSupportedEntity(entityDescriptor) && isEnabled();
@@ -78,11 +66,8 @@ public abstract class AbstractProcessorFactory<E> implements IProcessorFactory<E
 				&& isSupportedEntityJavaType(entityDescriptor.getJavaType());
 	}
 	
-	protected boolean isEnabled() {
-		return isEnabledPropertyNotFalse()
-				&& propertyTreeWithPrefixExists();
-	}
-	
+	protected abstract boolean isEnabled();
+
 	protected boolean isSupportedIfSupportedEntitySourcesIsEmpty() {
 		return true;
 	}
@@ -116,22 +101,5 @@ public abstract class AbstractProcessorFactory<E> implements IProcessorFactory<E
 				? isSupportedIfSupportedEntityJavaTypeIsEmpty() 
 				: supportedEntityJavaType.isAssignableFrom(entityJavaType);
 			
-	}
-
-	protected final boolean isEnabledPropertyNotFalse() {
-		return StringUtils.isBlank(propertyPrefix) 
-				? isEnabledIfPropertyPrefixIsEmpy() 
-				: environment.getProperty(propertyPrefix+".enabled", Boolean.class)!=Boolean.FALSE;
-	}
-
-	protected final boolean propertyTreeWithPrefixExists() {
-		if ( propertyPrefix==null || propertyPrefix.isEmpty() ) {return isEnabledIfPropertyPrefixIsEmpy();}
-		MutablePropertySources propertySources = environment.getPropertySources();
-		boolean hasPropertyTree = propertySources.stream()
-			.filter(ps->ps instanceof EnumerablePropertySource<?>)
-			.map(ps->((EnumerablePropertySource<?>)ps).getPropertyNames())
-			.flatMap(Arrays::stream)
-			.anyMatch(propertyName->propertyName.startsWith(propertyPrefix));
-		return hasPropertyTree;
 	}
 }

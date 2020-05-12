@@ -30,12 +30,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
 import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
 import com.fortify.impexp.common.processor.entity.StandardEntityType;
+import com.fortify.impexp.from.ssc.annotation.FromSSC;
 import com.fortify.impexp.from.ssc.loader.AbstractFromSSCRootLoaderFactory;
 import com.fortify.impexp.from.ssc.processor.entity.FromSSCEntityDescriptor;
 
-@FromPluginComponent
+@FromPluginComponent @FromSSC
 public class FromSSCReleaseLoaderFactory extends AbstractFromSSCRootLoaderFactory<FromSSCReleaseLoader> {
-	@Autowired private ObjectFactory<FromSSCReleaseLoader> rootLoaderFactory;
+	@Autowired @FromSSC private ObjectFactory<FromSSCReleaseLoader> rootLoaderFactory;
+	@Autowired @FromSSC private FromSSCReleaseLoaderConfig config;
 	
 	public static final IEntityDescriptor ENTITY_DESCRIPTOR = 
 			new FromSSCEntityDescriptor().entity(StandardEntityType.RELEASE);
@@ -52,4 +54,9 @@ public class FromSSCReleaseLoaderFactory extends AbstractFromSSCRootLoaderFactor
 
 	@Override
 	public FromSSCReleaseLoader getRootLoader() { return rootLoaderFactory.getObject(); }
+
+	@Override
+	public boolean isLoaderEnabled() {
+		return config.isConfigured();
+	}
 }

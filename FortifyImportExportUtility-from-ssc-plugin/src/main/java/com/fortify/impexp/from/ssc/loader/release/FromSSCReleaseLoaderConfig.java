@@ -22,43 +22,45 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.mock.loader.release;
+package com.fortify.impexp.from.ssc.loader.release;
 
-import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import com.fortify.client.ssc.api.query.builder.SSCOrderBy;
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
-import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
-import com.fortify.impexp.common.processor.entity.IEntityType;
-import com.fortify.impexp.common.processor.entity.StandardEntityType;
-import com.fortify.impexp.from.mock.loader.AbstractFromMockIntermediateLoaderFactory;
-import com.fortify.impexp.from.mock.processor.entity.FromMockEntityDescriptor;
+import com.fortify.impexp.from.ssc.annotation.FromSSC;
+import com.fortify.util.spring.expression.TemplateExpression;
 
-@FromPluginComponent
-public class FromMockReleaseFromApplicationLoaderFactory extends AbstractFromMockIntermediateLoaderFactory {
-	static final IEntityDescriptor ENTITY_DESCRIPTOR = 
-			new FromMockEntityDescriptor().entity(StandardEntityType.RELEASE);
-	private static final IEntityType[] SUPPORTED_ENTITY_TYPES = {StandardEntityType.APPLICATION};
-	@Autowired private ObjectFactory<FromMockReleaseFromApplicationLoader> processorFactory;
-	
-	@Override
-	protected IEntityType[] getSupportedEntityTypes() {
-		return SUPPORTED_ENTITY_TYPES;
-	}
+import lombok.Data;
 
-	@Override
-	protected IEntityDescriptor getEntityDescriptor() {
-		return ENTITY_DESCRIPTOR;
-	}
+@Data
+@FromPluginComponent @FromSSC
+@ConfigurationProperties("from.ssc.load.releases")
+public final class FromSSCReleaseLoaderConfig {
+	private static final String EMPTY_TO_STRING = new FromSSCReleaseLoaderConfig().toString();
+	@Value("${from.ssc.load.releases:undefined}") private String property = "undefined";
 	
-	@Override
-	public FromMockReleaseFromApplicationLoader getProcessor() { 
-		return processorFactory.getObject(); 
-	}
+	private String id;
+	private String name;
+	private String applicationName;
+	private String versionName;
+	private String[] includeSubEntities;
+	private String[] fields;
+	private SSCOrderBy orderBy;
+	private int maxResults = -1;
+	private Map<String, TemplateExpression> overrideProperties;
 	
-	@Override
-	public boolean isLoaderEnabled() {
-		// TODO Check whether config is available
-		return true;
+	/**
+	 * This method indicates whether the current instance has been configured,
+	 * returning false if the {@link #toString()} value equals the {@link #toString()}
+	 * value of an empty instance.
+	 *   
+	 * @return
+	 */
+	public boolean isConfigured() {
+		return !EMPTY_TO_STRING.equals(this.toString());
 	}
 }

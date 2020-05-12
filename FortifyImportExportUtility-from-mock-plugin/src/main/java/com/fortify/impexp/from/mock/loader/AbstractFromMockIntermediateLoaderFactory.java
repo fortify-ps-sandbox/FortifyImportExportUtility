@@ -31,7 +31,13 @@ import com.fortify.util.rest.json.JSONMap;
 public abstract class AbstractFromMockIntermediateLoaderFactory extends AbstractIntermediateLoaderFactory<JSONMap> {
 	public AbstractFromMockIntermediateLoaderFactory() {
 		setSupportedEntitySources(StandardEntitySource.MOCK);
-		setPropertyPrefix("from.mock");
+	}
+	
+	@Override
+	protected final boolean isEnabled() {
+		// For consistency with other plugins, we delegate to the abstract isLoaderEnabled() method
+		return isLoaderEnabled();
 	}
 
+	protected abstract boolean isLoaderEnabled();
 }

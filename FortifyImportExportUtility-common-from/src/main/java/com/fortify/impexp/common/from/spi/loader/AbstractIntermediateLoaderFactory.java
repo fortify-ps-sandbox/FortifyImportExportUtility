@@ -26,6 +26,8 @@ package com.fortify.impexp.common.from.spi.loader;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.core.Ordered;
+
 import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
 import com.fortify.impexp.common.processor.entity.IEntityType;
 import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerProcessorFactory;
@@ -67,9 +69,14 @@ public abstract class AbstractIntermediateLoaderFactory<E> extends AbstractProce
 		return false;
 	}
 	
+	/**
+	 * By default, this method returns {@link Ordered#LOWEST_PRECEDENCE} to allow target processors
+	 * to execute before intermediate loaders/processors. For example, this allows a target to 
+	 * export/create a release before exporting/creating individual vulnerabilities for that release.
+	 */
 	@Override
-	public boolean isActive(IEntityDescriptor entityDescriptor) {
-		return super.isActive(entityDescriptor) && hasEnabledProcessors(getEntityDescriptor());
+	public int getOrder() {
+		return Ordered.LOWEST_PRECEDENCE;
 	}
 	
 	protected abstract IEntityDescriptor getEntityDescriptor();

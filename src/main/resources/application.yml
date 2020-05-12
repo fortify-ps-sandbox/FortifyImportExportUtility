@@ -10,16 +10,29 @@ spring:
     web-application-type: NONE
 
 from.ssc:
-  conn:
-    baseUrl: http://localhost:1920/ssc
-    userName: ssc
-    password: Fortify123!
+  baseUrl: http://localhost:1920/ssc
+  userName: ssc
+  password: Fortify123!
+  load:
+    releases:
+      fields: id
+      includeSubEntities: filterSets
+      orderBy:
+        field: id
+      maxResults: 5
+    vulnerabilities:
+      include: all
+      fields: id
+      filterSet: Quick View
+      includeSubEntities: details, comments
+    
+    
+    
   
 from.mock:
-#  enabled: true
+  enabled: true
 
 to.mock:
-  simple: test
   entity:
     sources: mock, ssc
-    types: vulnerability, mock_custom
+    types: release, vulnerability, mock_custom

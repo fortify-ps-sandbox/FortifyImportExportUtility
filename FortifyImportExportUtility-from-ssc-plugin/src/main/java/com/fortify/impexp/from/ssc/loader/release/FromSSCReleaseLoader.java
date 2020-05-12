@@ -24,29 +24,65 @@
  ******************************************************************************/
 package com.fortify.impexp.from.ssc.loader.release;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 import com.fortify.client.ssc.api.SSCApplicationVersionAPI;
+import com.fortify.client.ssc.api.SSCAttributeDefinitionAPI.SSCAttributeDefinitionHelper;
+import com.fortify.client.ssc.api.query.builder.EmbedType;
+import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
 import com.fortify.client.ssc.connection.SSCAuthenticatingRestConnection;
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
 import com.fortify.impexp.common.from.spi.loader.AbstractRootLoader;
+import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
+import com.fortify.impexp.common.processor.entity.StandardEntityType;
+import com.fortify.impexp.from.ssc.annotation.FromSSC;
+import com.fortify.impexp.from.ssc.processor.entity.FromSSCEntityDescriptor;
 import com.fortify.util.rest.json.JSONMap;
 
-@FromPluginComponent
+@FromPluginComponent @FromSSC @Lazy
 public class FromSSCReleaseLoader extends AbstractRootLoader<JSONMap> {
-	@Autowired private SSCAuthenticatingRestConnection conn;
+	public static final IEntityDescriptor ENTITY_DESCRIPTOR = new FromSSCEntityDescriptor().entity(StandardEntityType.RELEASE);
+	@Autowired @FromSSC private SSCAuthenticatingRestConnection conn;
+	@Autowired @FromSSC private SSCAttributeDefinitionHelper attributeDefinitionHelper;
+	@Autowired @FromSSC private FromSSCReleaseLoaderConfig config;
 	
 	@Override
 	public void run() {
-		conn.api(SSCApplicationVersionAPI.class)
+		SSCApplicationVersionsQueryBuilder queryBuilder = conn.api(SSCApplicationVersionAPI.class)
 			.queryApplicationVersions()
-			.maxResults(10)
-			.build()
-			.processAll(this::processRelease);
+			.applicationAndOrVersionName(true, config.getName())
+			.applicationName(true, config.getApplicationName())
+			.versionName(true, config.getVersionName())
+			.paramFields(config.getFields())
+			.paramOrderBy(true, config.getOrderBy())
+			.maxResults(config.getMaxResults());
+		addSubEntities(queryBuilder, config.getIncludeSubEntities());
+		queryBuilder.build().processAll(this::processRelease);
+	}
+
+	private void addSubEntities(SSCApplicationVersionsQueryBuilder queryBuilder, String[] subEntities) {
+		if ( subEntities!=null ) {
+			for ( String subEntity : subEntities ) {
+				if ( "attributeValuesByName".equals(subEntity) ) {
+					queryBuilder.embedAttributeValuesByName(attributeDefinitionHelper);
+				} else {
+					queryBuilder.embedSubEntity(subEntity, subEntity, EmbedType.PRELOAD);
+				}
+			}
+		}
+	}
+
+	private final void processRelease(JSONMap release) {
+		invokeEnabledProcessors(ENTITY_DESCRIPTOR, release);
 	}
 	
-	private final void processRelease(JSONMap release) {
-		invokeEnabledProcessors(FromSSCReleaseLoaderFactory.ENTITY_DESCRIPTOR, release);
+	@Override
+	protected Map<String, Object> getOverrideProperties(JSONMap input) {
+		// TODO Evaluate expressions in config#getOverrideProperties
+		return super.getOverrideProperties(input);
 	}
 
 }
