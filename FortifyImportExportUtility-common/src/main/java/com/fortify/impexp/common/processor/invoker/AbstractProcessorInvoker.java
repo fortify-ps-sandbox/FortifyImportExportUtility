@@ -42,7 +42,7 @@ public class AbstractProcessorInvoker<E> {
 			activeProcessorsLoader
 				.getActiveProcessors(entityDescriptor)
 				// This cast should be safe based on IEntityDescriptor#getJavaType()
-				.forEach(processor->((IProcessor<E>)processor).process(entity));
+				.forEach(processor->((IProcessor<E>)processor).process(entityDescriptor, entity));
 		}
 	}
 

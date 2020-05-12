@@ -27,6 +27,7 @@ package com.fortify.impexp.to.file.processor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.impexp.common.processor.AbstractObjectProcessor;
+import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
 import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
 import com.fortify.impexp.to.file.processor.config.ToFileConfig;
 
@@ -35,7 +36,7 @@ public class ToFileProcessor extends AbstractObjectProcessor {
 	@Autowired ToFileConfig exportToFileConfig;
 	
 	@Override
-	public void process(Object input) {
+	public void process(IEntityDescriptor entityDescriptor, Object input) {
 		System.out.println(String.format("[%s] Processing input: %s", this.getClass().getSimpleName(), input));
 	}
 

@@ -43,7 +43,7 @@ public abstract class AbstractProcessorInvokerProcessor<E> extends AbstractProce
 			activeProcessorsLoader
 				.getActiveProcessors(entityDescriptor)
 				// This cast/invocation should be safe if associated processor factory accepted IProcessorInvokerDescriptor#getEntityClass
-				.forEach(processor->((IProcessor<E>)processor).process(entity));
+				.forEach(processor->((IProcessor<E>)processor).process(entityDescriptor, entity));
 		}
 	}
 	

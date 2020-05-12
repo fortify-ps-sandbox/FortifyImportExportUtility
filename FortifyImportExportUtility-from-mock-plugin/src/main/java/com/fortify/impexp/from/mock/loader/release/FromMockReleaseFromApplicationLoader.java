@@ -26,12 +26,13 @@ package com.fortify.impexp.from.mock.loader.release;
 
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
 import com.fortify.impexp.common.from.spi.loader.AbstractIntermediateLoader;
+import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
 import com.fortify.util.rest.json.JSONMap;
 
 @FromPluginComponent
 public class FromMockReleaseFromApplicationLoader extends AbstractIntermediateLoader<JSONMap> {
 	@Override
-	public void process(final JSONMap application) {
+	public void process(final IEntityDescriptor entityDescriptor, final JSONMap application) {
 		for ( int i = 0 ; i < 10 ; i++ ) {
 			invokeActiveProcessors(FromMockReleaseFromApplicationLoaderFactory.ENTITY_DESCRIPTOR, getRelease(application, i));
 		}
