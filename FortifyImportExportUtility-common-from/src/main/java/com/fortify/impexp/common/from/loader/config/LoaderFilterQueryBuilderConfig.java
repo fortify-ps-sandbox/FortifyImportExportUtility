@@ -29,8 +29,9 @@ import com.fortify.util.rest.query.AbstractRestConnectionQueryBuilder;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-@Data @EqualsAndHashCode(callSuper=true)
+@Data @EqualsAndHashCode(callSuper=true)  @ToString(callSuper=true)
 public class LoaderFilterQueryBuilderConfig<QB extends AbstractRestConnectionQueryBuilder<?,?>> extends LoaderFilterConfig<JSONMap> {
 	public void updateQueryBuilder(QB qb) {
 		qb.preProcessor(this::isIncluded);

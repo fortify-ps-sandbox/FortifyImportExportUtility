@@ -33,8 +33,8 @@ from.ssc:
         maxResults: 1                                  # Generic - loader
         filterSet: Quick View                          # Specific - SSC vuln loader
         matchFieldRegex:                               # Generic - entity processing
-          - entityFieldName1: regex1
-          - entityFieldName2: regex2
+          '[details.issueName]': Cross.*
+#          entityFieldName2: regex2
       orderBy:                                         # Generic - SSC
         field: id
       exportStatus:                                    # Specific - different impl for each entity source and type

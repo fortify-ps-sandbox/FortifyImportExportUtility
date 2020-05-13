@@ -28,8 +28,9 @@ import com.fortify.impexp.common.entity.config.EntityFilterConfig;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-@Data @EqualsAndHashCode(callSuper=true)
+@Data @EqualsAndHashCode(callSuper=true) @ToString(callSuper=true)
 public class LoaderFilterConfig<E> extends EntityFilterConfig<E> {
 	private int maxResults = -1;
 }
