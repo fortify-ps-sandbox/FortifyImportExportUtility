@@ -25,9 +25,26 @@
 package com.fortify.impexp.common.entity.config.domain;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
+import com.fortify.util.spring.SpringExpressionUtil;
 import com.fortify.util.spring.expression.TemplateExpression;
 
-public class EntityAddFieldsConfig extends LinkedHashMap<String, TemplateExpression> {
+public abstract class EntityAddFieldsConfig<E> extends LinkedHashMap<String, TemplateExpression> {
 	private static final long serialVersionUID = 1L;
+	
+	public void addFields(final E entity) {
+		entrySet().forEach(entry -> addField(entity, entry));
+	}
+	
+	protected void addField(E entity, Map.Entry<String, TemplateExpression> entry) {
+		addField(entity, entry.getKey(), entry.getValue());
+	}
+
+	protected void addField(E entity, String propertyName, TemplateExpression propertyTemplateExpression) {
+		Object propertyValue = SpringExpressionUtil.evaluateExpression(entity, propertyTemplateExpression, Object.class);
+		addPropertyValue(entity, propertyName, propertyValue);
+	}
+
+	protected abstract void addPropertyValue(E entity, String propertyName, Object propertyValue);
 }

@@ -22,15 +22,29 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.release.loader.config.domain;
+package com.fortify.impexp.common.from.loader.config.domain;
 
-import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
-import com.fortify.impexp.common.from.loader.config.domain.LoaderAddFieldsQueryBuilderConfig;
+import com.fortify.impexp.common.entity.config.domain.EntityAddFieldsConfig;
+import com.fortify.util.rest.json.JSONMap;
+import com.fortify.util.rest.query.AbstractRestConnectionQueryBuilder;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data @EqualsAndHashCode(callSuper=true)
-public class FromSSCReleaseLoaderAddFieldsConfig extends LoaderAddFieldsQueryBuilderConfig<SSCApplicationVersionsQueryBuilder> {
+public abstract class LoaderAddFieldsQueryBuilderConfig<QB extends AbstractRestConnectionQueryBuilder<?,?>> extends EntityAddFieldsConfig<JSONMap> {
 	private static final long serialVersionUID = 1L;
+	
+	public void updateQueryBuilder(QB qb) {
+		qb.preProcessor(this::addFieldsToJSONMap);
+	}
+	
+	private boolean addFieldsToJSONMap(JSONMap json) {
+		super.addFields(json); return true;
+	}
+	
+	@Override
+	protected void addPropertyValue(JSONMap entity, String propertyName, Object propertyValue) {
+		entity.putPath(propertyName, propertyValue);
+	}
 }

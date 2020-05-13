@@ -22,15 +22,18 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.release.loader.config.domain;
+package com.fortify.impexp.common.from.loader.config.domain;
 
-import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
-import com.fortify.impexp.common.from.loader.config.domain.LoaderAddFieldsQueryBuilderConfig;
+import com.fortify.util.rest.json.JSONMap;
+import com.fortify.util.rest.query.AbstractRestConnectionQueryBuilder;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data @EqualsAndHashCode(callSuper=true)
-public class FromSSCReleaseLoaderAddFieldsConfig extends LoaderAddFieldsQueryBuilderConfig<SSCApplicationVersionsQueryBuilder> {
-	private static final long serialVersionUID = 1L;
+public class LoaderFilterQueryBuilderConfig<QB extends AbstractRestConnectionQueryBuilder<?,?>> extends LoaderFilterConfig<JSONMap> {
+	public void updateQueryBuilder(QB qb) {
+		qb.preProcessor(this::isIncluded);
+		qb.maxResults(getMaxResults());
+	}
 }

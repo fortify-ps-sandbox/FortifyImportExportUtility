@@ -24,6 +24,9 @@
  ******************************************************************************/
 package com.fortify.impexp.from.ssc.release.loader.config.domain;
 
+import com.fortify.client.ssc.api.SSCAttributeDefinitionAPI.SSCAttributeDefinitionHelper;
+import com.fortify.client.ssc.api.query.builder.EmbedType;
+import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
 import com.fortify.impexp.common.from.loader.config.domain.LoaderIncludeConfig;
 
 import lombok.Data;
@@ -31,4 +34,17 @@ import lombok.EqualsAndHashCode;
 
 @Data @EqualsAndHashCode(callSuper=true)
 public class FromSSCReleaseLoaderIncludeConfig extends LoaderIncludeConfig {
+	public void updateQueryBuilder(SSCApplicationVersionsQueryBuilder qb, SSCAttributeDefinitionHelper attributeDefinitionHelper) {
+		qb.paramFields(getFields());
+		LoaderIncludeSubEntityConfig[] subEntities = getSubEntities();
+		if ( subEntities!=null ) {
+			for ( LoaderIncludeSubEntityConfig subEntity : subEntities ) {
+				if ( "attributeValuesByName".equals(subEntity.getName()) ) {
+					qb.embedAttributeValuesByName(attributeDefinitionHelper);
+				} else {
+					qb.embedSubEntity(subEntity.getName(), EmbedType.PRELOAD, subEntity.getFields());
+				}
+			}
+		}
+	}
 }

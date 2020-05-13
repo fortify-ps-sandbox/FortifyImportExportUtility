@@ -30,6 +30,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import com.fortify.client.ssc.api.SSCAttributeDefinitionAPI.SSCAttributeDefinitionHelper;
+import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
 import com.fortify.client.ssc.api.query.builder.SSCOrderBy;
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
 import com.fortify.impexp.from.ssc.annotation.FromSSC;
@@ -62,5 +64,12 @@ public final class FromSSCReleaseLoaderConfig {
 	 */
 	public boolean isConfigured() {
 		return !EMPTY_TO_STRING.equals(this.toString());
+	}
+	
+	public void updateQueryBuilder(SSCApplicationVersionsQueryBuilder qb, SSCAttributeDefinitionHelper attributeDefinitionHelper) {
+		include.updateQueryBuilder(qb, attributeDefinitionHelper);
+		addFields.updateQueryBuilder(qb);
+		filter.updateQueryBuilder(qb);
+		qb.paramOrderBy(true, getOrderBy());
 	}
 }

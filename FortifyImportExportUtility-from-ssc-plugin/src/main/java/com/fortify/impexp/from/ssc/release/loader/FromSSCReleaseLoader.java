@@ -31,10 +31,8 @@ import org.springframework.context.annotation.Lazy;
 
 import com.fortify.client.ssc.api.SSCApplicationVersionAPI;
 import com.fortify.client.ssc.api.SSCAttributeDefinitionAPI.SSCAttributeDefinitionHelper;
-import com.fortify.client.ssc.api.query.builder.EmbedType;
 import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
 import com.fortify.client.ssc.connection.SSCAuthenticatingRestConnection;
-import com.fortify.impexp.common.from.loader.config.domain.LoaderIncludeConfig.LoaderIncludeSubEntityConfig;
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
 import com.fortify.impexp.common.from.spi.loader.AbstractRootLoader;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
@@ -53,29 +51,10 @@ public class FromSSCReleaseLoader extends AbstractRootLoader<JSONMap> {
 	
 	@Override
 	public void run() {
-		SSCApplicationVersionsQueryBuilder queryBuilder = conn.api(SSCApplicationVersionAPI.class)
-			.queryApplicationVersions()
-			.id(true, config.getFilter().getId())
-			.applicationAndOrVersionName(true, config.getFilter().getName())
-			.applicationName(true, config.getFilter().getApplicationName())
-			.versionName(true, config.getFilter().getVersionName())
-			.paramFields(config.getInclude().getFields())
-			.paramOrderBy(true, config.getOrderBy())
-			.maxResults(config.getFilter().getMaxResults());
-		addSubEntities(queryBuilder, config.getInclude().getSubEntities());
+		SSCApplicationVersionsQueryBuilder queryBuilder = 
+			conn.api(SSCApplicationVersionAPI.class).queryApplicationVersions();
+		config.updateQueryBuilder(queryBuilder, attributeDefinitionHelper);
 		queryBuilder.build().processAll(this::processRelease);
-	}
-
-	private void addSubEntities(SSCApplicationVersionsQueryBuilder queryBuilder, LoaderIncludeSubEntityConfig[] loaderIncludeSubEntityConfigs) {
-		if ( loaderIncludeSubEntityConfigs!=null ) {
-			for ( LoaderIncludeSubEntityConfig subEntity : loaderIncludeSubEntityConfigs ) {
-				if ( "attributeValuesByName".equals(subEntity.getName()) ) {
-					queryBuilder.embedAttributeValuesByName(attributeDefinitionHelper);
-				} else {
-					queryBuilder.embedSubEntity(subEntity.getName(), EmbedType.PRELOAD, subEntity.getFields());
-				}
-			}
-		}
 	}
 
 	private final void processRelease(JSONMap release) {

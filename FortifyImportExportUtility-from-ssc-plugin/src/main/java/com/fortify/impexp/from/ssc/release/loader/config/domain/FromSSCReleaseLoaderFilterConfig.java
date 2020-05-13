@@ -24,15 +24,25 @@
  ******************************************************************************/
 package com.fortify.impexp.from.ssc.release.loader.config.domain;
 
-import com.fortify.impexp.common.from.loader.config.domain.LoaderFilterConfig;
+import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
+import com.fortify.impexp.common.from.loader.config.domain.LoaderFilterQueryBuilderConfig;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data @EqualsAndHashCode(callSuper=true)
-public class FromSSCReleaseLoaderFilterConfig extends LoaderFilterConfig {
+public class FromSSCReleaseLoaderFilterConfig extends LoaderFilterQueryBuilderConfig<SSCApplicationVersionsQueryBuilder> {
 	private String id;
 	private String name;
 	private String applicationName;
 	private String versionName;
+	
+	public void updateQueryBuilder(SSCApplicationVersionsQueryBuilder qb) {
+		super.updateQueryBuilder(qb);
+		qb.id(true, getId())
+			.applicationAndOrVersionName(true, getName())
+			.applicationName(true, getApplicationName())
+			.versionName(true, getVersionName());
+	}
+	
 }

@@ -30,6 +30,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data @EqualsAndHashCode(callSuper=true)
-public class LoaderAddFieldsConfig extends EntityAddFieldsConfig {
+public abstract class LoaderAddFieldsConfig<E> extends EntityAddFieldsConfig<E> {
 	private static final long serialVersionUID = 1L;
 }
