@@ -1,6 +1,6 @@
 /*******************************************************************************
- * (c) Copyright 2020 Micro Focus or one of its affiliates, a Micro Focus company
- * 
+ * (c) Copyright 2020 Micro Focus or one of its affiliates
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the 
  * "Software"), to deal in the Software without restriction, including without 
@@ -22,14 +22,26 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.status.export;
+package com.fortify.impexp.common.processor.entity.target;
 
-import java.util.Collection;
+import lombok.Getter;
 
-import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
-import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
-
-public interface IExportStatusHelper<S, T> {
-	public void notifyExported(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<S> sourceEntities, T targetEntity);
-	public boolean isExported(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, S sourceEntity);
+@Getter
+public abstract class AbstractEntityTargetDescriptor<T extends AbstractEntityTargetDescriptor<T>> implements IEntityTargetDescriptor {
+	private IEntityTarget target;
+	private Class<?> javaType;
+	
+	public T target(IEntityTarget target) {
+		this.target = target;
+		return _this();
+	}
+	public T javaType(Class<?> javaType) {
+		this.javaType = javaType;
+		return _this();
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected T _this() {
+		return (T)this;
+	}
 }

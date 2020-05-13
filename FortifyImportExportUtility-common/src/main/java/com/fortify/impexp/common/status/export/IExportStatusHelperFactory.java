@@ -29,5 +29,5 @@ import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor
 
 public interface IExportStatusHelperFactory<S,T> {
 	public boolean isActive(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor);
-	public IExportStatusHelper<S,T> getProcessor();
+	public IExportStatusHelper<S,T> getExportStatusHelper();
 }

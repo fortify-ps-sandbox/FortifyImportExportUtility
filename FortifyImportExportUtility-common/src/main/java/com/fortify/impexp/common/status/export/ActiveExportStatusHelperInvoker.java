@@ -43,7 +43,7 @@ public class ActiveExportStatusHelperInvoker {
 	
 	private final IExportStatusHelper<?,?> getActiveExportStatusHelper(final IEntitySourceDescriptor entitySourceDescriptor, final IEntityTargetDescriptor entityTargetDescriptor) {
 		List<IExportStatusHelper<?,?>> exportStatusHelpers = getActiveExportStatusHelpersStream(entitySourceDescriptor, entityTargetDescriptor)
-				.map(factory->(IExportStatusHelper<?,?>)factory.getProcessor())
+				.map(factory->(IExportStatusHelper<?,?>)factory.getExportStatusHelper())
 				.collect(Collectors.toList());
 		if ( exportStatusHelpers.size()>1 ) {
 			throw new IllegalStateException(String.format("More than one IExportStatusHelper found for entity source descriptor %s and entity target descriptor %s", entitySourceDescriptor, entityTargetDescriptor));
@@ -67,9 +67,9 @@ public class ActiveExportStatusHelperInvoker {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <S> void isExported(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, S sourceEntity) {
+	public <S> boolean isExported(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, S sourceEntity) {
 		// This cast should be safe based on IEntitySourceDescriptor#getJavaType()
-		((IExportStatusHelper<S,?>)getActiveExportStatusHelper(entitySourceDescriptor, entityTargetDescriptor))
+		return ((IExportStatusHelper<S,?>)getActiveExportStatusHelper(entitySourceDescriptor, entityTargetDescriptor))
 			.isExported(entitySourceDescriptor, entityTargetDescriptor, sourceEntity);
 	}
 }

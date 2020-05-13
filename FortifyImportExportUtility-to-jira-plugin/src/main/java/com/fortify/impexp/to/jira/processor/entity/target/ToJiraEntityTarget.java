@@ -22,26 +22,21 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.entity.target;
+package com.fortify.impexp.to.jira.processor.entity.target;
 
-import lombok.Getter;
+import org.springframework.stereotype.Component;
 
-@Getter
-public abstract class AbstractTargetEntityDescriptor<T extends AbstractTargetEntityDescriptor<T>> implements IEntityTargetDescriptor {
-	private IEntityTarget target;
-	private Class<?> javaType;
+import com.fortify.impexp.common.processor.entity.target.IEntityTarget;
+import com.fortify.util.enumentry.IEnumEntryProvider;
+
+public enum ToJiraEntityTarget implements IEntityTarget {
+	JIRA;
 	
-	public T target(IEntityTarget target) {
-		this.target = target;
-		return _this();
-	}
-	public T javaType(Class<?> javaType) {
-		this.javaType = javaType;
-		return _this();
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected T _this() {
-		return (T)this;
+	@Component
+	public static class EnumEntryProvider implements IEnumEntryProvider<IEntityTarget> {
+		@Override
+		public IEntityTarget[] getEnumEntries() {
+			return values();
+		}
 	}
 }

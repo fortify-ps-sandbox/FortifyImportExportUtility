@@ -43,7 +43,7 @@ public abstract class AbstractExportStatusHelperFactory<S,T> implements IExportS
 
 	@Override
 	public boolean isActive(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor) {
-		return isSupportedEntity(entitySourceDescriptor, entityTargetDescriptor) && isEnabled(entitySourceDescriptor);
+		return isSupportedEntity(entitySourceDescriptor, entityTargetDescriptor) && isEnabled(entitySourceDescriptor, entityTargetDescriptor);
 	}
 	
 	protected boolean isSupportedEntity(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor) {
@@ -58,5 +58,5 @@ public abstract class AbstractExportStatusHelperFactory<S,T> implements IExportS
 		return supportedEntityTargetDescriptorHelper.isSupportedEntity(entityTargetDescriptor);
 	}
 	
-	protected abstract boolean isEnabled(IEntitySourceDescriptor entitySourceDescriptor);
+	protected abstract boolean isEnabled(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor);
 }

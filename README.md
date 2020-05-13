@@ -92,8 +92,12 @@ Implementation:
 
 Documentation:
 
-* For users: Describe plugin system
-    * Optimize installation by removing unneeded plugins
+* For users: 
+    * Describe plugin system, optimize installation by removing unneeded plugins
+	* Explain terminology, 'release' is used for both SSC version and FoD release
+	* Troubleshooting; common error messages and solutions
+	    * How to identify which plugins have been loaded
+		* How to resolve configuration issues
 * For developers: Describe architecture
 	* Scheduled run vs run-once
 	* Modifyable property scope
@@ -114,7 +118,7 @@ FortifyBugTrackerUtility:
 
 FortifyImportExportUtility:
 * Can either be invoked manually for a single run, or can be run as a long-running process that handles scheduling of individual runs
-* Configuration is done using more user-friendly YAML configuration files
+* Configuration is done using more concise and user-friendly YAML configuration files
 * All vulnerabilities are loaded only once from the source system, independent of whether they were previously exported
     * How to differentiate between previously submitted versus new vulnerabilities is now decided in the target configuration
 * As an advanced use case, FortifyImportExportUtility can process multiple sources and targets within a single run
