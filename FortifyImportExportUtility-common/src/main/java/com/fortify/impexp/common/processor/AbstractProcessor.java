@@ -24,5 +24,5 @@
  ******************************************************************************/
 package com.fortify.impexp.common.processor;
 
-public abstract class AbstractProcessor<I> implements IProcessor<I> {
+public abstract class AbstractProcessor<S> implements IProcessor<S> {
 }

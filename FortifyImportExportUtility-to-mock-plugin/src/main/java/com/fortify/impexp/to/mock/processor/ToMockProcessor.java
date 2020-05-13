@@ -26,17 +26,18 @@ package com.fortify.impexp.to.mock.processor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.fortify.impexp.common.processor.AbstractObjectProcessor;
-import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
+import com.fortify.impexp.common.processor.AbstractProcessor;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
 import com.fortify.impexp.to.mock.processor.config.ToMockConfig;
 
 @ToPluginComponent
-public class ToMockProcessor extends AbstractObjectProcessor {
-	@Autowired ToMockConfig exportToFileConfig;
+public class ToMockProcessor extends AbstractProcessor<Object> {
+	@Autowired ToMockConfig exportToMockConfig;
 	
 	@Override
-	public void process(IEntityDescriptor entityDescriptor, Object input) {
+	public void process(IEntitySourceDescriptor entitySourceDescriptor, Object input) {
+		System.out.println("config: "+exportToMockConfig);
 		System.out.println(String.format("[%s] Processing input: %s", this.getClass().getSimpleName(), input));
 	}
 

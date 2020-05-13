@@ -22,21 +22,21 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.entity;
+package com.fortify.impexp.common.processor.entity.type;
 
 import org.springframework.stereotype.Component;
 
 import com.fortify.util.enumentry.IEnumEntryProvider;
 
-public enum StandardEntitySource implements IEntitySource {
-	MOCK,
-	SSC,
-	FOD;
+public enum StandardEntityType implements IEntityType {
+	APPLICATION,
+	RELEASE,
+	VULNERABILITY;
 	
 	@Component
-	public static class EnumEntryProvider implements IEnumEntryProvider<IEntitySource> {
+	public static class EnumEntryProvider implements IEnumEntryProvider<IEntityType> {
 		@Override
-		public IEntitySource[] getEnumEntries() {
+		public IEntityType[] getEnumEntries() {
 			return values();
 		}
 	}

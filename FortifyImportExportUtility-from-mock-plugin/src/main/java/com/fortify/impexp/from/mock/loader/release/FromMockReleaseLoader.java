@@ -26,14 +26,18 @@ package com.fortify.impexp.from.mock.loader.release;
 
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
 import com.fortify.impexp.common.from.spi.loader.AbstractRootLoader;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.impexp.common.processor.entity.type.StandardEntityType;
+import com.fortify.impexp.from.mock.processor.entity.source.FromMockEntitySourceDescriptor;
 import com.fortify.util.rest.json.JSONMap;
 
 @FromPluginComponent
 public class FromMockReleaseLoader extends AbstractRootLoader<JSONMap> {
+	public static final IEntitySourceDescriptor ENTITY_DESCRIPTOR = new FromMockEntitySourceDescriptor().entity(StandardEntityType.RELEASE);
 	@Override
 	public void run() {
 		for ( int i = 0 ; i < 10 ; i++ ) {
-			invokeEnabledProcessors(FromMockReleaseLoaderFactory.ENTITY_DESCRIPTOR, getRelease(i));
+			invokeEnabledProcessors(ENTITY_DESCRIPTOR, getRelease(i));
 		}
 	}
 

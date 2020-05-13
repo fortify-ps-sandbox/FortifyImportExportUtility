@@ -1,6 +1,6 @@
 plugins {
     id 'java-library'
-	id "io.freefair.lombok" version "4.1.2"
+	id "io.freefair.lombok" version "5.0.1"
 }
 
 description = 'FortifyImportExportUtility target mock implementation'

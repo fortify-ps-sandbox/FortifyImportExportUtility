@@ -7,4 +7,5 @@ include 'FortifyImportExportUtility-from-ssc-plugin'
 include 'FortifyImportExportUtility-from-fod-plugin'
 include 'FortifyImportExportUtility-to-mock-plugin'
 include 'FortifyImportExportUtility-to-file-plugin'
+include 'FortifyImportExportUtility-to-jira-plugin'
 

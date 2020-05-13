@@ -28,22 +28,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.client.ssc.connection.SSCAuthenticatingRestConnection;
 import com.fortify.impexp.common.from.spi.loader.AbstractIntermediateLoaderFactory;
-import com.fortify.impexp.common.processor.entity.StandardEntitySource;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.impexp.common.processor.entity.source.StandardEntitySource;
+import com.fortify.impexp.common.processor.entity.source.SupportedEntitySourceDescriptorHelper;
+import com.fortify.impexp.common.processor.entity.type.IEntityType;
 import com.fortify.impexp.from.ssc.annotation.FromSSC;
 import com.fortify.util.rest.json.JSONMap;
 
 public abstract class AbstractFromSSCIntermediateLoaderFactory extends AbstractIntermediateLoaderFactory<JSONMap> {
 	@Autowired(required=false) @FromSSC private SSCAuthenticatingRestConnection conn;
 	
-	public AbstractFromSSCIntermediateLoaderFactory() {
-		setSupportedEntitySources(StandardEntitySource.SSC);
+	public AbstractFromSSCIntermediateLoaderFactory(IEntityType entityType) {
+		super(SupportedEntitySourceDescriptorHelper.builder()
+				.supportedEntitySource(StandardEntitySource.SSC)
+				.supportedEntityType(entityType)
+				.supportedEntitySourceJavaType(JSONMap.class)
+				.build());
 	}
 	
 	@Override
-	protected final boolean isEnabled() {
+	protected final boolean isEnabled(IEntitySourceDescriptor entitySourceDescriptor) {
 		return conn!=null && isLoaderEnabled();
 	}
 
 	protected abstract boolean isLoaderEnabled();
-
 }

@@ -36,15 +36,15 @@ import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuild
 import com.fortify.client.ssc.connection.SSCAuthenticatingRestConnection;
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
 import com.fortify.impexp.common.from.spi.loader.AbstractRootLoader;
-import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
-import com.fortify.impexp.common.processor.entity.StandardEntityType;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.impexp.common.processor.entity.type.StandardEntityType;
 import com.fortify.impexp.from.ssc.annotation.FromSSC;
-import com.fortify.impexp.from.ssc.processor.entity.FromSSCEntityDescriptor;
+import com.fortify.impexp.from.ssc.processor.entity.source.FromSSCSourceEntityDescriptor;
 import com.fortify.util.rest.json.JSONMap;
 
 @FromPluginComponent @FromSSC @Lazy
 public class FromSSCReleaseLoader extends AbstractRootLoader<JSONMap> {
-	public static final IEntityDescriptor ENTITY_DESCRIPTOR = new FromSSCEntityDescriptor().entity(StandardEntityType.RELEASE);
+	public static final IEntitySourceDescriptor ENTITY_DESCRIPTOR = new FromSSCSourceEntityDescriptor().entity(StandardEntityType.RELEASE);
 	@Autowired @FromSSC private SSCAuthenticatingRestConnection conn;
 	@Autowired @FromSSC private SSCAttributeDefinitionHelper attributeDefinitionHelper;
 	@Autowired @FromSSC private FromSSCReleaseLoaderConfig config;

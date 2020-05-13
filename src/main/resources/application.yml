@@ -22,13 +22,20 @@ from.ssc:
       maxResults: 5
     vulnerabilities:
       include: all
+      maxResults: 1
       fields: id
       filterSet: Quick View
       includeSubEntities: details, comments
+      add:
+        fieldName: expression
+      exportStatus:
+        jira: #Map<String, ExportStatus>
+          storeAsBugLink: true            # SSC or FoD
+          storeAsCustomTag: CustomTagName # SSC
+          storeAsComment: Vulnerability submitted to {} # FoD, maybe SSC?
+          extraCustomTags: # SSC
+            abc: expression 
     
-    
-    
-  
 from.mock:
   enabled: true
 
@@ -36,3 +43,29 @@ to.mock:
   entity:
     sources: mock, ssc
     types: release, vulnerability, mock_custom
+    
+to.file:
+  - sources: mock, ssc
+    types: release, vulnerability
+    fileName: expression
+    format: json/csv/plain
+    formatOptions: xx, yy    
+    
+to.jira:
+  baseUrl: http://localhost:8989/jira
+  userName:
+  password:
+  vulnerabilities: #Map<String, JiraVulnExporterConfig>
+    ssc:
+      add: # Generic for any source
+        isOpen: not suppressed, not hidden, not removed, ...
+      exportNew: # Generic for any source
+        filters: isOpen, critical|high
+        groupBy: expression # Only for new vulns; existing vulns are grouped by bug link
+      updateExisting: # Generic for any source
+        filters: isNotOpen
+      fields:
+        abc: expression
+      appendedFields:
+        description: expression
+        

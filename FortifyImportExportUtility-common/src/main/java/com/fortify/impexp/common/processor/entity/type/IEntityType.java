@@ -22,6 +22,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor;
+package com.fortify.impexp.common.processor.entity.type;
 
-public abstract class AbstractObjectProcessor extends AbstractProcessor<Object> {}
+import com.fortify.util.enumentry.IEnumEntry;
+
+public interface IEntityType extends IEnumEntry {}

@@ -22,11 +22,21 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor;
+package com.fortify.impexp.from.mock.processor.entity.source;
 
-public abstract class AbstractObjectProcessorFactory extends AbstractProcessorFactory<Object> {
-	public AbstractObjectProcessorFactory() {
-		setSupportedEntityJavaType(Object.class);
+import org.springframework.stereotype.Component;
+
+import com.fortify.impexp.common.processor.entity.type.IEntityType;
+import com.fortify.util.enumentry.IEnumEntryProvider;
+
+public enum FromMockEntityType implements IEntityType {
+	MOCK_CUSTOM;
+	
+	@Component
+	public static class EnumEntryProvider implements IEnumEntryProvider<IEntityType> {
+		@Override
+		public IEntityType[] getEnumEntries() {
+			return values();
+		}
 	}
-
 }

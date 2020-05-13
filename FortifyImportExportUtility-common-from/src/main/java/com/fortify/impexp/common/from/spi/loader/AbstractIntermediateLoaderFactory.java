@@ -28,47 +28,15 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.core.Ordered;
 
-import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
-import com.fortify.impexp.common.processor.entity.IEntityType;
+import com.fortify.impexp.common.processor.entity.source.SupportedEntitySourceDescriptorHelper;
 import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerProcessorFactory;
 
-public abstract class AbstractIntermediateLoaderFactory<E> extends AbstractProcessorInvokerProcessorFactory<E> {
-	public AbstractIntermediateLoaderFactory() {
-		setSupportedEntityTypes(getSupportedEntityTypes());
-	}
+public abstract class AbstractIntermediateLoaderFactory<S> extends AbstractProcessorInvokerProcessorFactory<S> {
 	
-	/**
-	 * If no supported entity types are defined, then calls to {@link #isActive(IEntityDescriptor)}
-	 * may result in endless loops:
-	 * <ul>
-	 *  <li>This factory indirectly calls {@link #isActive(IEntityDescriptor)} on all 
-	 *      available processors to see whether they provide a valid target processor for our processor<li>
-	 *  <li>However if we call {@link #isActive(IEntityDescriptor)} on any 
-	 *      {@link AbstractIntermediateLoaderFactory} (either ourselves or any other {@link AbstractIntermediateLoaderFactory}
-	 *      implementation), then that factory will eventually call {@link #isActive(IEntityDescriptor)}
-	 *      on ourselves again, as we are listed as an available processor factory</li>
-	 * </ul>
-	 * 
-	 * We assume that entity types are hierarchical in nature (for example application->release->vulnerability), so
-	 * no endless loops are possible if each factory properly sets one or more supported entity types. If a loader 
-	 * implementation doesn't specify an entity type then the loader will be disabled automatically by having this method 
-	 * return false.
-	 */
-	@Override
-	protected boolean isSupportedIfSupportedEntityTypesIsEmpty() {
-		return false;
+	public AbstractIntermediateLoaderFactory(SupportedEntitySourceDescriptorHelper supportedEntitySourceDescriptorHelper) {
+		super(supportedEntitySourceDescriptorHelper);
 	}
-	
-	/**
-	 * Each intermediate loader should only be invoked by loaders that have the same entity source; 
-	 * if a loader implementation doesn't specify an entity source then it will be disabled automatically 
-	 * by having this method return false.
-	 */
-	@Override
-	protected boolean isSupportedIfSupportedEntitySourcesIsEmpty() {
-		return false;
-	}
-	
+
 	/**
 	 * By default, this method returns {@link Ordered#LOWEST_PRECEDENCE} to allow target processors
 	 * to execute before intermediate loaders/processors. For example, this allows a target to 
@@ -78,9 +46,6 @@ public abstract class AbstractIntermediateLoaderFactory<E> extends AbstractProce
 	public int getOrder() {
 		return Ordered.LOWEST_PRECEDENCE;
 	}
-	
-	protected abstract IEntityDescriptor getEntityDescriptor();
-	protected abstract IEntityType[] getSupportedEntityTypes();
 	
 	@PostConstruct
 	public final void logInitialized() {

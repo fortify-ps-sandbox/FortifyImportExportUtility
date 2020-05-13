@@ -54,7 +54,7 @@ import com.fortify.impexp.from.ssc.loader.AbstractFromSSCRootLoaderFactory;
  * @author Ruud Senden
  *
  */
-@Configuration
+@Configuration @FromSSC
 @ConditionalOnProperty("from.ssc.baseUrl")
 public class FromSSCConnectionConfiguration {
 	/**
@@ -80,8 +80,7 @@ public class FromSSCConnectionConfiguration {
 	}
 	
 	/**
-	 * Test whether the necessary application attributes have been defined on SSC.
-	 * This also implicitly tests whether we can successfully connect to SSC.
+	 * Test whether we can successfully connect to SSC.
 	 * 
 	 * @param conn
 	 */

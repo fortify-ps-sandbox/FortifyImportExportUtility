@@ -22,15 +22,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.processor.entity;
+package com.fortify.impexp.common.status.export;
 
-import com.fortify.impexp.common.processor.entity.AbstractEntityDescriptor;
-import com.fortify.impexp.common.processor.entity.StandardEntitySource;
-import com.fortify.util.rest.json.JSONMap;
-
-public class FromSSCEntityDescriptor extends AbstractEntityDescriptor<FromSSCEntityDescriptor> {
-	public FromSSCEntityDescriptor() {
-		source(StandardEntitySource.SSC);
-		javaType(JSONMap.class);
-	}
+public abstract class AbstractExportStatusHelper<S,T> implements IExportStatusHelper<S,T> {
 }

@@ -30,7 +30,6 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 
-import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
 import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerFactory;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunnerFactory;
@@ -62,8 +61,6 @@ public abstract class AbstractRootLoaderFactory<R extends ISchedulableRunner> ex
 	 * annotation. These implementations then simply return the result of {@link ObjectFactory#getObject()}.</p>
 	 */
 	protected abstract R getRootLoader();
-
-	protected abstract IEntityDescriptor getEntityDescriptor();
 	
 	@PostConstruct
 	public final void logInitialized() {

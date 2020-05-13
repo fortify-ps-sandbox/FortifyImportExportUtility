@@ -28,27 +28,15 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
-import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
-import com.fortify.impexp.common.processor.entity.IEntityType;
-import com.fortify.impexp.common.processor.entity.StandardEntityType;
+import com.fortify.impexp.common.processor.entity.type.StandardEntityType;
 import com.fortify.impexp.from.mock.loader.AbstractFromMockIntermediateLoaderFactory;
-import com.fortify.impexp.from.mock.processor.entity.FromMockEntityDescriptor;
 
 @FromPluginComponent
 public class FromMockReleaseFromApplicationLoaderFactory extends AbstractFromMockIntermediateLoaderFactory {
-	static final IEntityDescriptor ENTITY_DESCRIPTOR = 
-			new FromMockEntityDescriptor().entity(StandardEntityType.RELEASE);
-	private static final IEntityType[] SUPPORTED_ENTITY_TYPES = {StandardEntityType.APPLICATION};
 	@Autowired private ObjectFactory<FromMockReleaseFromApplicationLoader> processorFactory;
 	
-	@Override
-	protected IEntityType[] getSupportedEntityTypes() {
-		return SUPPORTED_ENTITY_TYPES;
-	}
-
-	@Override
-	protected IEntityDescriptor getEntityDescriptor() {
-		return ENTITY_DESCRIPTOR;
+	public FromMockReleaseFromApplicationLoaderFactory() {
+		super(StandardEntityType.RELEASE);
 	}
 	
 	@Override

@@ -29,25 +29,19 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.impexp.common.processor.AbstractProcessor;
-import com.fortify.impexp.common.processor.IProcessor;
-import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
-import com.fortify.impexp.common.processor.retriever.ActiveProcessorsRetriever;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.util.spring.boot.env.ModifyablePropertySource;
 
-public abstract class AbstractProcessorInvokerProcessor<E> extends AbstractProcessor<E> {
-	@Autowired private ActiveProcessorsRetriever activeProcessorsLoader;
+public abstract class AbstractProcessorInvokerProcessor<S> extends AbstractProcessor<S> {
+	@Autowired private ActiveProcessorsInvoker activeProcessors;
 	
-	@SuppressWarnings("unchecked")
-	protected final void invokeActiveProcessors(IEntityDescriptor entityDescriptor, E entity) {
+	protected final void invokeActiveProcessors(IEntitySourceDescriptor entitySourceDescriptor, S entity) {
 		try ( ModifyablePropertySource mps = ModifyablePropertySource.withProperties(getProperties(entity)) ) {
-			activeProcessorsLoader
-				.getActiveProcessors(entityDescriptor)
-				// This cast/invocation should be safe if associated processor factory accepted IProcessorInvokerDescriptor#getEntityClass
-				.forEach(processor->((IProcessor<E>)processor).process(entityDescriptor, entity));
+			activeProcessors.process(entitySourceDescriptor, entity);
 		}
 	}
 	
-	protected Map<String, Object> getProperties(E entity) {
+	protected Map<String, Object> getProperties(S entity) {
 		return null;
 	}
 }

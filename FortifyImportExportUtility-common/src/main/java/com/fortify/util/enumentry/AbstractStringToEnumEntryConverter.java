@@ -32,16 +32,18 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 
-import com.fortify.impexp.common.processor.entity.IEntityType;
+import com.fortify.impexp.common.processor.entity.type.IEntityType;
 
 public class AbstractStringToEnumEntryConverter<E extends IEnumEntry> implements Converter<String, E> {
 	private final Map<String, E> valuesByName = new HashMap<>();
 	
-	@Autowired
+	@Autowired(required=false)
 	public final void register(Collection<IEnumEntryProvider<E>> providers) {
-		providers.stream()
-			.map(IEnumEntryProvider::getEnumEntries)
-			.forEach(this::register); // TODO how to call register with individual entity directly?
+		if ( providers!=null ) {
+			providers.stream()
+				.map(IEnumEntryProvider::getEnumEntries)
+				.forEach(this::register); // TODO how to call register with individual entity directly?
+		}
 	}
 	
 	public final void register(E[] entity) {

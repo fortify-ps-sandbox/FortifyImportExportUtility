@@ -1,6 +1,6 @@
 /*******************************************************************************
- * (c) Copyright 2020 Micro Focus or one of its affiliates
- *
+ * (c) Copyright 2020 Micro Focus or one of its affiliates, a Micro Focus company
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the 
  * "Software"), to deal in the Software without restriction, including without 
@@ -22,15 +22,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.mock.processor.entity;
+package com.fortify.impexp.to.jira.processor.connection;
 
-import com.fortify.impexp.common.processor.entity.AbstractEntityDescriptor;
-import com.fortify.impexp.common.processor.entity.StandardEntitySource;
-import com.fortify.util.rest.json.JSONMap;
+import com.fortify.util.rest.connection.AbstractRestConnectionWithCredentialsConfig;
 
-public class FromMockEntityDescriptor extends AbstractEntityDescriptor<FromMockEntityDescriptor> {
-	public FromMockEntityDescriptor() {
-		source(StandardEntitySource.MOCK);
-		javaType(JSONMap.class);
-	}
+public class ToJiraRestConnectionConfig<T extends ToJiraRestConnectionConfig<T>> extends AbstractRestConnectionWithCredentialsConfig<T> {
 }

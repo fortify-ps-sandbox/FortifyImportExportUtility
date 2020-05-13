@@ -28,26 +28,15 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
-import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
-import com.fortify.impexp.common.processor.entity.StandardEntityType;
 import com.fortify.impexp.from.mock.loader.AbstractFromMockRootLoaderFactory;
-import com.fortify.impexp.from.mock.processor.entity.FromMockEntityDescriptor;
 
 @FromPluginComponent
 public class FromMockApplicationLoaderFactory extends AbstractFromMockRootLoaderFactory<FromMockApplicationLoader> {
 	@Autowired private ObjectFactory<FromMockApplicationLoader> rootLoaderFactory;
-	
-	public static final IEntityDescriptor ENTITY_DESCRIPTOR = 
-			new FromMockEntityDescriptor().entity(StandardEntityType.APPLICATION);
 
 	@Override
 	public String getCronSchedule() {
 		return null;
-	}
-	
-	@Override
-	protected IEntityDescriptor getEntityDescriptor() {
-		return ENTITY_DESCRIPTOR;
 	}
 
 	@Override

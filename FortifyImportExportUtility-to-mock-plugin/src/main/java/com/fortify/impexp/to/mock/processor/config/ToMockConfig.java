@@ -24,12 +24,15 @@
  ******************************************************************************/
 package com.fortify.impexp.to.mock.processor.config;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import com.fortify.impexp.common.processor.entity.IEntitySource;
-import com.fortify.impexp.common.processor.entity.IEntityType;
+import com.fortify.impexp.common.processor.entity.source.IEntitySource;
+import com.fortify.impexp.common.processor.entity.type.IEntityType;
 import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
 
 import lombok.Data;
@@ -39,20 +42,20 @@ import lombok.Data;
 @ConfigurationProperties("to.mock")
 public class ToMockConfig {
 	private String simple;
-	private ToMockConfigEntity entity;
+	private final ToMockConfigEntity entity = new ToMockConfigEntity();
 	
-	public final IEntitySource[] getEntitySources() {
-		return entity==null ? null : entity.getSources();
+	public final Collection<IEntitySource> getEntitySources() {
+		return entity.getSources();
 	}
 	
-	public final IEntityType[] getEntityTypes() {
-		return entity==null ? null : entity.getTypes();
+	public final Collection<IEntityType> getEntityTypes() {
+		return entity.getTypes();
 	}
 	
 	@Data
 	public static final class ToMockConfigEntity {
-		private IEntitySource[] sources;
-		private IEntityType[] types;
+		private final Collection<IEntitySource> sources = new ArrayList<>();
+		private final Collection<IEntityType> types = new ArrayList<>();
 	}
 	
 	@PostConstruct

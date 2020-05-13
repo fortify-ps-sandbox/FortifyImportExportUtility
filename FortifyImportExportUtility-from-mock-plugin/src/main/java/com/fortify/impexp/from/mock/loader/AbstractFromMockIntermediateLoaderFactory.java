@@ -25,16 +25,23 @@
 package com.fortify.impexp.from.mock.loader;
 
 import com.fortify.impexp.common.from.spi.loader.AbstractIntermediateLoaderFactory;
-import com.fortify.impexp.common.processor.entity.StandardEntitySource;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.impexp.common.processor.entity.source.StandardEntitySource;
+import com.fortify.impexp.common.processor.entity.source.SupportedEntitySourceDescriptorHelper;
+import com.fortify.impexp.common.processor.entity.type.IEntityType;
 import com.fortify.util.rest.json.JSONMap;
 
 public abstract class AbstractFromMockIntermediateLoaderFactory extends AbstractIntermediateLoaderFactory<JSONMap> {
-	public AbstractFromMockIntermediateLoaderFactory() {
-		setSupportedEntitySources(StandardEntitySource.MOCK);
+	public AbstractFromMockIntermediateLoaderFactory(IEntityType entityType) {
+		super(SupportedEntitySourceDescriptorHelper.builder()
+				.supportedEntitySource(StandardEntitySource.MOCK)
+				.supportedEntityType(entityType)
+				.supportedEntitySourceJavaType(JSONMap.class)
+				.build());
 	}
 	
 	@Override
-	protected final boolean isEnabled() {
+	protected final boolean isEnabled(IEntitySourceDescriptor entitySourceDescriptor) {
 		// For consistency with other plugins, we delegate to the abstract isLoaderEnabled() method
 		return isLoaderEnabled();
 	}

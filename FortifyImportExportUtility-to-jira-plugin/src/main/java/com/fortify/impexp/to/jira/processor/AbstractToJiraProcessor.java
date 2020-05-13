@@ -22,31 +22,11 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.entity;
+package com.fortify.impexp.to.jira.processor;
 
-import lombok.Getter;
+import com.fortify.impexp.common.processor.AbstractProcessor;
+import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
 
-@Getter
-public abstract class AbstractEntityDescriptor<T extends AbstractEntityDescriptor<T>> implements IEntityDescriptor {
-	private IEntitySource source;
-	private IEntityType type;
-	private Class<?> javaType;
-	
-	public T source(IEntitySource source) {
-		this.source = source;
-		return _this();
-	}
-	public T entity(IEntityType type) {
-		this.type = type;
-		return _this();
-	}
-	public T javaType(Class<?> javaType) {
-		this.javaType = javaType;
-		return _this();
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected T _this() {
-		return (T)this;
-	}
+@ToPluginComponent
+public abstract class AbstractToJiraProcessor extends AbstractProcessor<Object> {
 }

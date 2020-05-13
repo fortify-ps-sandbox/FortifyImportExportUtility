@@ -22,10 +22,13 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.entity;
+package com.fortify.impexp.common.processor.entity.type;
 
-public interface IEntityDescriptor {
-	public Class<?> getJavaType();
-	public IEntityType getType();
-	public IEntitySource getSource();
-}
+import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
+import org.springframework.stereotype.Component;
+
+import com.fortify.util.enumentry.AbstractStringToEnumEntryConverter;
+
+@Component
+@ConfigurationPropertiesBinding
+public class StringToEntityTypeConverter extends AbstractStringToEnumEntryConverter<IEntityType> {}

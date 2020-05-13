@@ -25,6 +25,11 @@
 package com.fortify.impexp.common.processor.invoker;
 
 import com.fortify.impexp.common.processor.AbstractProcessorFactory;
+import com.fortify.impexp.common.processor.entity.source.SupportedEntitySourceDescriptorHelper;
 
-public abstract class AbstractProcessorInvokerProcessorFactory<E> extends AbstractProcessorFactory<E> {
+public abstract class AbstractProcessorInvokerProcessorFactory<S> extends AbstractProcessorFactory<S> {
+
+	public AbstractProcessorInvokerProcessorFactory(SupportedEntitySourceDescriptorHelper supportedEntitySourceDescriptorHelper) {
+		super(supportedEntitySourceDescriptorHelper);
+	}
 }

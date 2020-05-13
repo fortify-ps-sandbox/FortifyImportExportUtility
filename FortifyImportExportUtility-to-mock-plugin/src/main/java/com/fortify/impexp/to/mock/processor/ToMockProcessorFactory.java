@@ -28,17 +28,22 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 
-import com.fortify.impexp.common.processor.AbstractObjectProcessorFactory;
+import com.fortify.impexp.common.processor.AbstractProcessorFactory;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.impexp.common.processor.entity.source.SupportedEntitySourceDescriptorHelper;
 import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
 import com.fortify.impexp.to.mock.processor.config.ToMockConfig;
 
 @ToPluginComponent
-public class ToMockProcessorFactory extends AbstractObjectProcessorFactory {
+public class ToMockProcessorFactory extends AbstractProcessorFactory<Object> {
 	@Autowired private ObjectFactory<ToMockProcessor> processorFactory;
 	
 	public ToMockProcessorFactory(@Autowired ToMockConfig config) {
-		setSupportedEntitySources(config.getEntitySources());
-		setSupportedEntityTypes(config.getEntityTypes());
+		super(SupportedEntitySourceDescriptorHelper.builder()
+				.supportedEntitySources(config.getEntitySources())
+				.supportedEntityTypes(config.getEntityTypes())
+				.supportedEntitySourceJavaType(Object.class)
+				.build());
 	}
 
 	@Override
@@ -47,9 +52,9 @@ public class ToMockProcessorFactory extends AbstractObjectProcessorFactory {
 	}
 	
 	@Override
-	protected boolean isEnabled() {
+	protected boolean isEnabled(IEntitySourceDescriptor entitySourceDescriptor) {
 		// TODO Auto-generated method stub
-		return true;
+		return false;
 	}
 	
 	@Override

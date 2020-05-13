@@ -28,25 +28,19 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.fortify.impexp.common.processor.IProcessor;
-import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
-import com.fortify.impexp.common.processor.retriever.ActiveProcessorsRetriever;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.util.spring.boot.env.ModifyablePropertySource;
 
-public class AbstractProcessorInvoker<E> {
-	@Autowired private ActiveProcessorsRetriever activeProcessorsLoader;
+public class AbstractProcessorInvoker<S> {
+	@Autowired private ActiveProcessorsInvoker activeProcessors;
 	
-	@SuppressWarnings("unchecked")
-	protected final void invokeEnabledProcessors(IEntityDescriptor entityDescriptor, E entity) {
+	protected final void invokeEnabledProcessors(IEntitySourceDescriptor entitySourceDescriptor, S entity) {
 		try ( ModifyablePropertySource mps = ModifyablePropertySource.withProperties(getOverrideProperties(entity)) ) {
-			activeProcessorsLoader
-				.getActiveProcessors(entityDescriptor)
-				// This cast should be safe based on IEntityDescriptor#getJavaType()
-				.forEach(processor->((IProcessor<E>)processor).process(entityDescriptor, entity));
+			activeProcessors.process(entitySourceDescriptor, entity);
 		}
 	}
 
-	protected Map<String, Object> getOverrideProperties(E input) {
+	protected Map<String, Object> getOverrideProperties(S input) {
 		return null;
 	}
 }

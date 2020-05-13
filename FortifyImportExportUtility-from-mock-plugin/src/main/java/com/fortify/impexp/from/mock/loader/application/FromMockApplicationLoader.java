@@ -29,14 +29,19 @@ import java.util.Map;
 
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
 import com.fortify.impexp.common.from.spi.loader.AbstractRootLoader;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.impexp.common.processor.entity.type.StandardEntityType;
+import com.fortify.impexp.from.mock.processor.entity.source.FromMockEntitySourceDescriptor;
 import com.fortify.util.rest.json.JSONMap;
 
 @FromPluginComponent
 public class FromMockApplicationLoader extends AbstractRootLoader<JSONMap> {
+	private static final IEntitySourceDescriptor ENTITY_DESCRIPTOR = new FromMockEntitySourceDescriptor().entity(StandardEntityType.APPLICATION);
+	
 	@Override
 	public void run() {
 		for ( int i = 0 ; i < 10 ; i++ ) {
-			invokeEnabledProcessors(FromMockApplicationLoaderFactory.ENTITY_DESCRIPTOR, getApplication(i));
+			invokeEnabledProcessors(ENTITY_DESCRIPTOR, getApplication(i));
 		}
 	}
 

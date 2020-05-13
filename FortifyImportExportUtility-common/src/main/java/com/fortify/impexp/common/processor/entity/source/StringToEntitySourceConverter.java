@@ -22,8 +22,13 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.entity;
+package com.fortify.impexp.common.processor.entity.source;
 
-import com.fortify.util.enumentry.IEnumEntry;
+import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
+import org.springframework.stereotype.Component;
 
-public interface IEntitySource extends IEnumEntry {}
+import com.fortify.util.enumentry.AbstractStringToEnumEntryConverter;
+
+@Component
+@ConfigurationPropertiesBinding
+public class StringToEntitySourceConverter extends AbstractStringToEnumEntryConverter<IEntitySource> {}

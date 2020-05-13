@@ -22,13 +22,31 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.entity;
+package com.fortify.impexp.common.processor.entity.target;
 
-import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
-import org.springframework.stereotype.Component;
+import java.util.Set;
 
-import com.fortify.util.enumentry.AbstractStringToEnumEntryConverter;
+import lombok.Builder;
+import lombok.Singular;
 
-@Component
-@ConfigurationPropertiesBinding
-public class StringToEntitySourceConverter extends AbstractStringToEnumEntryConverter<IEntitySource> {}
+@Builder
+public final class SupportedEntityTargetDescriptorHelper {
+	@Singular(ignoreNullCollections=true) private final Set<IEntityTarget> supportedEntityTargets;
+	@Builder.Default private final boolean supportsAllEntityTargets = false;
+	private final Class<?> supportedEntityTargetJavaType;
+	
+	public final boolean isSupportedEntity(IEntityTargetDescriptor entityTargetDescriptor) {
+		return isSupportedEntityTarget(entityTargetDescriptor.getTarget())
+				&& isSupportedEntityTargetJavaType(entityTargetDescriptor.getJavaType());
+	}
+	
+	private final boolean isSupportedEntityTarget(final IEntityTarget entitySource) {
+		return supportsAllEntityTargets 
+			|| (supportedEntityTargets.size()!=0 && supportedEntityTargets.contains(entitySource));
+	}
+	
+	private final boolean isSupportedEntityTargetJavaType(final Class<?> entityJavaType) {
+		return supportedEntityTargetJavaType!=null && supportedEntityTargetJavaType.isAssignableFrom(entityJavaType);
+			
+	}
+}

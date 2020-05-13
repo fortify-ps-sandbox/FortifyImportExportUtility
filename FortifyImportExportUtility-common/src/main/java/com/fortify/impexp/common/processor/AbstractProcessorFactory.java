@@ -24,82 +24,24 @@
  ******************************************************************************/
 package com.fortify.impexp.common.processor;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.impexp.common.processor.entity.source.SupportedEntitySourceDescriptorHelper;
 
-import com.fortify.impexp.common.processor.entity.IEntityDescriptor;
-import com.fortify.impexp.common.processor.entity.IEntitySource;
-import com.fortify.impexp.common.processor.entity.IEntityType;
+public abstract class AbstractProcessorFactory<S> implements IProcessorFactory<S> {
+	private final SupportedEntitySourceDescriptorHelper supportedEntitySourceDescriptorHelper;
+	
+	public AbstractProcessorFactory(SupportedEntitySourceDescriptorHelper supportedEntitySourceDescriptorHelper) {
+		this.supportedEntitySourceDescriptorHelper = supportedEntitySourceDescriptorHelper;
+	}
 
-public abstract class AbstractProcessorFactory<E> implements IProcessorFactory<E> {
-	private final Set<IEntitySource> supportedEntitySources = new HashSet<>();
-	private final Set<IEntityType> supportedEntityTypes = new HashSet<>();
-	private Class<E> supportedEntityJavaType;
-	
-	public final void setSupportedEntitySources(IEntitySource... supportedEntitySources) {
-		this.supportedEntitySources.clear();
-		if ( supportedEntitySources!=null ) {
-			this.supportedEntitySources.addAll(Arrays.asList(supportedEntitySources));
-		}
-	}
-	
-	public final void setSupportedEntityTypes(IEntityType... supportedEntityTypes) {
-		this.supportedEntityTypes.clear();
-		if ( supportedEntityTypes!=null ) {
-			this.supportedEntityTypes.addAll(Arrays.asList(supportedEntityTypes));
-		}
-	}
-	
-	public final void setSupportedEntityJavaType(Class<E> supportedEntityJavaType) {
-		this.supportedEntityJavaType = supportedEntityJavaType;
-	}
-	
 	@Override
-	public boolean isActive(IEntityDescriptor entityDescriptor) {
-		return isSupportedEntity(entityDescriptor) && isEnabled();
+	public boolean isActive(IEntitySourceDescriptor entitySourceDescriptor) {
+		return isSupportedEntity(entitySourceDescriptor) && isEnabled(entitySourceDescriptor);
 	}
 	
-	protected boolean isSupportedEntity(IEntityDescriptor entityDescriptor) {
-		return isSupportedEntitySource(entityDescriptor.getSource())
-				&& isSupportedEntityType(entityDescriptor.getType())
-				&& isSupportedEntityJavaType(entityDescriptor.getJavaType());
+	protected boolean isSupportedEntity(IEntitySourceDescriptor entitySourceDescriptor) {
+		return supportedEntitySourceDescriptorHelper.isSupportedEntity(entitySourceDescriptor);
 	}
 	
-	protected abstract boolean isEnabled();
-
-	protected boolean isSupportedIfSupportedEntitySourcesIsEmpty() {
-		return true;
-	}
-	
-	protected boolean isSupportedIfSupportedEntityTypesIsEmpty() {
-		return true;
-	}
-	
-	protected boolean isSupportedIfSupportedEntityJavaTypeIsEmpty() {
-		return true;
-	}
-	
-	protected boolean isEnabledIfPropertyPrefixIsEmpy() {
-		return true;
-	}
-	
-	protected final boolean isSupportedEntitySource(final IEntitySource entitySource) {
-		return supportedEntitySources.size()==0 
-				? isSupportedIfSupportedEntitySourcesIsEmpty() 
-				: supportedEntitySources.contains(entitySource);
-	}
-	
-	protected final boolean isSupportedEntityType(final IEntityType entityType) {
-		return supportedEntityTypes.size()==0 
-				? isSupportedIfSupportedEntityTypesIsEmpty() 
-				: supportedEntityTypes.contains(entityType);
-	}
-	
-	protected final boolean isSupportedEntityJavaType(final Class<?> entityJavaType) {
-		return supportedEntityJavaType==null 
-				? isSupportedIfSupportedEntityJavaTypeIsEmpty() 
-				: supportedEntityJavaType.isAssignableFrom(entityJavaType);
-			
-	}
+	protected abstract boolean isEnabled(IEntitySourceDescriptor entitySourceDescriptor);
 }

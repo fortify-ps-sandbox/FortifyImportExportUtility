@@ -28,7 +28,7 @@ import javax.annotation.PostConstruct;
 
 import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerProcessor;
 
-public abstract class AbstractIntermediateLoader<E> extends AbstractProcessorInvokerProcessor<E> {
+public abstract class AbstractIntermediateLoader<S> extends AbstractProcessorInvokerProcessor<S> {
 	
 	@PostConstruct
 	public final void logInitialized() {
