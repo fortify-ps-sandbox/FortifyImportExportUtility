@@ -22,29 +22,14 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.entity.config.domain;
+package com.fortify.impexp.common.from.loader.config;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import com.fortify.impexp.common.entity.config.EntityAddFieldsConfig;
 
-import com.fortify.util.spring.SpringExpressionUtil;
-import com.fortify.util.spring.expression.TemplateExpression;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-public abstract class EntityAddFieldsConfig<E> extends LinkedHashMap<String, TemplateExpression> {
+@Data @EqualsAndHashCode(callSuper=true)
+public abstract class LoaderAddFieldsConfig<E> extends EntityAddFieldsConfig<E> {
 	private static final long serialVersionUID = 1L;
-	
-	public void addFields(final E entity) {
-		entrySet().forEach(entry -> addField(entity, entry));
-	}
-	
-	protected void addField(E entity, Map.Entry<String, TemplateExpression> entry) {
-		addField(entity, entry.getKey(), entry.getValue());
-	}
-
-	protected void addField(E entity, String propertyName, TemplateExpression propertyTemplateExpression) {
-		Object propertyValue = SpringExpressionUtil.evaluateExpression(entity, propertyTemplateExpression, Object.class);
-		addPropertyValue(entity, propertyName, propertyValue);
-	}
-
-	protected abstract void addPropertyValue(E entity, String propertyName, Object propertyValue);
 }

@@ -22,10 +22,10 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.release.loader.config.domain;
+package com.fortify.impexp.from.ssc.release.loader.config;
 
 import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
-import com.fortify.impexp.common.from.loader.config.domain.LoaderAddFieldsQueryBuilderConfig;
+import com.fortify.impexp.common.from.loader.config.LoaderAddFieldsQueryBuilderConfig;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

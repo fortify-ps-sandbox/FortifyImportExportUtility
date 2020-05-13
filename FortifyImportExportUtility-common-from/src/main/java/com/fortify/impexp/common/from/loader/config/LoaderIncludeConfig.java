@@ -22,18 +22,32 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.from.loader.config.domain;
+package com.fortify.impexp.common.from.loader.config;
 
-import com.fortify.util.rest.json.JSONMap;
-import com.fortify.util.rest.query.AbstractRestConnectionQueryBuilder;
+import java.beans.PropertyEditorSupport;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@Data @EqualsAndHashCode(callSuper=true)
-public class LoaderFilterQueryBuilderConfig<QB extends AbstractRestConnectionQueryBuilder<?,?>> extends LoaderFilterConfig<JSONMap> {
-	public void updateQueryBuilder(QB qb) {
-		qb.preProcessor(this::isIncluded);
-		qb.maxResults(getMaxResults());
-	}
+@Data
+public class LoaderIncludeConfig {
+    private String[] fields;
+    private LoaderIncludeSubEntityConfig[] subEntities;
+    
+    
+    @Data
+    public static class LoaderIncludeSubEntityConfig {
+    	private String name;
+    	private String[] fields;
+    }
+    
+    public static class LoaderIncludeSubEntityConfigEditor extends PropertyEditorSupport {
+    	@Override
+    	public void setAsText(String text) {
+    		LoaderIncludeSubEntityConfig value = new LoaderIncludeSubEntityConfig();
+    		// TODO Parse entityName(field1, field2, ...)
+    		value.setName(text);
+    		value.setFields(null);
+            setValue(value);
+        }
+    }
 }

@@ -35,9 +35,6 @@ import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuild
 import com.fortify.client.ssc.api.query.builder.SSCOrderBy;
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
 import com.fortify.impexp.from.ssc.annotation.FromSSC;
-import com.fortify.impexp.from.ssc.release.loader.config.domain.FromSSCReleaseLoaderAddFieldsConfig;
-import com.fortify.impexp.from.ssc.release.loader.config.domain.FromSSCReleaseLoaderFilterConfig;
-import com.fortify.impexp.from.ssc.release.loader.config.domain.FromSSCReleaseLoaderIncludeConfig;
 import com.fortify.util.spring.expression.TemplateExpression;
 
 import lombok.Data;

@@ -22,29 +22,29 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.release.loader.config.domain;
+package com.fortify.impexp.common.from.loader.config;
 
-import com.fortify.client.ssc.api.SSCAttributeDefinitionAPI.SSCAttributeDefinitionHelper;
-import com.fortify.client.ssc.api.query.builder.EmbedType;
-import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
-import com.fortify.impexp.common.from.loader.config.domain.LoaderIncludeConfig;
+import com.fortify.impexp.common.entity.config.EntityAddFieldsConfig;
+import com.fortify.util.rest.json.JSONMap;
+import com.fortify.util.rest.query.AbstractRestConnectionQueryBuilder;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data @EqualsAndHashCode(callSuper=true)
-public class FromSSCReleaseLoaderIncludeConfig extends LoaderIncludeConfig {
-	public void updateQueryBuilder(SSCApplicationVersionsQueryBuilder qb, SSCAttributeDefinitionHelper attributeDefinitionHelper) {
-		qb.paramFields(getFields());
-		LoaderIncludeSubEntityConfig[] subEntities = getSubEntities();
-		if ( subEntities!=null ) {
-			for ( LoaderIncludeSubEntityConfig subEntity : subEntities ) {
-				if ( "attributeValuesByName".equals(subEntity.getName()) ) {
-					qb.embedAttributeValuesByName(attributeDefinitionHelper);
-				} else {
-					qb.embedSubEntity(subEntity.getName(), EmbedType.PRELOAD, subEntity.getFields());
-				}
-			}
-		}
+public abstract class LoaderAddFieldsQueryBuilderConfig<QB extends AbstractRestConnectionQueryBuilder<?,?>> extends EntityAddFieldsConfig<JSONMap> {
+	private static final long serialVersionUID = 1L;
+	
+	public void updateQueryBuilder(QB qb) {
+		qb.preProcessor(this::addFieldsToJSONMap);
+	}
+	
+	private boolean addFieldsToJSONMap(JSONMap json) {
+		super.addFields(json); return true;
+	}
+	
+	@Override
+	protected void addPropertyValue(JSONMap entity, String propertyName, Object propertyValue) {
+		entity.putPath(propertyName, propertyValue);
 	}
 }

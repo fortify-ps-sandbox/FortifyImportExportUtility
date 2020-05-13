@@ -22,11 +22,14 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.vulnerability.loader.config.domain;
+package com.fortify.impexp.common.from.loader.config;
 
-import java.util.Map;
+import com.fortify.impexp.common.entity.config.EntityFilterConfig;
 
-public interface IFromSSCVulnerabilityExportStatusConfigProvider {
-	public Map<String, FromSSCVulnerabilityExportStatusConfig> getExportStatus();
-	public boolean isConfigured();
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data @EqualsAndHashCode(callSuper=true)
+public class LoaderFilterConfig<E> extends EntityFilterConfig<E> {
+	private int maxResults = -1;
 }

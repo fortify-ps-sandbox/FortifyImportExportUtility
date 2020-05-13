@@ -22,16 +22,18 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.vulnerability.loader.config.domain;
+package com.fortify.impexp.common.from.loader.config;
 
-import java.util.Map;
+import com.fortify.util.rest.json.JSONMap;
+import com.fortify.util.rest.query.AbstractRestConnectionQueryBuilder;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Data
-public class FromSSCVulnerabilityExportStatusConfig {
-	private boolean storeAsBugLink;
-	private String storeAsCustomTag;
-	private String storeAsComment;
-	private Map<String, String> extraCustomTags;
+@Data @EqualsAndHashCode(callSuper=true)
+public class LoaderFilterQueryBuilderConfig<QB extends AbstractRestConnectionQueryBuilder<?,?>> extends LoaderFilterConfig<JSONMap> {
+	public void updateQueryBuilder(QB qb) {
+		qb.preProcessor(this::isIncluded);
+		qb.maxResults(getMaxResults());
+	}
 }
