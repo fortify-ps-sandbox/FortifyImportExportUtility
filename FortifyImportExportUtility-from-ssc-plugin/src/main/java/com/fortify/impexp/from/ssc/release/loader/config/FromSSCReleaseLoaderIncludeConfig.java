@@ -36,6 +36,11 @@ import lombok.EqualsAndHashCode;
 public class FromSSCReleaseLoaderIncludeConfig extends LoaderIncludeConfig {
 	public void updateQueryBuilder(SSCApplicationVersionsQueryBuilder qb, SSCAttributeDefinitionHelper attributeDefinitionHelper) {
 		qb.paramFields(getFields());
+		addSubEntities(qb, attributeDefinitionHelper);
+	}
+
+	private void addSubEntities(SSCApplicationVersionsQueryBuilder qb,
+			SSCAttributeDefinitionHelper attributeDefinitionHelper) {
 		LoaderIncludeSubEntityConfig[] subEntities = getSubEntities();
 		if ( subEntities!=null ) {
 			for ( LoaderIncludeSubEntityConfig subEntity : subEntities ) {
