@@ -22,32 +22,14 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.loader.vulnerability;
+package com.fortify.impexp.common.from.loader.config.domain;
 
-import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fortify.impexp.common.entity.config.domain.EntityAddFieldsConfig;
 
-import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
-import com.fortify.impexp.common.processor.entity.type.StandardEntityType;
-import com.fortify.impexp.from.ssc.annotation.FromSSC;
-import com.fortify.impexp.from.ssc.loader.AbstractFromSSCIntermediateLoaderFactory;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@FromPluginComponent @FromSSC
-public class FromSSCVulnerabilityFromReleaseLoaderFactory extends AbstractFromSSCIntermediateLoaderFactory {
-	@Autowired @FromSSC private ObjectFactory<FromSSCVulnerabilityFromReleaseLoader> processorFactory;
-	@Autowired @FromSSC private FromSSCVulnerabilityFromReleaseLoaderConfig config;
-	
-	public FromSSCVulnerabilityFromReleaseLoaderFactory() {
-		super(StandardEntityType.RELEASE);
-	}
-	
-	@Override
-	public FromSSCVulnerabilityFromReleaseLoader getProcessor() { 
-		return processorFactory.getObject(); 
-	}
-	
-	@Override
-	public boolean isLoaderEnabled() {
-		return config.isConfigured();
-	}
+@Data @EqualsAndHashCode(callSuper=true)
+public class LoaderAddFieldsConfig extends EntityAddFieldsConfig {
+	private static final long serialVersionUID = 1L;
 }

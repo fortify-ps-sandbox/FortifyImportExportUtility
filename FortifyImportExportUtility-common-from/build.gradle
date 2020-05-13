@@ -9,4 +9,5 @@ dependencies {
 	compileOnly project(':FortifyImportExportUtility-common')
 	compileOnly project(':FortifyImportExportUtility-common-to')
 	compileOnly('com.fortify.util.spring.boot:fortify-spring-boot-helper') { changing = true }
+	compileOnly('com.fortify.client.api:common-spring') { changing = true }
 }

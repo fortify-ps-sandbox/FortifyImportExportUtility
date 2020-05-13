@@ -22,45 +22,14 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.loader.release;
+package com.fortify.impexp.common.from.loader.config.domain;
 
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import com.fortify.client.ssc.api.query.builder.SSCOrderBy;
-import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
-import com.fortify.impexp.from.ssc.annotation.FromSSC;
-import com.fortify.util.spring.expression.TemplateExpression;
+import com.fortify.impexp.common.entity.config.domain.EntityFilterConfig;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Data
-@FromPluginComponent @FromSSC
-@ConfigurationProperties("from.ssc.load.releases")
-public final class FromSSCReleaseLoaderConfig {
-	private static final String EMPTY_TO_STRING = new FromSSCReleaseLoaderConfig().toString();
-	@Value("${from.ssc.load.releases:undefined}") private String property = "undefined";
-	
-	private String id;
-	private String name;
-	private String applicationName;
-	private String versionName;
-	private String[] includeSubEntities;
-	private String[] fields;
-	private SSCOrderBy orderBy;
+@Data @EqualsAndHashCode(callSuper=true)
+public class LoaderFilterConfig extends EntityFilterConfig {
 	private int maxResults = -1;
-	private Map<String, TemplateExpression> overrideProperties;
-	
-	/**
-	 * This method indicates whether the current instance has been configured,
-	 * returning false if the {@link #toString()} value equals the {@link #toString()}
-	 * value of an empty instance.
-	 *   
-	 * @return
-	 */
-	public boolean isConfigured() {
-		return !EMPTY_TO_STRING.equals(this.toString());
-	}
 }

@@ -22,14 +22,10 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.loader.vulnerability;
+package com.fortify.impexp.from.ssc.release.loader.config;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -37,25 +33,25 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import com.fortify.client.ssc.api.query.builder.SSCOrderBy;
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
 import com.fortify.impexp.from.ssc.annotation.FromSSC;
+import com.fortify.impexp.from.ssc.release.loader.config.domain.FromSSCReleaseLoaderAddFieldsConfig;
+import com.fortify.impexp.from.ssc.release.loader.config.domain.FromSSCReleaseLoaderFilterConfig;
+import com.fortify.impexp.from.ssc.release.loader.config.domain.FromSSCReleaseLoaderIncludeConfig;
 import com.fortify.util.spring.expression.TemplateExpression;
 
 import lombok.Data;
 
 @Data
 @FromPluginComponent @FromSSC
-@ConfigurationProperties("from.ssc.load.vulnerabilities")
-public final class FromSSCVulnerabilityFromReleaseLoaderConfig implements IFromSSCVulnerabilityExportStatusConfigProvider {
-	private static final String EMPTY_TO_STRING = new FromSSCVulnerabilityFromReleaseLoaderConfig().toString();
-	@Value("${from.ssc.load.vulnerabilities:undefined}") private String property = "undefined";
+@ConfigurationProperties("from.ssc.load.releases")
+public final class FromSSCReleaseLoaderConfig {
+	private static final String EMPTY_TO_STRING = new FromSSCReleaseLoaderConfig().toString();
+	@Value("${from.ssc.load.releases:undefined}") private String property = "undefined";
 	
-	private final Set<String> include = new HashSet<>();
-	private String filterSet;
-	private String[] includeSubEntities;
-	private String[] fields;
-	private SSCOrderBy orderBy;
-	private int maxResults = -1;
-	private final Map<String, TemplateExpression> overrideProperties = new HashMap<>();
-	private final Map<String, FromSSCVulnerabilityExportStatusConfig> exportStatus = new HashMap<>();
+	private final FromSSCReleaseLoaderIncludeConfig include = new FromSSCReleaseLoaderIncludeConfig();
+	private final FromSSCReleaseLoaderAddFieldsConfig addFields = new FromSSCReleaseLoaderAddFieldsConfig();
+	private final FromSSCReleaseLoaderFilterConfig filter = new FromSSCReleaseLoaderFilterConfig();
+	private final SSCOrderBy orderBy = new SSCOrderBy();
+	private final Map<String, TemplateExpression> overrideProperties = new LinkedHashMap<String, TemplateExpression>();
 	
 	/**
 	 * This method indicates whether the current instance has been configured,
@@ -66,10 +62,5 @@ public final class FromSSCVulnerabilityFromReleaseLoaderConfig implements IFromS
 	 */
 	public boolean isConfigured() {
 		return !EMPTY_TO_STRING.equals(this.toString());
-	}
-	
-	@PostConstruct
-	public final void logInitialized() {
-		System.out.println("Initialized "+this);
 	}
 }

@@ -22,29 +22,12 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.loader.vulnerability;
+package com.fortify.impexp.common.entity.config.domain;
 
-import java.util.Collection;
+import java.util.LinkedHashMap;
 
-import org.springframework.context.annotation.Lazy;
+import com.fortify.util.spring.expression.TemplateExpression;
 
-import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
-import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
-import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
-import com.fortify.impexp.common.status.export.AbstractExportStatusHelper;
-import com.fortify.impexp.from.ssc.annotation.FromSSC;
-import com.fortify.util.rest.json.JSONMap;
-
-@FromPluginComponent @FromSSC @Lazy
-public class FromSSCVulnerabilityExportStatusHelper extends AbstractExportStatusHelper<JSONMap,Object> {
-	@Override
-	public void notifyExported(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<JSONMap> sourceEntities, Object targetEntity) {
-		System.out.println("Notify Exported: "+targetEntity);
-	}
-
-	@Override
-	public boolean isExported(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, JSONMap sourceEntity) {
-		System.out.println("isExported: "+sourceEntity);
-		return false;
-	}
+public class EntityAddFieldsConfig extends LinkedHashMap<String, TemplateExpression> {
+	private static final long serialVersionUID = 1L;
 }

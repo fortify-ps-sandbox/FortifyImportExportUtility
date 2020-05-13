@@ -22,7 +22,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.loader.release;
+package com.fortify.impexp.from.ssc.release.loader;
 
 import java.util.Map;
 
@@ -34,12 +34,14 @@ import com.fortify.client.ssc.api.SSCAttributeDefinitionAPI.SSCAttributeDefiniti
 import com.fortify.client.ssc.api.query.builder.EmbedType;
 import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
 import com.fortify.client.ssc.connection.SSCAuthenticatingRestConnection;
+import com.fortify.impexp.common.from.loader.config.domain.LoaderIncludeConfig.LoaderIncludeSubEntityConfig;
 import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
 import com.fortify.impexp.common.from.spi.loader.AbstractRootLoader;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.impexp.common.processor.entity.type.StandardEntityType;
 import com.fortify.impexp.from.ssc.annotation.FromSSC;
 import com.fortify.impexp.from.ssc.processor.entity.source.FromSSCSourceEntityDescriptor;
+import com.fortify.impexp.from.ssc.release.loader.config.FromSSCReleaseLoaderConfig;
 import com.fortify.util.rest.json.JSONMap;
 
 @FromPluginComponent @FromSSC @Lazy
@@ -53,23 +55,24 @@ public class FromSSCReleaseLoader extends AbstractRootLoader<JSONMap> {
 	public void run() {
 		SSCApplicationVersionsQueryBuilder queryBuilder = conn.api(SSCApplicationVersionAPI.class)
 			.queryApplicationVersions()
-			.applicationAndOrVersionName(true, config.getName())
-			.applicationName(true, config.getApplicationName())
-			.versionName(true, config.getVersionName())
-			.paramFields(config.getFields())
+			.id(true, config.getFilter().getId())
+			.applicationAndOrVersionName(true, config.getFilter().getName())
+			.applicationName(true, config.getFilter().getApplicationName())
+			.versionName(true, config.getFilter().getVersionName())
+			.paramFields(config.getInclude().getFields())
 			.paramOrderBy(true, config.getOrderBy())
-			.maxResults(config.getMaxResults());
-		addSubEntities(queryBuilder, config.getIncludeSubEntities());
+			.maxResults(config.getFilter().getMaxResults());
+		addSubEntities(queryBuilder, config.getInclude().getSubEntities());
 		queryBuilder.build().processAll(this::processRelease);
 	}
 
-	private void addSubEntities(SSCApplicationVersionsQueryBuilder queryBuilder, String[] subEntities) {
-		if ( subEntities!=null ) {
-			for ( String subEntity : subEntities ) {
-				if ( "attributeValuesByName".equals(subEntity) ) {
+	private void addSubEntities(SSCApplicationVersionsQueryBuilder queryBuilder, LoaderIncludeSubEntityConfig[] loaderIncludeSubEntityConfigs) {
+		if ( loaderIncludeSubEntityConfigs!=null ) {
+			for ( LoaderIncludeSubEntityConfig subEntity : loaderIncludeSubEntityConfigs ) {
+				if ( "attributeValuesByName".equals(subEntity.getName()) ) {
 					queryBuilder.embedAttributeValuesByName(attributeDefinitionHelper);
 				} else {
-					queryBuilder.embedSubEntity(subEntity, subEntity, EmbedType.PRELOAD);
+					queryBuilder.embedSubEntity(subEntity.getName(), EmbedType.PRELOAD, subEntity.getFields());
 				}
 			}
 		}
