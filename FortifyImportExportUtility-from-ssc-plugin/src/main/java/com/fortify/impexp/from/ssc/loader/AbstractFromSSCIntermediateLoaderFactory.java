@@ -27,7 +27,7 @@ package com.fortify.impexp.from.ssc.loader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.client.ssc.connection.SSCAuthenticatingRestConnection;
-import com.fortify.impexp.common.from.spi.loader.AbstractIntermediateLoaderFactory;
+import com.fortify.impexp.common.from.loader.AbstractIntermediateLoaderFactory;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.impexp.common.processor.entity.source.StandardEntitySource;
 import com.fortify.impexp.common.processor.entity.source.SupportedEntitySourceDescriptorHelper;

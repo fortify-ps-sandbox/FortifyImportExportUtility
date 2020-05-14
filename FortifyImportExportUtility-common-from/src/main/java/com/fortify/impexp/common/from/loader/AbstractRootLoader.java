@@ -22,13 +22,14 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.from.spi.loader;
+package com.fortify.impexp.common.from.loader;
 
 import javax.annotation.PostConstruct;
 
-import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerProcessor;
+import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvoker;
+import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 
-public abstract class AbstractIntermediateLoader<S> extends AbstractProcessorInvokerProcessor<S> {
+public abstract class AbstractRootLoader<S> extends AbstractProcessorInvoker<S> implements ISchedulableRunner {
 	
 	@PostConstruct
 	public final void logInitialized() {

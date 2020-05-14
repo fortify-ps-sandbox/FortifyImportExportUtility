@@ -24,7 +24,7 @@
  ******************************************************************************/
 package com.fortify.impexp.from.mock.loader;
 
-import com.fortify.impexp.common.from.spi.loader.AbstractIntermediateLoaderFactory;
+import com.fortify.impexp.common.from.loader.AbstractIntermediateLoaderFactory;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.impexp.common.processor.entity.source.StandardEntitySource;
 import com.fortify.impexp.common.processor.entity.source.SupportedEntitySourceDescriptorHelper;

@@ -25,7 +25,7 @@
 package com.fortify.impexp.to.jira.processor;
 
 import com.fortify.impexp.common.processor.AbstractProcessor;
-import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
+import com.fortify.impexp.common.to.annotation.ToPluginComponent;
 
 @ToPluginComponent
 public abstract class AbstractToJiraProcessor extends AbstractProcessor<Object> {

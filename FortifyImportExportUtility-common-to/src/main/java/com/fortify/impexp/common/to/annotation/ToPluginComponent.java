@@ -22,7 +22,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.from.spi.annotation;
+package com.fortify.impexp.common.to.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -32,12 +32,12 @@ import java.lang.annotation.Target;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 
-import com.fortify.util.spring.boot.env.annotation.PropertyScopedBean;
+import com.fortify.util.spring.boot.env.annotation.PropertyScopedComponent;
 
 @Qualifier
-@PropertyScopedBean
+@PropertyScopedComponent
 @Lazy
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface FromPluginBean {
+public @interface ToPluginComponent {
 }

@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.impexp.common.processor.AbstractProcessor;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
-import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
+import com.fortify.impexp.common.to.annotation.ToPluginComponent;
 import com.fortify.impexp.to.mock.processor.config.ToMockConfig;
 
 @ToPluginComponent

@@ -33,7 +33,7 @@ import com.fortify.impexp.common.processor.entity.source.IEntitySource;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.impexp.common.processor.entity.source.SupportedEntitySourceDescriptorHelper;
 import com.fortify.impexp.common.processor.entity.type.IEntityType;
-import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
+import com.fortify.impexp.common.to.annotation.ToPluginComponent;
 import com.fortify.impexp.to.jira.processor.connection.ToJiraRestConnection;
 
 @ToPluginComponent

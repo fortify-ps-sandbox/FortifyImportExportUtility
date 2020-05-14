@@ -27,7 +27,7 @@ package com.fortify.impexp.from.ssc.release.loader;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
+import com.fortify.impexp.common.from.annotation.FromPluginComponent;
 import com.fortify.impexp.from.ssc.annotation.FromSSC;
 import com.fortify.impexp.from.ssc.loader.AbstractFromSSCRootLoaderFactory;
 import com.fortify.impexp.from.ssc.release.loader.config.FromSSCReleaseLoaderConfig;

@@ -22,7 +22,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.from.spi.loader;
+package com.fortify.impexp.common.from.loader;
 
 import javax.annotation.PostConstruct;
 

@@ -27,7 +27,7 @@ package com.fortify.impexp.to.jira.processor.connection;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import com.fortify.impexp.common.to.spi.annotation.ToPluginBean;
+import com.fortify.impexp.common.to.annotation.ToPluginBean;
 import com.fortify.impexp.to.jira.processor.connection.ToJiraRestConnection.JiraRestConnectionBuilder;
 
 @Configuration

@@ -27,8 +27,8 @@ package com.fortify.impexp.from.mock.loader.application;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
-import com.fortify.impexp.common.from.spi.loader.AbstractRootLoader;
+import com.fortify.impexp.common.from.annotation.FromPluginComponent;
+import com.fortify.impexp.common.from.loader.AbstractRootLoader;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.impexp.common.processor.entity.type.StandardEntityType;
 import com.fortify.impexp.from.mock.processor.entity.source.FromMockEntitySourceDescriptor;

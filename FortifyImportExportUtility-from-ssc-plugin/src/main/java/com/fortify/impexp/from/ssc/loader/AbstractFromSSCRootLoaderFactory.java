@@ -27,7 +27,7 @@ package com.fortify.impexp.from.ssc.loader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.client.ssc.connection.SSCAuthenticatingRestConnection;
-import com.fortify.impexp.common.from.spi.loader.AbstractRootLoaderFactory;
+import com.fortify.impexp.common.from.loader.AbstractRootLoaderFactory;
 import com.fortify.impexp.from.ssc.annotation.FromSSC;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 

@@ -31,7 +31,7 @@ import org.springframework.core.Ordered;
 import com.fortify.impexp.common.processor.AbstractProcessorFactory;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.impexp.common.processor.entity.source.SupportedEntitySourceDescriptorHelper;
-import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
+import com.fortify.impexp.common.to.annotation.ToPluginComponent;
 import com.fortify.impexp.to.mock.processor.config.ToMockConfig;
 
 @ToPluginComponent

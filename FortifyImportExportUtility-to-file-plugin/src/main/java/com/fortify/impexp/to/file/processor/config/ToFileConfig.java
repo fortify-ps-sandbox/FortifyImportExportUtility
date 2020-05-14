@@ -33,7 +33,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import com.fortify.impexp.common.processor.entity.source.IEntitySource;
 import com.fortify.impexp.common.processor.entity.type.IEntityType;
-import com.fortify.impexp.common.to.spi.annotation.ToPluginComponent;
+import com.fortify.impexp.common.to.annotation.ToPluginComponent;
 
 import lombok.Data;
 

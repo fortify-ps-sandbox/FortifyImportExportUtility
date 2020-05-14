@@ -33,7 +33,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import com.fortify.client.ssc.api.SSCAttributeDefinitionAPI.SSCAttributeDefinitionHelper;
 import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
 import com.fortify.client.ssc.api.query.builder.SSCOrderBy;
-import com.fortify.impexp.common.from.spi.annotation.FromPluginComponent;
+import com.fortify.impexp.common.from.annotation.FromPluginComponent;
 import com.fortify.impexp.from.ssc.annotation.FromSSC;
 import com.fortify.util.spring.expression.TemplateExpression;
 

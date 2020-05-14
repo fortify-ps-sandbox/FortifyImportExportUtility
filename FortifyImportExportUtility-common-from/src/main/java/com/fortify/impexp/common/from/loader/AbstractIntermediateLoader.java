@@ -22,30 +22,13 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.from.spi.loader;
+package com.fortify.impexp.common.from.loader;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.core.Ordered;
+import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerProcessor;
 
-import com.fortify.impexp.common.processor.entity.source.SupportedEntitySourceDescriptorHelper;
-import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerProcessorFactory;
-
-public abstract class AbstractIntermediateLoaderFactory<S> extends AbstractProcessorInvokerProcessorFactory<S> {
-	
-	public AbstractIntermediateLoaderFactory(SupportedEntitySourceDescriptorHelper supportedEntitySourceDescriptorHelper) {
-		super(supportedEntitySourceDescriptorHelper);
-	}
-
-	/**
-	 * By default, this method returns {@link Ordered#LOWEST_PRECEDENCE} to allow target processors
-	 * to execute before intermediate loaders/processors. For example, this allows a target to 
-	 * export/create a release before exporting/creating individual vulnerabilities for that release.
-	 */
-	@Override
-	public int getOrder() {
-		return Ordered.LOWEST_PRECEDENCE;
-	}
+public abstract class AbstractIntermediateLoader<S> extends AbstractProcessorInvokerProcessor<S> {
 	
 	@PostConstruct
 	public final void logInitialized() {
