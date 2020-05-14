@@ -42,7 +42,8 @@ from.ssc:
           storeAsBugLink: ${deepLink}                  # SSC or FoD
           #storeAsComment: Vulnerability submitted to {} # FoD, maybe SSC?
           customTag[Jira Bug Link]: ${deepLink}
-          primaryCustomTag: Jira Bug Link2
+          customTag[Extra]: ${deepLink}
+          primaryCustomTag: Jira Bug Link
     
 from.mock:
   enabled: true
