@@ -24,18 +24,26 @@
  ******************************************************************************/
 package com.fortify.impexp.common.processor.wrapper;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
 import com.fortify.impexp.common.processor.IProcessor;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 
 public class ProcessorWrapper<S> implements IProcessor<S> {
-	public final IProcessor<S> wrappedProcessor;
+	public final Collection<IProcessor<S>> wrappedProcessors;
 
 	public ProcessorWrapper(IProcessor<S> wrappedProcessor) {
-		this.wrappedProcessor = wrappedProcessor;
+		this.wrappedProcessors = Arrays.asList(wrappedProcessor);
+	}
+	
+	public ProcessorWrapper(Collection<IProcessor<S>> wrappedProcessors) {
+		this.wrappedProcessors = Collections.unmodifiableCollection(wrappedProcessors);
 	}
 	
 	@Override
 	public void process(IEntitySourceDescriptor entitySourceDescriptor, S entity) {
-		wrappedProcessor.process(entitySourceDescriptor, entity);
+		wrappedProcessors.forEach(processor ->processor.process(entitySourceDescriptor, entity));
 	}
 }

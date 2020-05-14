@@ -24,6 +24,8 @@
  ******************************************************************************/
 package com.fortify.impexp.common.processor.wrapper;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Predicate;
 
 import com.fortify.impexp.common.processor.IProcessor;
@@ -33,7 +35,11 @@ public class FilteringProcessorWrapper<S> extends ProcessorWrapper<S> {
 	private final Predicate<S> predicate;
 	
 	public FilteringProcessorWrapper(IProcessor<S> wrappedProcessor, Predicate<S> predicate) {
-		super(wrappedProcessor);
+		this(Arrays.asList(wrappedProcessor), predicate);
+	}
+	
+	public FilteringProcessorWrapper(Collection<IProcessor<S>> wrappedProcessors, Predicate<S> predicate) {
+		super(wrappedProcessors);
 		this.predicate = predicate;
 	}
 	
