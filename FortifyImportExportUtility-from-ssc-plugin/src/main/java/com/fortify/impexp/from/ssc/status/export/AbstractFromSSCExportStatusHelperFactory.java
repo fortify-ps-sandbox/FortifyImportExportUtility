@@ -22,7 +22,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.loader;
+package com.fortify.impexp.from.ssc.status.export;
 
 import java.util.Collection;
 
