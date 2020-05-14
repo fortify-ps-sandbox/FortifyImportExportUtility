@@ -22,29 +22,25 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.entity.config;
+package com.fortify.impexp.common.processor.wrapper;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.function.Predicate;
 
-import com.fortify.util.spring.SpringExpressionUtil;
-import com.fortify.util.spring.expression.TemplateExpression;
+import com.fortify.impexp.common.processor.IProcessor;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 
-public abstract class EntityAddFieldsConfig<E> extends LinkedHashMap<String, TemplateExpression> {
-	private static final long serialVersionUID = 1L;
+public class FilteringProcessorWrapper<S> extends ProcessorWrapper<S> {
+	private final Predicate<S> predicate;
 	
-	public void addFields(final E entity) {
-		entrySet().forEach(entry -> addField(entity, entry));
+	public FilteringProcessorWrapper(IProcessor<S> wrappedProcessor, Predicate<S> predicate) {
+		super(wrappedProcessor);
+		this.predicate = predicate;
 	}
 	
-	protected void addField(E entity, Map.Entry<String, TemplateExpression> entry) {
-		addField(entity, entry.getKey(), entry.getValue());
+	@Override
+	public void process(IEntitySourceDescriptor entitySourceDescriptor, S entity) {
+		if ( predicate.test(entity) ) {
+			super.process(entitySourceDescriptor, entity);
+		}
 	}
-
-	protected void addField(E entity, String propertyName, TemplateExpression propertyTemplateExpression) {
-		Object propertyValue = SpringExpressionUtil.evaluateExpression(entity, propertyTemplateExpression, Object.class);
-		addPropertyValue(entity, propertyName, propertyValue);
-	}
-
-	protected abstract void addPropertyValue(E entity, String propertyName, Object propertyValue);
 }

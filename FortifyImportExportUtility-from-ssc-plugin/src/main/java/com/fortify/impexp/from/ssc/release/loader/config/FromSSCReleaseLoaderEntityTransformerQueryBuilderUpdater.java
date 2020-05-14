@@ -22,18 +22,13 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.vulnerability.loader.config;
+package com.fortify.impexp.from.ssc.release.loader.config;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
+import com.fortify.impexp.common.from.loader.config.LoaderEntityTransformerQueryBuilderUpdater;
 
-import com.fortify.impexp.common.from.loader.config.LoaderIncludeConfig;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-@Data @EqualsAndHashCode(callSuper=true) @ToString(callSuper=true)
-public class FromSSCVulnerabilityLoaderIncludeConfig extends LoaderIncludeConfig {
-	private final Set<String> status = new HashSet<>(); // all, hidden, removed, suppressed  
+public final class FromSSCReleaseLoaderEntityTransformerQueryBuilderUpdater {
+	public static final SSCApplicationVersionsQueryBuilder updateQueryBuilder(SSCApplicationVersionsQueryBuilder qb, FromSSCReleaseLoaderEntityTransformerConfig config) {
+		return LoaderEntityTransformerQueryBuilderUpdater.updateQueryBuilder(qb, config);
+	}
 }

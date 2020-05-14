@@ -22,18 +22,17 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.vulnerability.loader.config;
+package com.fortify.impexp.from.ssc.release.loader.config;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
+import com.fortify.impexp.common.from.loader.config.LoaderEntityFilterQueryBuilderUpdater;
 
-import com.fortify.impexp.common.from.loader.config.LoaderIncludeConfig;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-@Data @EqualsAndHashCode(callSuper=true) @ToString(callSuper=true)
-public class FromSSCVulnerabilityLoaderIncludeConfig extends LoaderIncludeConfig {
-	private final Set<String> status = new HashSet<>(); // all, hidden, removed, suppressed  
+public final class FromSSCReleaseLoaderEntityFilterConfigQueryBuilderUpdater {
+	public static final SSCApplicationVersionsQueryBuilder updateQueryBuilder(SSCApplicationVersionsQueryBuilder qb, FromSSCReleaseLoaderEntityFilterConfig config) {
+		return LoaderEntityFilterQueryBuilderUpdater.updateQueryBuilder(qb, config)
+			.id(true, config.getId())
+			.applicationAndOrVersionName(true, config.getName())
+			.applicationName(true, config.getApplicationName())
+			.versionName(true, config.getVersionName());
+	}
 }

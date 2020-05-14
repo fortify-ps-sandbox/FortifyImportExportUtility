@@ -22,18 +22,20 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.vulnerability.loader.config;
+package com.fortify.impexp.common.processor.wrapper;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.fortify.impexp.common.processor.IProcessor;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 
-import com.fortify.impexp.common.from.loader.config.LoaderIncludeConfig;
+public class ProcessorWrapper<S> implements IProcessor<S> {
+	public final IProcessor<S> wrappedProcessor;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-@Data @EqualsAndHashCode(callSuper=true) @ToString(callSuper=true)
-public class FromSSCVulnerabilityLoaderIncludeConfig extends LoaderIncludeConfig {
-	private final Set<String> status = new HashSet<>(); // all, hidden, removed, suppressed  
+	public ProcessorWrapper(IProcessor<S> wrappedProcessor) {
+		this.wrappedProcessor = wrappedProcessor;
+	}
+	
+	@Override
+	public void process(IEntitySourceDescriptor entitySourceDescriptor, S entity) {
+		wrappedProcessor.process(entitySourceDescriptor, entity);
+	}
 }

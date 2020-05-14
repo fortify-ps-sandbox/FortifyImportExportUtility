@@ -28,23 +28,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import com.fortify.util.spring.SpringExpressionUtil;
-
 import lombok.Data;
 
 @Data
-public class EntityFilterConfig<E> {
+public class EntityFilterConfig {
 	private final Map<String, Pattern> matchFieldRegex = new LinkedHashMap<>();
-	
-	public boolean isIncluded(final E entity) {
-		return matchFieldRegex.entrySet().stream().allMatch(entry->isMatching(entity, entry));
-	}
-	
-	protected boolean isMatching(E entity, Map.Entry<String, Pattern> entry) {
-		return isMatching(entity, entry.getKey(), entry.getValue());
-	}
-
-	protected boolean isMatching(E entity, String propertyName, Pattern pattern) {
-		return pattern.matcher(SpringExpressionUtil.evaluateExpression(entity, propertyName, String.class)).matches();
-	}
 }

@@ -22,18 +22,16 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.vulnerability.loader.config;
+package com.fortify.impexp.common.entity.config;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedHashMap;
 
-import com.fortify.impexp.common.from.loader.config.LoaderIncludeConfig;
+import com.fortify.util.spring.expression.TemplateExpression;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
-@Data @EqualsAndHashCode(callSuper=true) @ToString(callSuper=true)
-public class FromSSCVulnerabilityLoaderIncludeConfig extends LoaderIncludeConfig {
-	private final Set<String> status = new HashSet<>(); // all, hidden, removed, suppressed  
+@Data
+public class EntityTransformerConfig {
+	private LinkedHashMap<String, TemplateExpression> add = new LinkedHashMap<>();
+	private String[] remove = {};
 }

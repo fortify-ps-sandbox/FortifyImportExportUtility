@@ -22,18 +22,20 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.vulnerability.loader.config;
+package com.fortify.impexp.common.from.loader.config;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.fortify.impexp.common.entity.config.EntityFilter;
+import com.fortify.util.rest.json.preprocessor.IJSONMapPreProcessor;
+import com.fortify.util.rest.query.AbstractRestConnectionQueryBuilder;
 
-import com.fortify.impexp.common.from.loader.config.LoaderIncludeConfig;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-@Data @EqualsAndHashCode(callSuper=true) @ToString(callSuper=true)
-public class FromSSCVulnerabilityLoaderIncludeConfig extends LoaderIncludeConfig {
-	private final Set<String> status = new HashSet<>(); // all, hidden, removed, suppressed  
+public final class LoaderEntityFilterQueryBuilderUpdater {
+	public static final <QB extends AbstractRestConnectionQueryBuilder<?,?>> QB updateQueryBuilder(QB qb, LoaderEntityFilterConfig loaderEntityFilterConfig) {
+		qb.maxResults(loaderEntityFilterConfig.getMaxResults());
+		qb.preProcessor(preProcessor(loaderEntityFilterConfig));
+		return qb;
+	}
+	
+	private static final IJSONMapPreProcessor preProcessor(LoaderEntityFilterConfig loaderEntityFilterConfig) {
+		return new EntityFilter(loaderEntityFilterConfig)::isIncluded;
+	}
 }

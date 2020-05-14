@@ -22,15 +22,35 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.release.loader.config;
+package com.fortify.impexp.common.entity.config;
 
-import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
-import com.fortify.impexp.common.from.loader.config.LoaderAddFieldsQueryBuilderConfig;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+import com.fortify.impexp.common.processor.IProcessor;
+import com.fortify.impexp.common.processor.wrapper.FilteringProcessorWrapper;
+import com.fortify.util.spring.SpringExpressionUtil;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@Data @EqualsAndHashCode(callSuper=true)
-public class FromSSCReleaseLoaderAddFieldsConfig extends LoaderAddFieldsQueryBuilderConfig<SSCApplicationVersionsQueryBuilder> {
-	private static final long serialVersionUID = 1L;
+@Data
+public class EntityFilter {
+	private final EntityFilterConfig entityFilterConfig;
+	
+	public static final <E> IProcessor<E> wrapWithFilteringProcessor(IProcessor<E> wrappedProcessor, EntityFilterConfig entityFilterConfig) {
+		return new FilteringProcessorWrapper<>(wrappedProcessor, new EntityFilter(entityFilterConfig)::isIncluded);
+	}
+	
+	public <E> boolean isIncluded(final E entity) {
+		return entityFilterConfig.getMatchFieldRegex().entrySet().stream().allMatch(entry->isMatching(entity, entry));
+	}
+	
+	protected <E> boolean isMatching(E entity, Map.Entry<String, Pattern> entry) {
+		return isMatching(entity, entry.getKey(), entry.getValue());
+	}
+
+	protected <E> boolean isMatching(E entity, String propertyName, Pattern pattern) {
+		return pattern.matcher(SpringExpressionUtil.evaluateExpression(entity, propertyName, String.class)).matches();
+	}
+	
 }

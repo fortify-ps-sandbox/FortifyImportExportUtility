@@ -24,12 +24,12 @@
  ******************************************************************************/
 package com.fortify.impexp.common.from.loader.config;
 
-import com.fortify.impexp.common.entity.config.EntityAddFieldsConfig;
+import com.fortify.impexp.common.entity.config.EntityTransformerConfig;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-@Data @EqualsAndHashCode(callSuper=true)
-public abstract class LoaderAddFieldsConfig<E> extends EntityAddFieldsConfig<E> {
-	private static final long serialVersionUID = 1L;
+@Data @EqualsAndHashCode(callSuper=true) @ToString(callSuper=true)
+public class LoaderEntityTransformerConfig extends EntityTransformerConfig {
 }

@@ -22,15 +22,18 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.from.loader.config;
+package com.fortify.impexp.from.ssc.release.loader.config;
 
-import com.fortify.impexp.common.entity.config.EntityFilterConfig;
+import com.fortify.impexp.common.from.loader.config.LoaderEntityFilterConfig;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Data @EqualsAndHashCode(callSuper=true) @ToString(callSuper=true)
-public class LoaderFilterConfig<E> extends EntityFilterConfig<E> {
-	private int maxResults = -1;
+public class FromSSCReleaseLoaderEntityFilterConfig extends LoaderEntityFilterConfig {
+	private String id;
+	private String name;
+	private String applicationName;
+	private String versionName;
 }

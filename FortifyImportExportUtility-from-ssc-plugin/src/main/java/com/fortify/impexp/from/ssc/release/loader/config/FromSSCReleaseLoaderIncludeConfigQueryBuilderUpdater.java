@@ -24,13 +24,27 @@
  ******************************************************************************/
 package com.fortify.impexp.from.ssc.release.loader.config;
 
-import com.fortify.impexp.common.from.loader.config.LoaderIncludeConfig;
+import com.fortify.client.ssc.api.SSCAttributeDefinitionAPI.SSCAttributeDefinitionHelper;
+import com.fortify.client.ssc.api.query.builder.EmbedType;
+import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionsQueryBuilder;
+import com.fortify.impexp.common.from.loader.config.LoaderIncludeConfig.LoaderIncludeSubEntityConfig;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-@Data @EqualsAndHashCode(callSuper=true) @ToString(callSuper=true)
-public class FromSSCReleaseLoaderIncludeConfig extends LoaderIncludeConfig {
-
+public final class FromSSCReleaseLoaderIncludeConfigQueryBuilderUpdater {
+	public static final SSCApplicationVersionsQueryBuilder updateQueryBuilder(SSCApplicationVersionsQueryBuilder qb, FromSSCReleaseLoaderIncludeConfig config, SSCAttributeDefinitionHelper attributeDefinitionHelper) {
+		addSubEntities(qb, config, attributeDefinitionHelper);
+		return qb.paramFields(config.getFields());
+	}
+	
+	private static final void addSubEntities(SSCApplicationVersionsQueryBuilder qb, FromSSCReleaseLoaderIncludeConfig config, SSCAttributeDefinitionHelper attributeDefinitionHelper) {
+		LoaderIncludeSubEntityConfig[] subEntities = config.getSubEntities();
+		if ( subEntities!=null ) {
+			for ( LoaderIncludeSubEntityConfig subEntity : subEntities ) {
+				if ( "attributeValuesByName".equals(subEntity.getName()) ) {
+					qb.embedAttributeValuesByName(attributeDefinitionHelper);
+				} else {
+					qb.embedSubEntity(subEntity.getName(), EmbedType.PRELOAD, subEntity.getFields());
+				}
+			}
+		}
+	}
 }

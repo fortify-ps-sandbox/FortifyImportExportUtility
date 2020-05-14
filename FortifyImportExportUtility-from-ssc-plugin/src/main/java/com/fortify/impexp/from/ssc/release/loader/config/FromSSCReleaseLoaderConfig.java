@@ -47,8 +47,8 @@ public final class FromSSCReleaseLoaderConfig {
 	@Value("${from.ssc.load.releases:undefined}") private String property = "undefined";
 	
 	private final FromSSCReleaseLoaderIncludeConfig include = new FromSSCReleaseLoaderIncludeConfig();
-	private final FromSSCReleaseLoaderAddFieldsConfig addFields = new FromSSCReleaseLoaderAddFieldsConfig();
-	private final FromSSCReleaseLoaderFilterConfig filter = new FromSSCReleaseLoaderFilterConfig();
+	private final FromSSCReleaseLoaderEntityTransformerConfig transform = new FromSSCReleaseLoaderEntityTransformerConfig();
+	private final FromSSCReleaseLoaderEntityFilterConfig filter = new FromSSCReleaseLoaderEntityFilterConfig();
 	private final SSCOrderBy orderBy = new SSCOrderBy();
 	private final Map<String, TemplateExpression> overrideProperties = new LinkedHashMap<String, TemplateExpression>();
 	
@@ -64,9 +64,9 @@ public final class FromSSCReleaseLoaderConfig {
 	}
 	
 	public void updateQueryBuilder(SSCApplicationVersionsQueryBuilder qb, SSCAttributeDefinitionHelper attributeDefinitionHelper) {
-		include.updateQueryBuilder(qb, attributeDefinitionHelper);
-		addFields.updateQueryBuilder(qb);
-		filter.updateQueryBuilder(qb);
+		FromSSCReleaseLoaderIncludeConfigQueryBuilderUpdater.updateQueryBuilder(qb, include, attributeDefinitionHelper);
+		FromSSCReleaseLoaderEntityTransformerQueryBuilderUpdater.updateQueryBuilder(qb, transform);
+		FromSSCReleaseLoaderEntityFilterConfigQueryBuilderUpdater.updateQueryBuilder(qb, filter);
 		qb.paramOrderBy(true, getOrderBy());
 	}
 }

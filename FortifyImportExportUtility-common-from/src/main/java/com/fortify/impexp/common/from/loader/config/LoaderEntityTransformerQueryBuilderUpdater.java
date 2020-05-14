@@ -22,15 +22,21 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.from.ssc.vulnerability.loader.config;
+package com.fortify.impexp.common.from.loader.config;
 
-import com.fortify.client.ssc.api.query.builder.SSCApplicationVersionIssuesQueryBuilder;
-import com.fortify.impexp.common.from.loader.config.LoaderAddFieldsQueryBuilderConfig;
+import com.fortify.impexp.common.entity.config.EntityTransformer;
+import com.fortify.util.rest.json.JSONMap;
+import com.fortify.util.rest.json.preprocessor.IJSONMapPreProcessor;
+import com.fortify.util.rest.query.AbstractRestConnectionQueryBuilder;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-@Data @EqualsAndHashCode(callSuper=true)
-public class FromSSCVulnerabilityLoaderAddFieldsConfig extends LoaderAddFieldsQueryBuilderConfig<SSCApplicationVersionIssuesQueryBuilder> {
-	private static final long serialVersionUID = 1L;
+public final class LoaderEntityTransformerQueryBuilderUpdater {
+	public static final <QB extends AbstractRestConnectionQueryBuilder<?,?>> QB updateQueryBuilder(QB qb, LoaderEntityTransformerConfig entityTransformerConfig) {
+		qb.preProcessor(preProcessor(entityTransformerConfig));
+		return qb;
+	}
+	
+	private static final IJSONMapPreProcessor preProcessor(LoaderEntityTransformerConfig entityTransformerConfig) {
+		final EntityTransformer entityTransformer = new EntityTransformer(entityTransformerConfig);
+		return (JSONMap json) -> { entityTransformer.transformJSONMap(json); return true; };
+	}
 }

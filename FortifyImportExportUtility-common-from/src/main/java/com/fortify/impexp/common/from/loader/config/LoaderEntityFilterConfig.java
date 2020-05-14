@@ -24,17 +24,13 @@
  ******************************************************************************/
 package com.fortify.impexp.common.from.loader.config;
 
-import com.fortify.util.rest.json.JSONMap;
-import com.fortify.util.rest.query.AbstractRestConnectionQueryBuilder;
+import com.fortify.impexp.common.entity.config.EntityFilterConfig;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-@Data @EqualsAndHashCode(callSuper=true)  @ToString(callSuper=true)
-public class LoaderFilterQueryBuilderConfig<QB extends AbstractRestConnectionQueryBuilder<?,?>> extends LoaderFilterConfig<JSONMap> {
-	public void updateQueryBuilder(QB qb) {
-		qb.preProcessor(this::isIncluded);
-		qb.maxResults(getMaxResults());
-	}
+@Data @EqualsAndHashCode(callSuper=true) @ToString(callSuper=true)
+public class LoaderEntityFilterConfig extends EntityFilterConfig {
+	private int maxResults = -1;
 }

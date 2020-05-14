@@ -27,13 +27,13 @@ from.ssc:
         fields: id                                     # Generic - loader
         subEntities: details, comments                 # Generic - loader
         status: hidden, removed, suppressed            # Specific - SSC vuln loader
-      addFields:                                       # Generic - entity processing
-        fieldName: expression
+      transform:
+        add[details.idDescription]: Identifier ${id}   # Generic - entity processing
       filter:
         maxResults: 1                                  # Generic - loader
         filterSet: Quick View                          # Specific - SSC vuln loader
-        matchFieldRegex:                               # Generic - entity processing
-          '[details.issueName]': Cross.*
+        matchFieldRegex[details.issueName]: Cross.*    # Generic - entity processing
+#          - 'details.issueName: Cross.*'
 #          entityFieldName2: regex2
       orderBy:                                         # Generic - SSC
         field: id
