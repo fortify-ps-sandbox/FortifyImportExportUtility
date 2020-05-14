@@ -25,7 +25,6 @@
 package com.fortify.impexp.common.status.export;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,17 +37,13 @@ import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor
 import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
 
 @Component
-public class ActiveExportStatusHelperInvoker {
+public class ActiveExportStatusHelpersInvoker {
 	@Autowired private ObjectFactory<Collection<IExportStatusHelperFactory<?, ?>>> allExportStatusHelperFactoriesFactory;
 	
-	private final IExportStatusHelper<?,?> getActiveExportStatusHelper(final IEntitySourceDescriptor entitySourceDescriptor, final IEntityTargetDescriptor entityTargetDescriptor) {
-		List<IExportStatusHelper<?,?>> exportStatusHelpers = getActiveExportStatusHelpersStream(entitySourceDescriptor, entityTargetDescriptor)
+	private final Collection<IExportStatusHelper<?,?>> getActiveExportStatusHelpers(final IEntitySourceDescriptor entitySourceDescriptor, final IEntityTargetDescriptor entityTargetDescriptor) {
+		return getActiveExportStatusHelpersStream(entitySourceDescriptor, entityTargetDescriptor)
 				.map(factory->(IExportStatusHelper<?,?>)factory.getExportStatusHelper())
 				.collect(Collectors.toList());
-		if ( exportStatusHelpers.size()>1 ) {
-			throw new IllegalStateException(String.format("More than one IExportStatusHelper found for entity source descriptor %s and entity target descriptor %s", entitySourceDescriptor, entityTargetDescriptor));
-		}
-		return exportStatusHelpers.size()==0 ? null : exportStatusHelpers.get(0);
 	}
 
 	private Stream<IExportStatusHelperFactory<?,?>> getActiveExportStatusHelpersStream(final IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor) {
@@ -61,15 +56,15 @@ public class ActiveExportStatusHelperInvoker {
 	
 	@SuppressWarnings("unchecked")
 	public <S,T> void notifyExported(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<S> sourceEntities, T targetEntity) {
-		// This cast should be safe based on IEntitySourceDescriptor#getJavaType() and IEntityTargetDescriptor#getJavaType()
-		((IExportStatusHelper<S,T>)getActiveExportStatusHelper(entitySourceDescriptor, entityTargetDescriptor))
-			.notifyExported(entitySourceDescriptor, entityTargetDescriptor, sourceEntities, targetEntity);
+		getActiveExportStatusHelpers(entitySourceDescriptor, entityTargetDescriptor)
+			// This cast should be safe based on IEntitySourceDescriptor#getJavaType() and IEntityTargetDescriptor#getJavaType()
+			.forEach(helper -> ((IExportStatusHelper<S,T>)helper).notifyExported(entitySourceDescriptor, entityTargetDescriptor, sourceEntities, targetEntity));
 	}
 	
 	@SuppressWarnings("unchecked")
 	public <S> boolean isExported(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, S sourceEntity) {
-		// This cast should be safe based on IEntitySourceDescriptor#getJavaType()
-		return ((IExportStatusHelper<S,?>)getActiveExportStatusHelper(entitySourceDescriptor, entityTargetDescriptor))
-			.isExported(entitySourceDescriptor, entityTargetDescriptor, sourceEntity);
+		return getActiveExportStatusHelpers(entitySourceDescriptor, entityTargetDescriptor)
+			// This cast should be safe based on IEntitySourceDescriptor#getJavaType() and IEntityTargetDescriptor#getJavaType()
+			.stream().anyMatch(helper -> ((IExportStatusHelper<S,?>)helper).isExported(entitySourceDescriptor, entityTargetDescriptor, sourceEntity));
 	}
 }

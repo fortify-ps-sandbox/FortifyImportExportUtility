@@ -39,7 +39,7 @@ from.ssc:
         field: id
       exportStatus:                                    # Specific - different impl for each entity source and type
         jira: #Map<String, ExportStatus>
-          storeAsBugLink: true            # SSC or FoD
+          storeAsBugLink: false            # SSC or FoD
           storeAsCustomTag: CustomTagName # SSC
           storeAsComment: Vulnerability submitted to {} # FoD, maybe SSC?
           extraCustomTags: # SSC
