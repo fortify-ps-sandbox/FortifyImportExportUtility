@@ -1,6 +1,6 @@
 /*******************************************************************************
- * (c) Copyright 2020 Micro Focus or one of its affiliates
- *
+ * (c) Copyright 2020 Micro Focus or one of its affiliates, a Micro Focus company
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the 
  * "Software"), to deal in the Software without restriction, including without 
@@ -22,28 +22,19 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.wrapper;
+package com.fortify.impexp.common.status.export.entity;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
-import com.fortify.impexp.common.processor.IProcessor;
-import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
-
-public class ProcessorWrapper<S> extends AbstractProcessorWrapper<S> {
-	public final Collection<IProcessor<S>> wrappedProcessors;
-
-	public ProcessorWrapper(IProcessor<S> wrappedProcessor) {
-		this.wrappedProcessors = Arrays.asList(wrappedProcessor);
-	}
-	
-	public ProcessorWrapper(Collection<IProcessor<S>> wrappedProcessors) {
-		this.wrappedProcessors = Collections.unmodifiableCollection(wrappedProcessors);
-	}
-	
-	@Override
-	protected Collection<IProcessor<S>> getProcessors(IEntitySourceDescriptor entitySourceDescriptor, S entity) {
-		return wrappedProcessors;
-	}
+/**
+ * This class holds the export location for an exported entity. 
+ * 
+ * @author Ruud Senden
+ */
+@Getter @RequiredArgsConstructor @ToString
+public class ExportedEntityDescriptor implements IExportedEntityDescriptor {
+	private final String location;
+	private final ExportedEntityStatus status;
 }

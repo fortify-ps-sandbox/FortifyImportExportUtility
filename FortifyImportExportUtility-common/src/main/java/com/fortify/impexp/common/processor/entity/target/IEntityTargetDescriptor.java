@@ -27,4 +27,5 @@ package com.fortify.impexp.common.processor.entity.target;
 public interface IEntityTargetDescriptor {
 	public Class<?> getJavaType();
 	public IEntityTarget getTarget();
+	public boolean isLocationChangeable();
 }

@@ -123,6 +123,10 @@ FortifyImportExportUtility:
     * How to differentiate between previously submitted versus new vulnerabilities is now decided in the target configuration
 * As an advanced use case, FortifyImportExportUtility can process multiple sources and targets within a single run
 	
+When migrating from FortifyBugTrackerUtility, please verify the following:
+* FortifyImportExportUtility can successfully identify vulnerabilities previously exported with FortifyBugTrackerUtility
+* TODO
+
 
 ## Developers
 

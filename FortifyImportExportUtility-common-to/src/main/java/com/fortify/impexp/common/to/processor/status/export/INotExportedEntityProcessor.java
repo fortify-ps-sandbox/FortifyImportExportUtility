@@ -22,28 +22,10 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.wrapper;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+package com.fortify.impexp.common.to.processor.status.export;
 
 import com.fortify.impexp.common.processor.IProcessor;
-import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 
-public class ProcessorWrapper<S> extends AbstractProcessorWrapper<S> {
-	public final Collection<IProcessor<S>> wrappedProcessors;
+public interface INotExportedEntityProcessor<S> extends IProcessor<S> {
 
-	public ProcessorWrapper(IProcessor<S> wrappedProcessor) {
-		this.wrappedProcessors = Arrays.asList(wrappedProcessor);
-	}
-	
-	public ProcessorWrapper(Collection<IProcessor<S>> wrappedProcessors) {
-		this.wrappedProcessors = Collections.unmodifiableCollection(wrappedProcessors);
-	}
-	
-	@Override
-	protected Collection<IProcessor<S>> getProcessors(IEntitySourceDescriptor entitySourceDescriptor, S entity) {
-		return wrappedProcessors;
-	}
 }

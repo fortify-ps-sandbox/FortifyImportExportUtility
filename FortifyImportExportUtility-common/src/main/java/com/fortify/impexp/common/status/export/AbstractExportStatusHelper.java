@@ -24,5 +24,69 @@
  ******************************************************************************/
 package com.fortify.impexp.common.status.export;
 
-public abstract class AbstractExportStatusHelper<S,T> implements IExportStatusHelper<S,T> {
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.apache.commons.codec.binary.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
+import com.fortify.impexp.common.status.export.entity.ExportedEntityStatus;
+import com.fortify.impexp.common.status.export.entity.IExportedEntityDescriptor;
+
+public abstract class AbstractExportStatusHelper<S,T extends IExportedEntityDescriptor> implements IExportStatusHelper<S,T> {
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractExportStatusHelper.class);
+	
+	@Override
+	public final void updateSourceEntity(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<S> sourceEntities, T exportedEntityDescriptor) {
+		if ( exportedEntityDescriptor.getStatus()==ExportedEntityStatus.NEW ) {
+			updateSourceEntityForNewExportedEntity(entitySourceDescriptor, entityTargetDescriptor, sourceEntities, exportedEntityDescriptor);
+		} else {
+			_updateSourceEntityForExistingExportedEntity(entitySourceDescriptor, entityTargetDescriptor, sourceEntities, exportedEntityDescriptor);
+		}
+	}
+	
+	private final void _updateSourceEntityForExistingExportedEntity(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<S> sourceEntities, T exportedEntityDescriptor) {
+		if ( entityTargetDescriptor.isLocationChangeable() ) {
+			updateExportLocationForExistingExportedEntity(entitySourceDescriptor, entityTargetDescriptor, sourceEntities, exportedEntityDescriptor);
+		}
+		updateSourceEntityForExistingExportedEntity(entitySourceDescriptor, entityTargetDescriptor, sourceEntities, exportedEntityDescriptor);
+	}
+
+	protected abstract void updateSourceEntityForNewExportedEntity(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<S> sourceEntities, T exportedEntityDescriptor);
+	protected void updateSourceEntityForExistingExportedEntity(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<S> sourceEntities, T exportedEntityDescriptor) {
+		LOG.trace("Source entity update not supported by this ExportStatusHelper implementation");
+	}
+	
+	protected void updateExportLocationForExistingExportedEntity(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<S> sourceEntities, T exportedEntityDescriptor) {
+		String currentLocation = exportedEntityDescriptor.getLocation();
+		Stream<S> sourceEntitiesToUpdateStream = sourceEntities.stream()
+			.filter(getExportLocationChangedPredicate(entitySourceDescriptor, entityTargetDescriptor, currentLocation));
+		updateExportLocation(entitySourceDescriptor, entityTargetDescriptor, sourceEntitiesToUpdateStream, exportedEntityDescriptor);
+	}
+	
+	protected void updateExportLocation(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Stream<S> sourceEntitiesToUpdateStream, T exportedEntityDescriptor) {
+		LOG.warn("Not updating export locations; new location: {}, old location(s): {}", 
+				exportedEntityDescriptor.getLocation(),
+				getOldExportLocations(entitySourceDescriptor, entityTargetDescriptor, sourceEntitiesToUpdateStream));
+	}
+
+	private List<String> getOldExportLocations(IEntitySourceDescriptor entitySourceDescriptor,
+			IEntityTargetDescriptor entityTargetDescriptor, Stream<S> sourceEntitiesToUpdateStream) {
+		return sourceEntitiesToUpdateStream.map(sourceEntity->getExportedEntityLocation(entitySourceDescriptor, entityTargetDescriptor, sourceEntity)).collect(Collectors.toList());
+	}
+
+	private final Predicate<S> getExportLocationChangedPredicate(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, String currentLocation) {
+		return sourceEntity -> !isExportLocationMatching(entitySourceDescriptor, entityTargetDescriptor, sourceEntity, currentLocation);
+	}
+
+	private final boolean isExportLocationMatching(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, S sourceEntity, String updatedLocation) {
+		String previousLocation = getExportedEntityLocation(entitySourceDescriptor, entityTargetDescriptor, sourceEntity);
+		return StringUtils.equals(updatedLocation, previousLocation);
+	}
 }

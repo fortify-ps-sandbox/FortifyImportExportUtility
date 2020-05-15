@@ -1,6 +1,6 @@
 /*******************************************************************************
- * (c) Copyright 2020 Micro Focus or one of its affiliates
- *
+ * (c) Copyright 2020 Micro Focus or one of its affiliates, a Micro Focus company
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the 
  * "Software"), to deal in the Software without restriction, including without 
@@ -22,28 +22,36 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.wrapper;
+package com.fortify.impexp.common.status.export.entity;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.function.Function;
 
-import com.fortify.impexp.common.processor.IProcessor;
-import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import lombok.ToString;
 
-public class ProcessorWrapper<S> extends AbstractProcessorWrapper<S> {
-	public final Collection<IProcessor<S>> wrappedProcessors;
-
-	public ProcessorWrapper(IProcessor<S> wrappedProcessor) {
-		this.wrappedProcessors = Arrays.asList(wrappedProcessor);
-	}
+/**
+ * This class holds the export location, id and arbitrary (extra) fields for an exported entity. 
+ * 
+ * @author Ruud Senden
+ */
+@ToString(callSuper=true)
+public class ExportedEntityDescriptorWithIdAndFields<I, F> extends ExportedEntityDescriptorWithId<I> implements IExportedEntityDescriptorWithFields<F> {
+	private F fields;
+	private final Function<I, F> getFieldsForId;
 	
-	public ProcessorWrapper(Collection<IProcessor<S>> wrappedProcessors) {
-		this.wrappedProcessors = Collections.unmodifiableCollection(wrappedProcessors);
+	public ExportedEntityDescriptorWithIdAndFields(String location, ExportedEntityStatus status, Function<String, I> convertlocationToId, Function<I, F> getFieldsForId) {
+		super(location, status, convertlocationToId);
+		this.getFieldsForId = getFieldsForId;
 	}
 	
 	@Override
-	protected Collection<IProcessor<S>> getProcessors(IEntitySourceDescriptor entitySourceDescriptor, S entity) {
-		return wrappedProcessors;
+	public F getFields() {
+		if ( fields==null ) {
+			fields = getFieldsForId.apply(getId());
+		}
+		return fields;
+	}
+	
+	public void resetFields() {
+		fields = null;
 	}
 }

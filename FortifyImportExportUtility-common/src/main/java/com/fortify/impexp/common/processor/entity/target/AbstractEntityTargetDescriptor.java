@@ -30,6 +30,7 @@ import lombok.Getter;
 public abstract class AbstractEntityTargetDescriptor<T extends AbstractEntityTargetDescriptor<T>> implements IEntityTargetDescriptor {
 	private IEntityTarget target;
 	private Class<?> javaType;
+	private boolean locationChangeable = false;
 	
 	public T target(IEntityTarget target) {
 		this.target = target;
@@ -37,6 +38,10 @@ public abstract class AbstractEntityTargetDescriptor<T extends AbstractEntityTar
 	}
 	public T javaType(Class<?> javaType) {
 		this.javaType = javaType;
+		return _this();
+	}
+	public T locationChangeable(boolean locationChangeable) {
+		this.locationChangeable = locationChangeable;
 		return _this();
 	}
 	

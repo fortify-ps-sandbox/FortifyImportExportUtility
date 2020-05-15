@@ -8,5 +8,6 @@ description = 'FortifyImportExportUtility common functionality'
 dependencies {
 	compileOnly('com.fortify.util.spring.boot:fortify-spring-boot-helper') { changing = true }
 	compileOnly('com.fortify.client.api:common-spring') { changing = true }
+	compileOnly('com.fortify.client.api:common-rest') { changing = true }
 	compileOnly 'commons-lang:commons-lang'
 }

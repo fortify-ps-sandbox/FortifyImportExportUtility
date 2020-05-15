@@ -28,8 +28,9 @@ import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor
 import com.fortify.impexp.common.processor.entity.source.SupportedEntitySourceDescriptorHelper;
 import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
 import com.fortify.impexp.common.processor.entity.target.SupportedEntityTargetDescriptorHelper;
+import com.fortify.impexp.common.status.export.entity.IExportedEntityDescriptor;
 
-public abstract class AbstractExportStatusHelperFactory<S,T> implements IExportStatusHelperFactory<S,T> {
+public abstract class AbstractExportStatusHelperFactory<S,T extends IExportedEntityDescriptor> implements IExportStatusHelperFactory<S,T> {
 	private final SupportedEntitySourceDescriptorHelper supportedEntitySourceDescriptorHelper;
 	private final SupportedEntityTargetDescriptorHelper supportedEntityTargetDescriptorHelper;
 	

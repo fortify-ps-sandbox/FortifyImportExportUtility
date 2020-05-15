@@ -28,8 +28,9 @@ import java.util.Collection;
 
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
+import com.fortify.impexp.common.status.export.entity.IExportedEntityDescriptor;
 
-public interface IExportStatusHelper<S, T> {
-	public void notifyExported(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<S> sourceEntities, T targetEntity);
-	public boolean isExported(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, S sourceEntity);
+public interface IExportStatusHelper<S, T extends IExportedEntityDescriptor> {
+	public void updateSourceEntity(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<S> sourceEntities, T exportedEntityDescriptor);
+	public String getExportedEntityLocation(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, S sourceEntity);
 }

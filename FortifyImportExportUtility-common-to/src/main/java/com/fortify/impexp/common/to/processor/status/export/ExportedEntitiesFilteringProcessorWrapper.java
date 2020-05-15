@@ -22,28 +22,40 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.wrapper;
+package com.fortify.impexp.common.to.processor.status.export;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 
 import com.fortify.impexp.common.processor.IProcessor;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
+import com.fortify.impexp.common.processor.wrapper.AbstractProcessorWrapper;
+import com.fortify.impexp.common.status.export.ActiveExportStatusHelpersInvoker;
 
-public class ProcessorWrapper<S> extends AbstractProcessorWrapper<S> {
-	public final Collection<IProcessor<S>> wrappedProcessors;
+public class ExportedEntitiesFilteringProcessorWrapper<S> extends AbstractProcessorWrapper<S> {
+	private final Collection<IProcessor<S>> exportedEntityProcessors;
+	private final Collection<IProcessor<S>> notExportedEntityProcessors;
+	private final IEntityTargetDescriptor entityTargetDescriptor;
+	private final ActiveExportStatusHelpersInvoker exportStatusHelper;
+	
+	public ExportedEntitiesFilteringProcessorWrapper(IExportedEntityProcessor<S> exportedEntityProcessor,
+			INotExportedEntityProcessor<S> notExportedEntityProcessor,
+			IEntityTargetDescriptor entityTargetDescriptor,
+			ActiveExportStatusHelpersInvoker exportStatusHelper) {
+		super();
+		this.exportedEntityProcessors = Arrays.asList(exportedEntityProcessor);
+		this.notExportedEntityProcessors = Arrays.asList(notExportedEntityProcessor);
+		this.entityTargetDescriptor = entityTargetDescriptor;
+		this.exportStatusHelper = exportStatusHelper;
+	}
 
-	public ProcessorWrapper(IProcessor<S> wrappedProcessor) {
-		this.wrappedProcessors = Arrays.asList(wrappedProcessor);
-	}
-	
-	public ProcessorWrapper(Collection<IProcessor<S>> wrappedProcessors) {
-		this.wrappedProcessors = Collections.unmodifiableCollection(wrappedProcessors);
-	}
-	
 	@Override
 	protected Collection<IProcessor<S>> getProcessors(IEntitySourceDescriptor entitySourceDescriptor, S entity) {
-		return wrappedProcessors;
+		if ( exportStatusHelper.isPreviouslyExported(entitySourceDescriptor, entityTargetDescriptor, entity) ) {
+			return exportedEntityProcessors;
+		} else {
+			return notExportedEntityProcessors;
+		}
 	}
 }

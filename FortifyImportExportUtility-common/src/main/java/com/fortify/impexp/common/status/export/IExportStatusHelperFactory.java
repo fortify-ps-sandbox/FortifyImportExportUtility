@@ -26,8 +26,9 @@ package com.fortify.impexp.common.status.export;
 
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
+import com.fortify.impexp.common.status.export.entity.IExportedEntityDescriptor;
 
-public interface IExportStatusHelperFactory<S,T> {
+public interface IExportStatusHelperFactory<S,T extends IExportedEntityDescriptor> {
 	public boolean isActive(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor);
 	public IExportStatusHelper<S,T> getExportStatusHelper();
 }

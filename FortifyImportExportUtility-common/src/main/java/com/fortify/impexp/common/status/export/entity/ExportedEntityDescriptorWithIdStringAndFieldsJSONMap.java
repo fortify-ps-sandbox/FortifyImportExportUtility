@@ -22,28 +22,14 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.wrapper;
+package com.fortify.impexp.common.status.export.entity;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.function.Function;
 
-import com.fortify.impexp.common.processor.IProcessor;
-import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.util.rest.json.JSONMap;
 
-public class ProcessorWrapper<S> extends AbstractProcessorWrapper<S> {
-	public final Collection<IProcessor<S>> wrappedProcessors;
-
-	public ProcessorWrapper(IProcessor<S> wrappedProcessor) {
-		this.wrappedProcessors = Arrays.asList(wrappedProcessor);
-	}
-	
-	public ProcessorWrapper(Collection<IProcessor<S>> wrappedProcessors) {
-		this.wrappedProcessors = Collections.unmodifiableCollection(wrappedProcessors);
-	}
-	
-	@Override
-	protected Collection<IProcessor<S>> getProcessors(IEntitySourceDescriptor entitySourceDescriptor, S entity) {
-		return wrappedProcessors;
+public class ExportedEntityDescriptorWithIdStringAndFieldsJSONMap extends ExportedEntityDescriptorWithIdAndFields<String, JSONMap> {
+	public ExportedEntityDescriptorWithIdStringAndFieldsJSONMap(String location, ExportedEntityStatus status, Function<String, String> convertlocationToId, Function<String, JSONMap> getFieldsForId) {
+		super(location, status, convertlocationToId, getFieldsForId);
 	}
 }

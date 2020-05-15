@@ -1,7 +1,7 @@
 logging:
   level:
     org.springframework.beans.factory: WARN
-    com.fortify.impexp.common.api.processor.AbstractEnabledProcessorsLoader: TRACE
+    com.fortify.impexp: TRACE
 
 spring:
   profiles:
@@ -18,9 +18,11 @@ from.ssc:
       include:
         fields: id
         subEntities: filterSets
+      filter:
+        maxResults: 3
       orderBy:
         field: id
-      maxResults: 5
+      
       
     vulnerabilities:
       include: 
@@ -30,19 +32,17 @@ from.ssc:
       transform:
         add[details.idDescription]: Identifier ${id}   # Generic - entity processing
       filter:
-        maxResults: 1                                  # Generic - loader
+#        maxResults: -1                                 # Generic - loader
         filterSet: Quick View                          # Specific - SSC vuln loader
         matchFieldRegex[details.issueName]: Cross.*    # Generic - entity processing
-#          - 'details.issueName: Cross.*'
-#          entityFieldName2: regex2
       orderBy:                                         # Generic - SSC
         field: id
       exportStatus:                                    # Specific - different impl for each entity source and type
         jira: #Map<String, ExportStatus>
-          storeAsBugLink: ${deepLink}                  # SSC or FoD
+          storeAsBugLink: true                         # SSC or FoD
           #storeAsComment: Vulnerability submitted to {} # FoD, maybe SSC?
-          customTag[Jira Bug Link]: ${deepLink}
-          customTag[Extra]: ${deepLink}
+          storeAsCustomTag: JiraBugURL
+          customTag[Extra]: Extra ${deepLink}
           primaryCustomTag: Jira Bug Link
     
 from.mock:
@@ -66,15 +66,17 @@ to.jira:
   password:
   vulnerabilities: #Map<String, JiraVulnExporterConfig>
     ssc:
-      add: # Generic for any source
-        isOpen: not suppressed, not hidden, not removed, ...
-      exportNew: # Generic for any source
-        filters: isOpen, critical|high
-        groupBy: expression # Only for new vulns; existing vulns are grouped by bug link
-      updateExisting: # Generic for any source
-        filters: isNotOpen
-      fields:
-        abc: expression
-      appendedFields:
-        description: expression
+      transform: # Generic for any source
+        add[isOpen]: not suppressed, not hidden, not removed, ...
+#      exportNew: # Generic for any source
+#        filter: isOpen, critical|high
+#        groupBy: expression # Only for new vulns; existing vulns are grouped by bug link
+#      updateExisting: # Generic for any source
+#        filter: xxx
+#      fields:
+#        field[abc]: expression
+#        field[def]: expression
+#        appendToField[abc]: expression
+#        updateDuringStateManagent: abc, def, ghi.xyz
+#      state: open/close transitions
         

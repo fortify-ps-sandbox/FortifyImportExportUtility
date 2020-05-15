@@ -26,6 +26,8 @@ package com.fortify.impexp.from.ssc.release.loader;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
@@ -45,12 +47,14 @@ import com.fortify.util.rest.json.JSONMap;
 @FromPluginComponent @FromSSC @Lazy
 public class FromSSCReleaseLoader extends AbstractRootLoader<JSONMap> {
 	public static final IEntitySourceDescriptor ENTITY_DESCRIPTOR = new FromSSCSourceEntityDescriptor().entity(StandardEntityType.RELEASE);
+	private static final Logger LOG = LoggerFactory.getLogger(FromSSCReleaseLoader.class);
 	@Autowired @FromSSC private SSCAuthenticatingRestConnection conn;
 	@Autowired @FromSSC private SSCAttributeDefinitionHelper attributeDefinitionHelper;
 	@Autowired @FromSSC private FromSSCReleaseLoaderConfig config;
 	
 	@Override
 	public void run() {
+		LOG.info("Loading SSC application versions");
 		SSCApplicationVersionsQueryBuilder queryBuilder = 
 			conn.api(SSCApplicationVersionAPI.class).queryApplicationVersions();
 		config.updateQueryBuilder(queryBuilder, attributeDefinitionHelper);
@@ -58,6 +62,7 @@ public class FromSSCReleaseLoader extends AbstractRootLoader<JSONMap> {
 	}
 
 	private final void processRelease(JSONMap release) {
+		LOG.info("Processing SSC application version {}", release.get("id"));
 		invokeEnabledProcessors(ENTITY_DESCRIPTOR, release);
 	}
 	

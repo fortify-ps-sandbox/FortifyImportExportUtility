@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.OrderComparator;
@@ -35,6 +36,7 @@ import org.springframework.stereotype.Component;
 
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
+import com.fortify.impexp.common.status.export.entity.IExportedEntityDescriptor;
 
 @Component
 public class ActiveExportStatusHelpersInvoker {
@@ -55,16 +57,24 @@ public class ActiveExportStatusHelpersInvoker {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <S,T> void notifyExported(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<S> sourceEntities, T targetEntity) {
+	public <S,T extends IExportedEntityDescriptor> void updateSourceEntity(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<S> sourceEntities, T exportedEntityDescriptor) {
 		getActiveExportStatusHelpers(entitySourceDescriptor, entityTargetDescriptor)
 			// This cast should be safe based on IEntitySourceDescriptor#getJavaType() and IEntityTargetDescriptor#getJavaType()
-			.forEach(helper -> ((IExportStatusHelper<S,T>)helper).notifyExported(entitySourceDescriptor, entityTargetDescriptor, sourceEntities, targetEntity));
+			.forEach(helper -> 
+				((IExportStatusHelper<S,T>)helper).updateSourceEntity(entitySourceDescriptor, entityTargetDescriptor, sourceEntities, exportedEntityDescriptor));
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <S> boolean isExported(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, S sourceEntity) {
-		return getActiveExportStatusHelpers(entitySourceDescriptor, entityTargetDescriptor)
-			// This cast should be safe based on IEntitySourceDescriptor#getJavaType() and IEntityTargetDescriptor#getJavaType()
-			.stream().anyMatch(helper -> ((IExportStatusHelper<S,?>)helper).isExported(entitySourceDescriptor, entityTargetDescriptor, sourceEntity));
+	public <S> String getExportedEntityLocation(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, S sourceEntity) {
+		 return getActiveExportStatusHelpers(entitySourceDescriptor, entityTargetDescriptor)
+			.stream()
+			.map(helper->
+				((IExportStatusHelper<S,?>)helper).getExportedEntityLocation(entitySourceDescriptor, entityTargetDescriptor, sourceEntity))
+			.filter(StringUtils::isNotBlank)
+			.findAny().orElse(null);
+	}
+	
+	public <S> boolean isPreviouslyExported(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, S sourceEntity) {
+		return getExportedEntityLocation(entitySourceDescriptor, entityTargetDescriptor, sourceEntity) != null;
 	}
 }

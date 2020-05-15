@@ -1,6 +1,6 @@
 /*******************************************************************************
- * (c) Copyright 2020 Micro Focus or one of its affiliates, a Micro Focus company
- * 
+ * (c) Copyright 2020 Micro Focus or one of its affiliates
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the 
  * "Software"), to deal in the Software without restriction, including without 
@@ -22,17 +22,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.to.jira.processor.connection;
+package com.fortify.impexp.common.status.export.entity;
 
-import lombok.Data;
-
-/**
- * This class holds information for locating target issues, like id and deep link.
- * 
- * @author Ruud Senden
- */
-@Data
-public final class TargetIssueLocator {
-	private final String id;
-	private final String deepLink;
+public interface IExportedEntityDescriptorWithFields<F> extends IExportedEntityDescriptor {
+	public F getFields();
 }

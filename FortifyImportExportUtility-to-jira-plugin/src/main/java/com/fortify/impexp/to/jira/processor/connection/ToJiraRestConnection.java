@@ -52,16 +52,15 @@ public final class ToJiraRestConnection extends AbstractRestConnection {
 		return true;
 	}
 	
-	public TargetIssueLocator submitIssue(Map<String, Object> issueFields) {
+	public String submitIssue(Map<String, Object> issueFields) {
 		LOG.trace(String.format("[Jira] Submitting issue: %s", issueFields));
 		WebTarget target = getBaseResource().path("/rest/api/latest/issue");
 		JSONMap request = getIssueRequestData(issueFields);
 		JSONMap submitResult = executeRequest(HttpMethod.POST, target, Entity.entity(request, "application/json"), JSONMap.class);
 		
 		String submittedIssueKey = submitResult.get("key", String.class);
-		String submittedIssueBrowserURL = getBaseResource()
-				.path("/browse/").path(submittedIssueKey).getUri().toString();
-		return new TargetIssueLocator(submittedIssueKey, submittedIssueBrowserURL);
+		String submittedIssueBrowserURL = getIssueDeepLinkForIssueKey(submittedIssueKey);
+		return submittedIssueBrowserURL;
 	}
 
 	private JSONMap getIssueRequestData(Map<String, Object> issueFields) {
@@ -70,9 +69,8 @@ public final class ToJiraRestConnection extends AbstractRestConnection {
 		return request;
 	}
 	
-	public void updateIssueData(TargetIssueLocator targetIssueLocator, Map<String, Object> issueFields) {
-		LOG.trace(String.format("[Jira] Updating issue data for %s: %s", targetIssueLocator.getDeepLink(), issueFields)); 
-		String issueId = getIssueId(targetIssueLocator);
+	public void updateIssueData(String issueId, Map<String, Object> issueFields) {
+		LOG.trace(String.format("[Jira] Updating issue data for %s: %s", issueId, issueFields)); 
 		WebTarget target = getBaseResource().path("/rest/api/latest/issue").path(issueId);
 		executeRequest(HttpMethod.PUT, target, Entity.entity(getIssueRequestData(issueFields), "application/json"), null);
 	}
@@ -89,8 +87,7 @@ public final class ToJiraRestConnection extends AbstractRestConnection {
 		return transitionId;
 	}
 	
-	public boolean transition(TargetIssueLocator targetIssueLocator, String transitionName, String comment) {
-		String issueId = getIssueId(targetIssueLocator);
+	public boolean transition(String issueId, String transitionName, String comment) {
 		String transitionId = getTransitionId(issueId, transitionName);
 		if ( transitionId == null ) { return false; }
 		
@@ -109,15 +106,6 @@ public final class ToJiraRestConnection extends AbstractRestConnection {
 		return true;
 	}
 	
-	public JSONMap getIssueDetails(TargetIssueLocator targetIssueLocator, String... fields) {
-		String issueId = getIssueId(targetIssueLocator);
-		WebTarget target = getBaseResource().path("/rest/api/latest/issue").path(issueId);
-		if ( fields!=null ) {
-			target = target.queryParam("fields", StringUtils.join(fields, ","));
-		}
-		return executeRequest(HttpMethod.GET, target, JSONMap.class).getOrCreateJSONMap("fields");
-	}
-	
 	public String getIssueKeyForJql(String jql) {
 		WebTarget target = getBaseResource()
 				.path("/rest/api/latest/search")
@@ -128,14 +116,21 @@ public final class ToJiraRestConnection extends AbstractRestConnection {
 		return issues.size()==0 ? null : issues.getValues("key", String.class).get(0);
 	}
 	
-	private String getIssueId(TargetIssueLocator targetIssueLocator) {
-		String id = targetIssueLocator.getId();
-		if ( StringUtils.isBlank(id) ) {
-			// TODO (Low) Check whether link indeed looks like a JIRA URL?
-			String deepLink = targetIssueLocator.getDeepLink();
-			id = deepLink.substring(deepLink.lastIndexOf('/'));
+	public final JSONMap getIssueFields(String issueId, String... fields) {
+		WebTarget target = getBaseResource().path("/rest/api/latest/issue").path(issueId);
+		if ( fields!=null ) {
+			target = target.queryParam("fields", StringUtils.join(fields, ","));
 		}
-		return id;
+		return executeRequest(HttpMethod.GET, target, JSONMap.class).getOrCreateJSONMap("fields");
+	}
+	
+	private String getIssueDeepLinkForIssueKey(String issueKey) {
+		return getBaseResource().path("/browse/").path(issueKey).getUri().toString();
+	}
+
+	
+	public static final String getIssueKeyForIssueDeepLink(String deepLink) {
+		return deepLink.substring(deepLink.lastIndexOf('/'));
 	}
 	
 	/**

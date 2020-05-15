@@ -27,6 +27,8 @@ package com.fortify.impexp.from.ssc.release.loader.config;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -43,6 +45,7 @@ import lombok.Data;
 @FromPluginComponent @FromSSC
 @ConfigurationProperties("from.ssc.load.releases")
 public final class FromSSCReleaseLoaderConfig {
+	private static final Logger LOG = LoggerFactory.getLogger(FromSSCReleaseLoaderConfig.class);
 	private static final String EMPTY_TO_STRING = new FromSSCReleaseLoaderConfig().toString();
 	@Value("${from.ssc.load.releases:undefined}") private String property = "undefined";
 	
@@ -64,9 +67,17 @@ public final class FromSSCReleaseLoaderConfig {
 	}
 	
 	public void updateQueryBuilder(SSCApplicationVersionsQueryBuilder qb, SSCAttributeDefinitionHelper attributeDefinitionHelper) {
+		logQBUpdate(qb, include);
 		FromSSCReleaseLoaderIncludeConfigQueryBuilderUpdater.updateQueryBuilder(qb, include, attributeDefinitionHelper);
+		logQBUpdate(qb, transform);
 		FromSSCReleaseLoaderEntityTransformerQueryBuilderUpdater.updateQueryBuilder(qb, transform);
+		logQBUpdate(qb, filter);
 		FromSSCReleaseLoaderEntityFilterConfigQueryBuilderUpdater.updateQueryBuilder(qb, filter);
-		qb.paramOrderBy(true, getOrderBy());
+		logQBUpdate(qb, orderBy);
+		qb.paramOrderBy(true, orderBy);
+	}
+
+	private <C> void logQBUpdate(SSCApplicationVersionsQueryBuilder qb, C config) {
+		LOG.debug("Updating {} with configuration {}", qb, config);
 	}
 }
