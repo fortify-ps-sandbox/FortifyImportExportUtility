@@ -28,5 +28,4 @@ import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor
 
 public interface IProcessor<S> {
 	public void process(IEntitySourceDescriptor entitySourceDescriptor, S entity);
-	// TODO Add initialize/finalize methods
 }

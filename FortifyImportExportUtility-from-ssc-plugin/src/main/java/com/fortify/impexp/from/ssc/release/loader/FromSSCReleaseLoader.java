@@ -24,8 +24,6 @@
  ******************************************************************************/
 package com.fortify.impexp.from.ssc.release.loader;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,13 +61,7 @@ public class FromSSCReleaseLoader extends AbstractRootLoader<JSONMap> {
 
 	private final void processRelease(JSONMap release) {
 		LOG.info("Processing SSC application version {}", release.get("id"));
-		invokeEnabledProcessors(ENTITY_DESCRIPTOR, release);
-	}
-	
-	@Override
-	protected Map<String, Object> getOverrideProperties(JSONMap input) {
-		// TODO Evaluate expressions in config#getOverrideProperties
-		return super.getOverrideProperties(input);
+		invokeProcessOnActiveProcessors(ENTITY_DESCRIPTOR, release);
 	}
 
 }

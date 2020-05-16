@@ -37,7 +37,7 @@ public class FromMockReleaseFromApplicationLoader extends AbstractIntermediateLo
 	@Override
 	public void process(final IEntitySourceDescriptor entitySourceDescriptor, final JSONMap application) {
 		for ( int i = 0 ; i < 10 ; i++ ) {
-			invokeActiveProcessors(ENTITY_DESCRIPTOR, getRelease(application, i));
+			invokeProcessOnActiveProcessors(ENTITY_DESCRIPTOR, getRelease(application, i));
 		}
 	}
 	

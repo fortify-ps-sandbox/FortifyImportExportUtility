@@ -27,8 +27,6 @@ package com.fortify.impexp.common.entity.config;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import com.fortify.impexp.common.processor.IProcessor;
-import com.fortify.impexp.common.processor.wrapper.FilteringProcessorWrapper;
 import com.fortify.util.spring.SpringExpressionUtil;
 
 import lombok.Data;
@@ -36,10 +34,6 @@ import lombok.Data;
 @Data
 public class EntityFilter {
 	private final EntityFilterConfig entityFilterConfig;
-	
-	public static final <E> IProcessor<E> wrapWithFilteringProcessor(IProcessor<E> wrappedProcessor, EntityFilterConfig entityFilterConfig) {
-		return new FilteringProcessorWrapper<>(wrappedProcessor, new EntityFilter(entityFilterConfig)::isIncluded);
-	}
 	
 	public <E> boolean isIncluded(final E entity) {
 		return entityFilterConfig.getMatchFieldRegex().entrySet().stream().allMatch(entry->isMatching(entity, entry));

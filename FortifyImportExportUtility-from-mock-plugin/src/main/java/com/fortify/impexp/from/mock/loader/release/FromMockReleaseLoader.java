@@ -37,7 +37,7 @@ public class FromMockReleaseLoader extends AbstractRootLoader<JSONMap> {
 	@Override
 	public void run() {
 		for ( int i = 0 ; i < 10 ; i++ ) {
-			invokeEnabledProcessors(ENTITY_DESCRIPTOR, getRelease(i));
+			invokeProcessOnActiveProcessors(ENTITY_DESCRIPTOR, getRelease(i));
 		}
 	}
 

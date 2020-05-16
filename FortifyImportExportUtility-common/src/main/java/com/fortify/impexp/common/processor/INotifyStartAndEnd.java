@@ -22,18 +22,11 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.wrapper;
+package com.fortify.impexp.common.processor;
 
-import java.util.Collection;
-
-import com.fortify.impexp.common.processor.IProcessor;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 
-public abstract class AbstractProcessorWrapper<S> implements IProcessor<S> {
-	@Override
-	public void process(IEntitySourceDescriptor entitySourceDescriptor, S entity) {
-		getProcessors(entitySourceDescriptor, entity).forEach(processor ->processor.process(entitySourceDescriptor, entity));
-	}
-
-	protected abstract Collection<IProcessor<S>> getProcessors(IEntitySourceDescriptor entitySourceDescriptor, S entity);
+public interface INotifyStartAndEnd {
+	public void notifyStart(IEntitySourceDescriptor entitySourceDescriptor);
+	public void notifyEnd(IEntitySourceDescriptor entitySourceDescriptor);
 }

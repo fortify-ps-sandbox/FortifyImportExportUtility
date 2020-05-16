@@ -27,9 +27,6 @@ package com.fortify.impexp.common.entity.config;
 import java.util.Arrays;
 import java.util.Map;
 
-import com.fortify.impexp.common.processor.IProcessor;
-import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
-import com.fortify.impexp.common.processor.wrapper.ProcessorWrapper;
 import com.fortify.util.rest.json.JSONMap;
 import com.fortify.util.spring.SpringExpressionUtil;
 import com.fortify.util.spring.expression.TemplateExpression;
@@ -39,18 +36,6 @@ import lombok.Data;
 @Data
 public class EntityTransformer {
 	private final EntityTransformerConfig entityTransformerConfig;
-	
-	public static final <E> IProcessor<E> wrapWithTransformingProcessor(IProcessor<E> wrappedProcessor, EntityTransformerConfig entityTransformerConfig, ObjectPropertyAdder<E> objectPropertyAdder, ObjectPropertyRemover<E> objectPropertyRemover) {
-		return new TransformingProcessorWrapper<>(wrappedProcessor, entityTransformerConfig, objectPropertyAdder, objectPropertyRemover);
-	}
-	
-	public static final <E extends Map<String,Object>> IProcessor<E> wrapWithTransformingProcessor(IProcessor<E> wrappedProcessor, EntityTransformerConfig entityTransformerConfig) {
-		return new TransformingProcessorWrapper<>(wrappedProcessor, entityTransformerConfig, Map::put, Map::remove);
-	}
-	
-	public static final IProcessor<JSONMap> wrapWithTransformingJSONMapProcessor(IProcessor<JSONMap> wrappedProcessor, EntityTransformerConfig entityTransformerConfig) {
-		return new TransformingProcessorWrapper<>(wrappedProcessor, entityTransformerConfig, JSONMap::putPath, JSONMap::remove);
-	}
 	
 	public JSONMap transformJSONMap(JSONMap entity) {
 		return transform(entity, JSONMap::putPath, JSONMap::remove);
@@ -91,24 +76,5 @@ public class EntityTransformer {
 	@FunctionalInterface
 	public static interface ObjectPropertyRemover<E> {
 		public void removePropertyValue(E entity, String propertyName);
-	}
-	
-	public static final class TransformingProcessorWrapper<E> extends ProcessorWrapper<E> {
-		private final EntityTransformer entityTransformer;
-		private final ObjectPropertyAdder<E> objectPropertyAdder;
-		private final ObjectPropertyRemover<E> objectPropertyRemover;
-
-		public TransformingProcessorWrapper(IProcessor<E> wrappedProcessor, EntityTransformerConfig entityTransformerConfig, ObjectPropertyAdder<E> objectPropertyAdder, ObjectPropertyRemover<E> objectPropertyRemover) {
-			super(wrappedProcessor);
-			this.entityTransformer = new EntityTransformer(entityTransformerConfig);
-			this.objectPropertyAdder = objectPropertyAdder;
-			this.objectPropertyRemover = objectPropertyRemover;
-		}
-		
-		@Override
-		public void process(IEntitySourceDescriptor entitySourceDescriptor, E entity) {
-			super.process(entitySourceDescriptor, entityTransformer.transform(entity, objectPropertyAdder, objectPropertyRemover));
-		}
-		
 	}
 }

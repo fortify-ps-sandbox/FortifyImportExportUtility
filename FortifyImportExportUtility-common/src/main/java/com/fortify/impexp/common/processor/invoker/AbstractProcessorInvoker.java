@@ -29,18 +29,25 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
-import com.fortify.util.spring.boot.env.ModifyablePropertySource;
+import com.fortify.util.spring.expression.TemplateExpression;
 
 public class AbstractProcessorInvoker<S> {
 	@Autowired private ActiveProcessorsInvoker activeProcessors;
 	
-	protected final void invokeEnabledProcessors(IEntitySourceDescriptor entitySourceDescriptor, S entity) {
-		try ( ModifyablePropertySource mps = ModifyablePropertySource.withProperties(getOverrideProperties(entity)) ) {
-			activeProcessors.process(entitySourceDescriptor, entity);
-		}
+	protected final void invokeStartOnActiveProcessors(IEntitySourceDescriptor entitySourceDescriptor) {
+		activeProcessors.start(entitySourceDescriptor);
 	}
-
-	protected Map<String, Object> getOverrideProperties(S input) {
+	
+	protected final void invokeProcessOnActiveProcessors(IEntitySourceDescriptor entitySourceDescriptor, S entity) {
+		activeProcessors.processWithPropertyTemplates(entitySourceDescriptor, entity, getPropertyTemplates());
+	}
+	
+	protected final void invokeEndOnActiveProcessors(IEntitySourceDescriptor entitySourceDescriptor) {
+		activeProcessors.end(entitySourceDescriptor);
+	}
+	
+	protected Map<String, TemplateExpression> getPropertyTemplates() {
+		// TODO default implementation: get directly from property
 		return null;
 	}
 }

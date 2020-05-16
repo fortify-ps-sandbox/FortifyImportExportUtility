@@ -33,6 +33,8 @@ import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor
 import com.fortify.impexp.common.processor.entity.type.StandardEntityType;
 import com.fortify.impexp.from.mock.processor.entity.source.FromMockEntitySourceDescriptor;
 import com.fortify.util.rest.json.JSONMap;
+import com.fortify.util.spring.SpringExpressionUtil;
+import com.fortify.util.spring.expression.TemplateExpression;
 
 @FromPluginComponent
 public class FromMockApplicationLoader extends AbstractRootLoader<JSONMap> {
@@ -41,7 +43,7 @@ public class FromMockApplicationLoader extends AbstractRootLoader<JSONMap> {
 	@Override
 	public void run() {
 		for ( int i = 0 ; i < 10 ; i++ ) {
-			invokeEnabledProcessors(ENTITY_DESCRIPTOR, getApplication(i));
+			invokeProcessOnActiveProcessors(ENTITY_DESCRIPTOR, getApplication(i));
 		}
 	}
 
@@ -53,10 +55,10 @@ public class FromMockApplicationLoader extends AbstractRootLoader<JSONMap> {
 	}
 	
 	@Override
-	protected Map<String, Object> getOverrideProperties(JSONMap application) {
-		Map<String, Object> result = new HashMap<>();
-		result.put("to.mock.enabled", application.get("id",Integer.class)%2==0);
-		result.put("to.mock.simple", application.get("id",String.class));
+	protected Map<String, TemplateExpression> getPropertyTemplates() {
+		Map<String, TemplateExpression> result = new HashMap<>();
+		result.put("to.mock.enabled", SpringExpressionUtil.parseTemplateExpression("${id=='2'}"));
+		result.put("to.mock.simple", SpringExpressionUtil.parseTemplateExpression("${id}"));
 		return result;
 	}
 	
