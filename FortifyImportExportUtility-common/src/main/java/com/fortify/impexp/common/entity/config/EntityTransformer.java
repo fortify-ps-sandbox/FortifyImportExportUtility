@@ -37,11 +37,25 @@ import lombok.Data;
 public class EntityTransformer {
 	private final EntityTransformerConfig entityTransformerConfig;
 	
+	@SuppressWarnings("unchecked")
+	public <E> E transform(E entity) {
+		if ( entity!=null ) {
+			if ( entity instanceof JSONMap ) {
+				transformJSONMap((JSONMap)entity);
+			} else if ( entity instanceof Map ) {
+				transformMap((Map<String,Object>)entity);
+			} else {
+				throw new IllegalArgumentException("Transformation not supported for entity type "+entity.getClass().getName());
+			}
+		}
+		return entity;
+	}
+	
 	public JSONMap transformJSONMap(JSONMap entity) {
 		return transform(entity, JSONMap::putPath, JSONMap::remove);
 	}
 	
-	public <E extends Map<String,Object>> E transform(E entity) {
+	public <E extends Map<String,Object>> E transformMap(E entity) {
 		return transform(entity, Map::put, Map::remove);
 	}
 	
