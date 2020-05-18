@@ -24,6 +24,8 @@
  ******************************************************************************/
 package com.fortify.impexp.from.mock.loader.release;
 
+import java.util.function.Consumer;
+
 import com.fortify.impexp.common.from.annotation.FromPluginComponent;
 import com.fortify.impexp.common.from.loader.AbstractRootLoader;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
@@ -34,10 +36,15 @@ import com.fortify.util.rest.json.JSONMap;
 @FromPluginComponent
 public class FromMockReleaseLoader extends AbstractRootLoader<JSONMap> {
 	public static final IEntitySourceDescriptor ENTITY_DESCRIPTOR = new FromMockEntitySourceDescriptor().entity(StandardEntityType.RELEASE);
+	
+	public FromMockReleaseLoader() {
+		super(ENTITY_DESCRIPTOR);
+	}
+	
 	@Override
-	public void run() {
+	protected void supplyEntities(Consumer<JSONMap> consumer) {
 		for ( int i = 0 ; i < 10 ; i++ ) {
-			invokeProcessOnActiveProcessors(ENTITY_DESCRIPTOR, getRelease(i));
+			consumer.accept(getRelease(i));
 		}
 	}
 

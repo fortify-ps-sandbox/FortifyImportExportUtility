@@ -22,7 +22,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.processor.invoker;
+package com.fortify.impexp.common.processor;
 
 import java.util.Collection;
 import java.util.Map;
@@ -33,9 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Component;
 
-import com.fortify.impexp.common.processor.INotifyStartAndEnd;
-import com.fortify.impexp.common.processor.IProcessor;
-import com.fortify.impexp.common.processor.IProcessorFactory;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.util.spring.boot.env.ModifyablePropertySource;
 import com.fortify.util.spring.expression.TemplateExpression;

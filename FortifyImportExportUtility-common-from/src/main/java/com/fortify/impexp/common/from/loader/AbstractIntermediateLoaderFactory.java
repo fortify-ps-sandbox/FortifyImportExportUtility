@@ -28,10 +28,10 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.core.Ordered;
 
+import com.fortify.impexp.common.processor.AbstractProcessorFactory;
 import com.fortify.impexp.common.processor.entity.source.SupportedEntitySourceDescriptorHelper;
-import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerProcessorFactory;
 
-public abstract class AbstractIntermediateLoaderFactory<S> extends AbstractProcessorInvokerProcessorFactory<S> {
+public abstract class AbstractIntermediateLoaderFactory<S> extends AbstractProcessorFactory<S> {
 	
 	public AbstractIntermediateLoaderFactory(SupportedEntitySourceDescriptorHelper supportedEntitySourceDescriptorHelper) {
 		super(supportedEntitySourceDescriptorHelper);

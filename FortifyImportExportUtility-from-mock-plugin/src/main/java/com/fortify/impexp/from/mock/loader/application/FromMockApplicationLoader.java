@@ -26,6 +26,7 @@ package com.fortify.impexp.from.mock.loader.application;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import com.fortify.impexp.common.from.annotation.FromPluginComponent;
 import com.fortify.impexp.common.from.loader.AbstractRootLoader;
@@ -40,10 +41,14 @@ import com.fortify.util.spring.expression.TemplateExpression;
 public class FromMockApplicationLoader extends AbstractRootLoader<JSONMap> {
 	private static final IEntitySourceDescriptor ENTITY_DESCRIPTOR = new FromMockEntitySourceDescriptor().entity(StandardEntityType.APPLICATION);
 	
+	public FromMockApplicationLoader() {
+		super(ENTITY_DESCRIPTOR);
+	}
+	
 	@Override
-	public void run() {
+	protected void supplyEntities(Consumer<JSONMap> consumer) {
 		for ( int i = 0 ; i < 10 ; i++ ) {
-			invokeProcessOnActiveProcessors(ENTITY_DESCRIPTOR, getApplication(i));
+			consumer.accept(getApplication(i));
 		}
 	}
 

@@ -24,11 +24,43 @@
  ******************************************************************************/
 package com.fortify.impexp.common.from.loader;
 
+import java.util.Map;
+import java.util.function.Consumer;
+
 import javax.annotation.PostConstruct;
 
-import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class AbstractIntermediateLoader<S> extends AbstractProcessorInvokerProcessor<S> {
+import com.fortify.impexp.common.processor.AbstractProcessor;
+import com.fortify.impexp.common.processor.ActiveProcessorsInvoker;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.util.spring.expression.TemplateExpression;
+
+public abstract class AbstractIntermediateLoader<S> extends AbstractProcessor<S> {
+	private final IEntitySourceDescriptor entitySourceDescriptor;
+	@Autowired private ActiveProcessorsInvoker activeProcessors;
+	
+	protected AbstractIntermediateLoader(IEntitySourceDescriptor entitySourceDescriptor) {
+		this.entitySourceDescriptor = entitySourceDescriptor;
+	}
+
+	@Override
+	public final void process(final IEntitySourceDescriptor parentEntitySourceDescriptor, final S parentEntity) {
+		activeProcessors.start(entitySourceDescriptor);
+		supplyEntities(parentEntitySourceDescriptor, parentEntity, this::processEntity);
+		activeProcessors.end(entitySourceDescriptor);
+	}
+
+	private final void processEntity(S entity) {
+		activeProcessors.processWithPropertyTemplates(entitySourceDescriptor, entity, getPropertyTemplates());
+	}
+	
+	protected Map<String, TemplateExpression> getPropertyTemplates() {
+		// TODO default implementation: get directly from property
+		return null;
+	}
+	
+	protected abstract void supplyEntities(final IEntitySourceDescriptor parentEntitySourceDescriptor, final S parentEntity, Consumer<S> entityConsumer);
 	
 	@PostConstruct
 	public final void logInitialized() {

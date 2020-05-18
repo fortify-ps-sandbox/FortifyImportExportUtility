@@ -24,6 +24,8 @@
  ******************************************************************************/
 package com.fortify.impexp.from.ssc.release.loader;
 
+import java.util.function.Consumer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,18 +52,16 @@ public class FromSSCReleaseLoader extends AbstractRootLoader<JSONMap> {
 	@Autowired @FromSSC private SSCAttributeDefinitionHelper attributeDefinitionHelper;
 	@Autowired @FromSSC private FromSSCReleaseLoaderConfig config;
 	
+	public FromSSCReleaseLoader() {
+		super(ENTITY_DESCRIPTOR);
+	}
+	
 	@Override
-	public void run() {
+	protected void supplyEntities(Consumer<JSONMap> consumer) {
 		LOG.info("Loading SSC application versions");
 		SSCApplicationVersionsQueryBuilder queryBuilder = 
 			conn.api(SSCApplicationVersionAPI.class).queryApplicationVersions();
 		config.updateQueryBuilder(queryBuilder, attributeDefinitionHelper);
-		queryBuilder.build().processAll(this::processRelease);
+		queryBuilder.build().processAll(consumer); // TODO Add LOG.info("Processing SSC application version {}", release.get("id"));
 	}
-
-	private final void processRelease(JSONMap release) {
-		LOG.info("Processing SSC application version {}", release.get("id"));
-		invokeProcessOnActiveProcessors(ENTITY_DESCRIPTOR, release);
-	}
-
 }

@@ -30,11 +30,10 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 
-import com.fortify.impexp.common.processor.invoker.AbstractProcessorInvokerFactory;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunnerFactory;
 
-public abstract class AbstractRootLoaderFactory<R extends ISchedulableRunner> extends AbstractProcessorInvokerFactory implements ISchedulableRunnerFactory {
+public abstract class AbstractRootLoaderFactory<R extends ISchedulableRunner> implements ISchedulableRunnerFactory {
 	/**
 	 * This implementation of {@link ISchedulableRunnerFactory#getRunner()} simply returns
 	 * the root loader that is returned by the {@link #getRootLoader()} method.
