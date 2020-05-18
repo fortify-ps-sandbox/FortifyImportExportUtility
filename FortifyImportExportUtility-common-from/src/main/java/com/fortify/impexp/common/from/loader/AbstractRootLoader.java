@@ -25,7 +25,9 @@
 package com.fortify.impexp.common.from.loader;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -33,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fortify.impexp.common.processor.ActiveProcessorsInvoker;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.util.spring.SpringExpressionUtil;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 import com.fortify.util.spring.expression.TemplateExpression;
 
@@ -52,15 +55,20 @@ public abstract class AbstractRootLoader<S> implements ISchedulableRunner {
 	}
 
 	private final void processEntity(S entity) {
-		activeProcessors.processWithPropertyTemplates(entitySourceDescriptor, entity, getPropertyTemplates());
-	}
-	
-	protected Map<String, TemplateExpression> getPropertyTemplates() {
-		// TODO default implementation: get directly from property
-		return null;
+		activeProcessors.processWithProperties(entitySourceDescriptor, entity, getProperties(entity));
 	}
 	
 	protected abstract void supplyEntities(Consumer<S> entityConsumer);
+	
+	protected Map<String, Object> getProperties(S entity) {
+		return getPropertyTemplates(entity).entrySet().stream().collect(Collectors.toMap(Entry::getKey, e -> 
+			SpringExpressionUtil.evaluateExpression(entity, e.getValue(), Object.class)));
+	}
+	
+	protected Map<String, TemplateExpression> getPropertyTemplates(S entity) {
+		// TODO default implementation: get directly from property
+		return null;
+	}
 	
 	@PostConstruct
 	public final void logInitialized() {

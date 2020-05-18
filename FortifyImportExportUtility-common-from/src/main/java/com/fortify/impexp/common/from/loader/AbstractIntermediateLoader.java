@@ -25,7 +25,9 @@
 package com.fortify.impexp.common.from.loader;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -34,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.fortify.impexp.common.processor.AbstractProcessor;
 import com.fortify.impexp.common.processor.ActiveProcessorsInvoker;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.util.spring.SpringExpressionUtil;
 import com.fortify.util.spring.expression.TemplateExpression;
 
 public abstract class AbstractIntermediateLoader<S> extends AbstractProcessor<S> {
@@ -52,10 +55,15 @@ public abstract class AbstractIntermediateLoader<S> extends AbstractProcessor<S>
 	}
 
 	private final void processEntity(S entity) {
-		activeProcessors.processWithPropertyTemplates(entitySourceDescriptor, entity, getPropertyTemplates());
+		activeProcessors.processWithProperties(entitySourceDescriptor, entity, getProperties(entity));
 	}
 	
-	protected Map<String, TemplateExpression> getPropertyTemplates() {
+	protected Map<String, Object> getProperties(S entity) {
+		return getPropertyTemplates(entity).entrySet().stream().collect(Collectors.toMap(Entry::getKey, e -> 
+			SpringExpressionUtil.evaluateExpression(entity, e.getValue(), Object.class)));
+	}
+	
+	protected Map<String, TemplateExpression> getPropertyTemplates(S entity) {
 		// TODO default implementation: get directly from property
 		return null;
 	}

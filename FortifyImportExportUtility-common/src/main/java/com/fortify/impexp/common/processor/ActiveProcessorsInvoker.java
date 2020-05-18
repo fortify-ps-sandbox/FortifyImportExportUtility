@@ -35,7 +35,6 @@ import org.springframework.stereotype.Component;
 
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.util.spring.boot.env.ModifyablePropertySource;
-import com.fortify.util.spring.expression.TemplateExpression;
 
 /**
  * This class allows for invoking all active {@link IProcessor} instances 
@@ -78,11 +77,6 @@ public class ActiveProcessorsInvoker {
 	public <S> void start(IEntitySourceDescriptor entitySourceDescriptor) {
 		getNotifyStartAndStopProcessorsStream(entitySourceDescriptor)
 			.forEach(processor->processor.notifyStart(entitySourceDescriptor));
-	}
-	
-	public <S> void processWithPropertyTemplates(IEntitySourceDescriptor entitySourceDescriptor, S entity, Map<String, TemplateExpression> propertyExpressions) {
-		// TODO Evaluate template expressions on entity
-		processWithProperties(entitySourceDescriptor, entity, null);
 	}
 	
 	public <S> void processWithProperties(IEntitySourceDescriptor entitySourceDescriptor, S entity, Map<String,Object> properties) {
