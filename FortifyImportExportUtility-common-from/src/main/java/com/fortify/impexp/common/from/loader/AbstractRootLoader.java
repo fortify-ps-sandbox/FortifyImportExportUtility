@@ -61,7 +61,8 @@ public abstract class AbstractRootLoader<S> implements ISchedulableRunner {
 	protected abstract void supplyEntities(Consumer<S> entityConsumer);
 	
 	protected Map<String, Object> getProperties(S entity) {
-		return getPropertyTemplates(entity).entrySet().stream().collect(Collectors.toMap(Entry::getKey, e -> 
+		Map<String, TemplateExpression> propertyTemplates = getPropertyTemplates(entity);
+		return propertyTemplates==null ? null : propertyTemplates.entrySet().stream().collect(Collectors.toMap(Entry::getKey, e -> 
 			SpringExpressionUtil.evaluateExpression(entity, e.getValue(), Object.class)));
 	}
 	
