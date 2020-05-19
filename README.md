@@ -34,7 +34,7 @@ together; it doesn't do anything useful yet.
 ### Related Links
 
 * **Downloads**:  
-  _Beta versions may be unstable or non-functional. The `*-licenseReport.zip` and `*-dependencySources.zip` files are for informational purposes only and do not need to be downloaded._
+  _Beta versions may be unstable or non-functional. The `*-thirdparty.zip` file is for informational purposes only and does not need to be downloaded._
 	* **Release versions**: https://bintray.com/package/files/fortify-ps/release/FortifyImportExportUtility?order=desc&sort=fileLastModified&basePath=&tab=files  
 	* **Beta versions**: https://bintray.com/package/files/fortify-ps/beta/FortifyImportExportUtility?order=desc&sort=fileLastModified&basePath=&tab=files
 	* **Sample configuration files**: [config](config)
