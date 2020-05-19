@@ -1,6 +1,6 @@
 /*******************************************************************************
- * (c) Copyright 2020 Micro Focus or one of its affiliates, a Micro Focus company
- * 
+ * (c) Copyright 2020 Micro Focus or one of its affiliates
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the 
  * "Software"), to deal in the Software without restriction, including without 
@@ -22,36 +22,16 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.status.export.entity;
+package com.fortify.impexp.common.export.helper;
 
-import java.util.function.Function;
+import com.fortify.impexp.common.entity.config.EntityFilterConfig;
+import com.fortify.impexp.common.entity.config.EntityTransformerConfig;
+import com.fortify.util.spring.expression.TemplateExpression;
 
-import lombok.ToString;
-
-/**
- * This class holds the export location, id and arbitrary (extra) fields for an exported entity. 
- * 
- * @author Ruud Senden
- */
-@ToString(callSuper=true)
-public class ExportedEntityDescriptorWithIdAndFields<I, F> extends ExportedEntityDescriptorWithId<I> implements IExportedEntityDescriptorWithFields<F> {
-	private F fields;
-	private final Function<I, F> getFieldsForId;
-	
-	public ExportedEntityDescriptorWithIdAndFields(String location, ExportedEntityStatus status, Function<String, I> convertlocationToId, Function<I, F> getFieldsForId) {
-		super(location, status, convertlocationToId);
-		this.getFieldsForId = getFieldsForId;
-	}
-	
-	@Override
-	public F getFields() {
-		if ( fields==null ) {
-			fields = getFieldsForId.apply(getId());
-		}
-		return fields;
-	}
-	
-	public void resetFields() {
-		fields = null;
-	}
+public interface IExportConfig {
+	public EntityTransformerConfig getTransformerConfig(); 
+	public EntityFilterConfig getFilterConfig();
+	public TemplateExpression getExportNewGroupByExpression();
+	public EntityFilterConfig getExportNewFilterConfig();
+	public EntityFilterConfig getUpdateExistingFilterConfig();
 }

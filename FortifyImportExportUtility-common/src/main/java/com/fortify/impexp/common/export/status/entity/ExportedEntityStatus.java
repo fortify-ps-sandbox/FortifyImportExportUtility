@@ -22,14 +22,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.status.export.entity;
+package com.fortify.impexp.common.export.status.entity;
 
-import java.util.function.Function;
-
-import com.fortify.util.rest.json.JSONMap;
-
-public class ExportedEntityDescriptorWithIdStringAndFieldsJSONMap extends ExportedEntityDescriptorWithIdAndFields<String, JSONMap> {
-	public ExportedEntityDescriptorWithIdStringAndFieldsJSONMap(String location, ExportedEntityStatus status, Function<String, String> convertlocationToId, Function<String, JSONMap> getFieldsForId) {
-		super(location, status, convertlocationToId, getFieldsForId);
-	}
+public enum ExportedEntityStatus {
+	NEW, EXISTING
 }

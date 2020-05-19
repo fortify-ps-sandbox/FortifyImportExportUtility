@@ -1,6 +1,6 @@
 /*******************************************************************************
- * (c) Copyright 2020 Micro Focus or one of its affiliates
- *
+ * (c) Copyright 2020 Micro Focus or one of its affiliates, a Micro Focus company
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the 
  * "Software"), to deal in the Software without restriction, including without 
@@ -22,9 +22,15 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.status.export.entity;
+package com.fortify.impexp.common.export.status;
 
-public interface IExportedEntityDescriptor {
-	public String getLocation();
-	public ExportedEntityStatus getStatus();
+import java.util.Collection;
+
+import com.fortify.impexp.common.export.status.entity.IExportedEntityDescriptor;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
+
+public interface IExportStatusHelper<S, T extends IExportedEntityDescriptor> {
+	public void updateSourceEntity(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<S> sourceEntities, T exportedEntityDescriptor);
+	public String getExportedEntityLocation(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, S sourceEntity);
 }

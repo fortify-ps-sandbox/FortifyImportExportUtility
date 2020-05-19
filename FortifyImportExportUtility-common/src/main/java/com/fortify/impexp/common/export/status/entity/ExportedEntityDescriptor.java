@@ -1,6 +1,6 @@
 /*******************************************************************************
- * (c) Copyright 2020 Micro Focus or one of its affiliates
- *
+ * (c) Copyright 2020 Micro Focus or one of its affiliates, a Micro Focus company
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the 
  * "Software"), to deal in the Software without restriction, including without 
@@ -22,13 +22,19 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.status.export;
+package com.fortify.impexp.common.export.status.entity;
 
-import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
-import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
-import com.fortify.impexp.common.status.export.entity.IExportedEntityDescriptor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
-public interface IExportStatusHelperFactory<S,T extends IExportedEntityDescriptor> {
-	public boolean isActive(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor);
-	public IExportStatusHelper<S,T> getExportStatusHelper();
+/**
+ * This class holds the export location for an exported entity. 
+ * 
+ * @author Ruud Senden
+ */
+@Getter @RequiredArgsConstructor @ToString
+public class ExportedEntityDescriptor implements IExportedEntityDescriptor {
+	private final String location;
+	private final ExportedEntityStatus status;
 }

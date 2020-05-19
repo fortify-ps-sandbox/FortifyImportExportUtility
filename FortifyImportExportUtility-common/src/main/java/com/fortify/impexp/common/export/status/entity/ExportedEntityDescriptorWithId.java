@@ -1,6 +1,6 @@
 /*******************************************************************************
- * (c) Copyright 2020 Micro Focus or one of its affiliates
- *
+ * (c) Copyright 2020 Micro Focus or one of its affiliates, a Micro Focus company
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the 
  * "Software"), to deal in the Software without restriction, including without 
@@ -22,13 +22,36 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.to.jira.processor.connection;
+package com.fortify.impexp.common.export.status.entity;
 
-import com.fortify.impexp.common.export.status.entity.ExportedEntityDescriptorWithIdStringAndFieldsJSONMap;
-import com.fortify.impexp.common.export.status.entity.ExportedEntityStatus;
+import java.util.function.Function;
 
-public class ToJiraExportedEntityDescriptor extends ExportedEntityDescriptorWithIdStringAndFieldsJSONMap {
-	public ToJiraExportedEntityDescriptor(String deepLink, ExportedEntityStatus status, ToJiraRestConnection conn, final String... issueDetailFields) {
-		super(deepLink, status, ToJiraRestConnection::getIssueKeyForIssueDeepLink, id->conn.getIssueFields(id, issueDetailFields));
+import lombok.ToString;
+
+/**
+ * This class holds the export location and id for an exported entity. 
+ * 
+ * @author Ruud Senden
+ */
+@ToString(callSuper=true)
+public class ExportedEntityDescriptorWithId<I> extends ExportedEntityDescriptor implements IExportedEntityDescriptorWithId<I> {
+	private I id;
+	private final Function<String, I> convertlocationToId;
+	
+	public ExportedEntityDescriptorWithId(String location, ExportedEntityStatus status, Function<String, I> convertlocationToId) {
+		super(location, status);
+		this.convertlocationToId = convertlocationToId;
+	}
+	
+	@Override
+	public I getId() {
+		if ( id==null ) {
+			id = convertlocationToId.apply(getLocation());
+		}
+		return id;
+	}
+	
+	public void resetId() {
+		id = null;
 	}
 }

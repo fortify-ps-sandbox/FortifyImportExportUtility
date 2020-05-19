@@ -22,7 +22,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.status.export;
+package com.fortify.impexp.common.export.status;
 
 import java.util.Collection;
 import java.util.List;
@@ -34,10 +34,10 @@ import org.apache.commons.codec.binary.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fortify.impexp.common.export.status.entity.ExportedEntityStatus;
+import com.fortify.impexp.common.export.status.entity.IExportedEntityDescriptor;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
-import com.fortify.impexp.common.status.export.entity.ExportedEntityStatus;
-import com.fortify.impexp.common.status.export.entity.IExportedEntityDescriptor;
 
 public abstract class AbstractExportStatusHelper<S,T extends IExportedEntityDescriptor> implements IExportStatusHelper<S,T> {
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractExportStatusHelper.class);

@@ -22,15 +22,36 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.status.export;
+package com.fortify.impexp.common.export.status.entity;
 
-import java.util.Collection;
+import java.util.function.Function;
 
-import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
-import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
-import com.fortify.impexp.common.status.export.entity.IExportedEntityDescriptor;
+import lombok.ToString;
 
-public interface IExportStatusHelper<S, T extends IExportedEntityDescriptor> {
-	public void updateSourceEntity(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, Collection<S> sourceEntities, T exportedEntityDescriptor);
-	public String getExportedEntityLocation(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor, S sourceEntity);
+/**
+ * This class holds the export location, id and arbitrary (extra) fields for an exported entity. 
+ * 
+ * @author Ruud Senden
+ */
+@ToString(callSuper=true)
+public class ExportedEntityDescriptorWithIdAndFields<I, F> extends ExportedEntityDescriptorWithId<I> implements IExportedEntityDescriptorWithFields<F> {
+	private F fields;
+	private final Function<I, F> getFieldsForId;
+	
+	public ExportedEntityDescriptorWithIdAndFields(String location, ExportedEntityStatus status, Function<String, I> convertlocationToId, Function<I, F> getFieldsForId) {
+		super(location, status, convertlocationToId);
+		this.getFieldsForId = getFieldsForId;
+	}
+	
+	@Override
+	public F getFields() {
+		if ( fields==null ) {
+			fields = getFieldsForId.apply(getId());
+		}
+		return fields;
+	}
+	
+	public void resetFields() {
+		fields = null;
+	}
 }

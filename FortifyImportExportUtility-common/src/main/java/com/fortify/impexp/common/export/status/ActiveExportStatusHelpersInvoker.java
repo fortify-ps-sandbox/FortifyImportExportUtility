@@ -22,7 +22,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.status.export;
+package com.fortify.impexp.common.export.status;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -34,9 +34,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.OrderComparator;
 import org.springframework.stereotype.Component;
 
+import com.fortify.impexp.common.export.status.entity.IExportedEntityDescriptor;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
-import com.fortify.impexp.common.status.export.entity.IExportedEntityDescriptor;
 
 @Component
 public class ActiveExportStatusHelpersInvoker {

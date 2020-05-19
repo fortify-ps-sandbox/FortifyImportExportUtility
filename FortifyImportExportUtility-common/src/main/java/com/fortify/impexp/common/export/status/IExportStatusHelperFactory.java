@@ -1,6 +1,6 @@
 /*******************************************************************************
- * (c) Copyright 2020 Micro Focus or one of its affiliates, a Micro Focus company
- * 
+ * (c) Copyright 2020 Micro Focus or one of its affiliates
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a 
  * copy of this software and associated documentation files (the 
  * "Software"), to deal in the Software without restriction, including without 
@@ -22,36 +22,13 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.status.export.entity;
+package com.fortify.impexp.common.export.status;
 
-import java.util.function.Function;
+import com.fortify.impexp.common.export.status.entity.IExportedEntityDescriptor;
+import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
+import com.fortify.impexp.common.processor.entity.target.IEntityTargetDescriptor;
 
-import lombok.ToString;
-
-/**
- * This class holds the export location and id for an exported entity. 
- * 
- * @author Ruud Senden
- */
-@ToString(callSuper=true)
-public class ExportedEntityDescriptorWithId<I> extends ExportedEntityDescriptor implements IExportedEntityDescriptorWithId<I> {
-	private I id;
-	private final Function<String, I> convertlocationToId;
-	
-	public ExportedEntityDescriptorWithId(String location, ExportedEntityStatus status, Function<String, I> convertlocationToId) {
-		super(location, status);
-		this.convertlocationToId = convertlocationToId;
-	}
-	
-	@Override
-	public I getId() {
-		if ( id==null ) {
-			id = convertlocationToId.apply(getLocation());
-		}
-		return id;
-	}
-	
-	public void resetId() {
-		id = null;
-	}
+public interface IExportStatusHelperFactory<S,T extends IExportedEntityDescriptor> {
+	public boolean isActive(IEntitySourceDescriptor entitySourceDescriptor, IEntityTargetDescriptor entityTargetDescriptor);
+	public IExportStatusHelper<S,T> getExportStatusHelper();
 }

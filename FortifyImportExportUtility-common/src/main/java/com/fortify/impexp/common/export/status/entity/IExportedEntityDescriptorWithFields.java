@@ -22,7 +22,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
  * IN THE SOFTWARE.
  ******************************************************************************/
-package com.fortify.impexp.common.status.export.entity;
+package com.fortify.impexp.common.export.status.entity;
 
 public interface IExportedEntityDescriptorWithFields<F> extends IExportedEntityDescriptor {
 	public F getFields();
