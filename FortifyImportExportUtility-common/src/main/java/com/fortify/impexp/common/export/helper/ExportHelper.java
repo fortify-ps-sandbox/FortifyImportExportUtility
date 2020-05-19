@@ -25,7 +25,6 @@
 package com.fortify.impexp.common.export.helper;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -61,7 +60,7 @@ public class ExportHelper<E> {
 			EntityTransformerConfig transformerConfig, EntityFilterConfig filterConfig,
 			TemplateExpression exportNewGroupBy, EntityFilterConfig exportNewFilterConfig,
 			EntityFilterConfig updateExistingFilterConfig,
-			BiConsumer<String, List<E>> exportNewConsumer, BiConsumer<String, List<E>> updateExistingConsumer) {
+			IGroupProcessor<E> exportNewGroupProcessor, IGroupProcessor<E> updateExistingGroupProcessor) {
 		this.activeExportStatusHelpersInvoker = activeExportStatusHelpersInvoker;
 		this.entitySourceDescriptor = entitySourceDescriptor;
 		this.entityTargetDescriptor = entityTargetDescriptor;
@@ -72,10 +71,10 @@ public class ExportHelper<E> {
 		this.toBeExportedGrouping = Grouping.<E>builder()
 				.groupNameFunction(SpringExpressionUtil.expressionAsFunction(exportNewGroupBy, String.class))
 				.blankGroupNameConsumer(Grouping::directInvokeOnBlankGroupName)
-				.groupConsumer(exportNewConsumer)
+				.groupConsumer((groupName, entities)->exportNewGroupProcessor.processGroup(entitySourceDescriptor, groupName, entities))
 				.build();
 		this.previouslyExportedGrouping = Grouping.<E>builder()
-				.groupConsumer(updateExistingConsumer)
+				.groupConsumer((groupName, entities)->updateExistingGroupProcessor.processGroup(entitySourceDescriptor, groupName, entities))
 				.build();
 	}
 	
@@ -88,7 +87,8 @@ public class ExportHelper<E> {
 				.updateExistingFilterConfig(exportConfig.getUpdateExistingFilterConfig());
 	}
 	
-	public final void add(E entity) {
+	public final void add(IEntitySourceDescriptor currentEntitySourceDescriptor, E entity) {
+		checkEntitySourceDescriptor(currentEntitySourceDescriptor);
 		entity = entityTransformer.transform(entity);
 		if ( entityFilter.isIncluded(entity) ) {
 			String exportedEntityLocation = activeExportStatusHelpersInvoker.getExportedEntityLocation(entitySourceDescriptor, entityTargetDescriptor, entity);
@@ -104,8 +104,24 @@ public class ExportHelper<E> {
 		}
 	}
 	
-	public final void runAndClose() {
+	public final void runAndClose(IEntitySourceDescriptor currentEntitySourceDescriptor) {
+		checkEntitySourceDescriptor(currentEntitySourceDescriptor);
 		toBeExportedGrouping.runAndClose();
 		previouslyExportedGrouping.runAndClose();
 	}
+
+	private void checkEntitySourceDescriptor(IEntitySourceDescriptor currentEntitySourceDescriptor) {
+		if ( !currentEntitySourceDescriptor.equals(entitySourceDescriptor) ) {
+			throw new IllegalStateException(
+				String.format("Given EntitySourceDescriptor %s does not match configured EntitySourceDescriptor %s", 
+					currentEntitySourceDescriptor, entitySourceDescriptor));
+		}
+		
+	}
+	
+	@FunctionalInterface
+	public interface IGroupProcessor<E> {
+		public void processGroup(IEntitySourceDescriptor entitySourceDescriptor, String groupName, List<E> entities);
+	}
+	
 }
