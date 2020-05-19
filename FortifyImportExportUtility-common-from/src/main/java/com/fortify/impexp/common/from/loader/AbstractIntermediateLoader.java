@@ -37,6 +37,7 @@ import com.fortify.impexp.common.processor.AbstractProcessor;
 import com.fortify.impexp.common.processor.ActiveProcessorsInvoker;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.util.spring.SpringExpressionUtil;
+import com.fortify.util.spring.boot.env.ModifyablePropertySource;
 import com.fortify.util.spring.expression.TemplateExpression;
 
 public abstract class AbstractIntermediateLoader<S> extends AbstractProcessor<S> {
@@ -49,9 +50,13 @@ public abstract class AbstractIntermediateLoader<S> extends AbstractProcessor<S>
 
 	@Override
 	public final void process(final IEntitySourceDescriptor parentEntitySourceDescriptor, final S parentEntity) {
-		activeProcessors.start(entitySourceDescriptor);
-		supplyEntities(parentEntitySourceDescriptor, parentEntity, this::processEntity);
-		activeProcessors.end(entitySourceDescriptor);
+		// We generate a new scope for each parent, such that new target processor instances are
+		// generated for each cycle of start, process and end operations
+		try (ModifyablePropertySource mps = ModifyablePropertySource.withNewScope()) {
+			activeProcessors.start(entitySourceDescriptor);
+			supplyEntities(parentEntitySourceDescriptor, parentEntity, this::processEntity);
+			activeProcessors.end(entitySourceDescriptor);
+		}
 	}
 
 	private final void processEntity(S entity) {

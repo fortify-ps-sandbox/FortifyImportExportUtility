@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.fortify.impexp.common.processor.ActiveProcessorsInvoker;
 import com.fortify.impexp.common.processor.entity.source.IEntitySourceDescriptor;
 import com.fortify.util.spring.SpringExpressionUtil;
+import com.fortify.util.spring.boot.env.ModifyablePropertySource;
 import com.fortify.util.spring.boot.scheduler.ISchedulableRunner;
 import com.fortify.util.spring.expression.TemplateExpression;
 
@@ -48,10 +49,14 @@ public abstract class AbstractRootLoader<S> implements ISchedulableRunner {
 	}
 	
 	@Override
-	public final void run() {
-		activeProcessors.start(entitySourceDescriptor);
-		supplyEntities(this::processEntity);
-		activeProcessors.end(entitySourceDescriptor);
+	public final void run() { 
+		// We generate a new scope for every run, such that new target processor instances are
+		// generated for each cycle of start, process and end operations
+		try (ModifyablePropertySource mps = ModifyablePropertySource.withNewScope()) {
+			activeProcessors.start(entitySourceDescriptor);
+			supplyEntities(this::processEntity);
+			activeProcessors.end(entitySourceDescriptor);
+		}
 	}
 
 	private final void processEntity(S entity) {
